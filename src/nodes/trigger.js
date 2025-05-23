@@ -17,4 +17,13 @@ class RootNode extends LGraphNode {
     }
 }
 
-LiteGraph.registerNodeType("trigger/root", RootNode);
+class ManualTrigger extends RootNode {
+    constructor() {
+        super();
+        this.title = "수동 시작";
+    }
+
+    onExecute() {}
+}
+
+LiteGraph.registerNodeType("trigger/manualTrigger", ManualTrigger);

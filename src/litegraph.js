@@ -146,6 +146,12 @@
 
         constructor() {}
 
+        static distance(a, b) {
+            return Math.sqrt(
+                (b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1])
+            );
+        }
+
         static isInsideRectangle(x, y, left, top, width, height) {
             if (left < x && left + width > x && top < y && top + height > y) {
                 return true;
@@ -6963,7 +6969,7 @@
                                 this.dragging_rectangle = null;
                             }
 
-                            const dist = this.distance(
+                            const dist = LiteGraph.distance(
                                 [e.canvasX, e.canvasY],
                                 [
                                     this.selected_group.pos[0] +
@@ -11268,7 +11274,7 @@
             start_dir = start_dir || LiteGraph.RIGHT;
             end_dir = end_dir || LiteGraph.LEFT;
 
-            const dist = this.distance(a, b);
+            const dist = LiteGraph.distance(a, b);
 
             if (this.render_connections_border && this.ds.scale > 0.6) {
                 ctx.lineWidth = this.connections_width + 4;
@@ -11619,7 +11625,7 @@
             start_dir = start_dir || LiteGraph.RIGHT;
             end_dir = end_dir || LiteGraph.LEFT;
 
-            const dist = distance(a, b);
+            const dist = LiteGraph.distance(a, b);
             const p0 = a;
             const p1 = [a[0], a[1]];
             const p2 = [b[0], b[1]];
