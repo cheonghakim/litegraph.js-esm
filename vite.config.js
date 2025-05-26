@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
     build: {
@@ -12,5 +13,15 @@ export default defineConfig({
         },
         outDir: "dist",
         emptyOutDir: true,
+    },
+    resolve: {
+        alias: {
+            "@": fileURLToPath(new URL("./src", import.meta.url)),
+        },
+    },
+    server: {
+        hmr: true,
+        host: "localhost",
+        port: 8084,
     },
 });

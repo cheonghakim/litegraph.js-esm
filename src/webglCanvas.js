@@ -1450,7 +1450,7 @@ export function enableWebGLCanvas(canvas, options) {
 
         const points = point_text_vertices;
         const coords = point_text_coords;
-        const point_size = this._font_size * 1.1;
+        let point_size = this._font_size * 1.1;
 
         if (point_size < 1) point_size = 1;
 

@@ -8996,7 +8996,6 @@ export class LGraphCanvas {
                     ctx.fill();
                 }
                 if (this._highlight_output) {
-                    console.log(this._highlight_output);
                     let shape = this._highlight_output.shape;
                     ctx.beginPath();
                     if (shape === LiteGraph.ARROW_SHAPE) {

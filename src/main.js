@@ -14,9 +14,11 @@ import {
 import { enableWebGLCanvas } from "./webglCanvas.js";
 import { Editor } from "./litegraph-editor.js";
 
-import "./code.js";
-import "./defaults.js";
-import "./demos.js";
+if (import.meta.env.MODE === "development") {
+    import("./code.js");
+    import("./defaults.js");
+    import("./demos.js");
+}
 
 // nodes
 import "./nodes/trigger.js";

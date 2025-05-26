@@ -31,7 +31,7 @@ export class Editor {
             useWebgl: true,
         }));
         graphcanvas.links_render_mode = 0;
-        graphcanvas.background_image = "imgs/grid.png";
+        graphcanvas.background_image = "/editor/imgs/grid.png";
         graph.onAfterExecute = function () {
             graphcanvas.draw(true);
         };
@@ -39,20 +39,20 @@ export class Editor {
         graphcanvas.onDropItem = this.onDropItem.bind(this);
 
         //add stuff
-        //this.addToolsButton("loadsession_button","Load","imgs/icon-load.png", this.onLoadButton.bind(this), ".tools-left" );
-        //this.addToolsButton("savesession_button","Save","imgs/icon-save.png", this.onSaveButton.bind(this), ".tools-left" );
+        //this.addToolsButton("loadsession_button","Load","/editor/imgs/icon-load.png", this.onLoadButton.bind(this), ".tools-left" );
+        //this.addToolsButton("savesession_button","Save","/editor/imgs/icon-save.png", this.onSaveButton.bind(this), ".tools-left" );
         this.addLoadCounter();
         this.addToolsButton(
             "playnode_button",
             "Play",
-            "imgs/icon-play.png",
+            "/editor/imgs/icon-play.png",
             this.onPlayButton.bind(this),
             ".tools-right"
         );
         this.addToolsButton(
             "playstepnode_button",
             "Step",
-            "imgs/icon-playstep.png",
+            "/editor/imgs/icon-playstep.png",
             this.onPlayStepButton.bind(this),
             ".tools-right"
         );
@@ -61,7 +61,7 @@ export class Editor {
             this.addToolsButton(
                 "livemode_button",
                 "Live",
-                "imgs/icon-record.png",
+                "/editor/imgs/icon-record.png",
                 this.onLiveButton.bind(this),
                 ".tools-right"
             );
@@ -70,7 +70,7 @@ export class Editor {
             this.addToolsButton(
                 "maximize_button",
                 "",
-                "imgs/icon-maximize.png",
+                "/editor/imgs/icon-maximize.png",
                 this.onFullscreenButton.bind(this),
                 ".tools-right"
             );
@@ -151,10 +151,10 @@ export class Editor {
         var button = this.root.querySelector("#playnode_button");
 
         if (graph.status == LGraph.STATUS_STOPPED) {
-            button.innerHTML = "<img src='imgs/icon-stop.png'/> Stop";
+            button.innerHTML = "<img src='/editor/imgs/icon-stop.png'/> Stop";
             graph.start();
         } else {
-            button.innerHTML = "<img src='imgs/icon-play.png'/> Play";
+            button.innerHTML = "<img src='/editor/imgs/icon-play.png'/> Play";
             graph.stop();
         }
     }
@@ -170,12 +170,12 @@ export class Editor {
         this.graphcanvas.switchLiveMode(true);
         this.graphcanvas.draw();
         var url = this.graphcanvas.live_mode
-            ? "imgs/gauss_bg_medium.jpg"
-            : "imgs/gauss_bg.jpg";
+            ? "/editor/imgs/gauss_bg_medium.jpg"
+            : "/editor/imgs/gauss_bg.jpg";
         var button = this.root.querySelector("#livemode_button");
         button.innerHTML = !is_live_mode
-            ? "<img src='imgs/icon-record.png'/> Live"
-            : "<img src='imgs/icon-gear.png'/> Edit";
+            ? "<img src='/editor/imgs/icon-record.png'/> Live"
+            : "<img src='/editor/imgs/icon-gear.png'/> Edit";
     }
 
     onDropItem(e) {
@@ -229,7 +229,7 @@ export class Editor {
 
         var graphcanvas = new LGraphCanvas(canvas, this.graph);
         graphcanvas.show_info = false;
-        graphcanvas.background_image = "imgs/grid.png";
+        graphcanvas.background_image = "/editor/imgs/grid.png";
         graphcanvas.scale = 0.25;
         graphcanvas.allow_dragnodes = false;
         graphcanvas.allow_interaction = false;
@@ -287,7 +287,7 @@ export class Editor {
         ];
 
         var graphcanvas = new LGraphCanvas(canvas, this.graph);
-        graphcanvas.background_image = "imgs/grid.png";
+        graphcanvas.background_image = "/editor/imgs/grid.png";
         this.graphcanvas2 = graphcanvas;
         this.graphcanvas2.viewport = [
             canvas.width * 0.5,

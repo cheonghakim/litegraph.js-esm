@@ -10,9 +10,10 @@
     "private": false,
     "scripts": {
         "prebuild": "rimraf build",
-        "build": "vite build && npm run copy",
+        "build-dev": "vite build --mode development && npm run copy",
+        "build": "vite build --mode production && npm run copy",
         "copy": "cpx \"dist/**\" /editor/js",
-        "start": "nodemon utils/server.js",
+        "dev": "vite",
         "test": "jest",
         "test:allVersions": "./utils/test.sh",
         "prettier": "npx prettier --write src/**/*.* css/**/*.*",
@@ -52,6 +53,7 @@
         "yuidocjs": "^0.10.2"
     },
     "dependencies": {
+        "dotenv": "^16.5.0",
         "vite": "^6.3.5"
     }
 }
