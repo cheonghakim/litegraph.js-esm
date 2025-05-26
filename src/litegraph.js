@@ -13466,7 +13466,7 @@
             };
             const title = dialog.querySelector(".name");
             title.innerText = property;
-            const input = dialog.querySelector(".value");
+            let input = dialog.querySelector(".value");
             if (input) {
                 input.value = value;
                 input.addEventListener("blur", function (e) {
@@ -13801,7 +13801,7 @@
             const timeout = null;
             const selected = null;
 
-            const input = dialog.querySelector("input");
+            let input = dialog.querySelector("input");
             if (input) {
                 input.addEventListener("blur", function (e) {
                     if (that.search_box) this.focus();
@@ -14361,7 +14361,7 @@
             const info = node.getPropertyInfo(property);
             const type = info.type;
 
-            const input_html = "";
+            let input_html = "";
 
             if (
                 type == "string" ||
@@ -14405,7 +14405,7 @@
                 options
             );
 
-            const input = false;
+            let input = false;
             if ((type == "enum" || type == "combo") && info.values) {
                 input = dialog.querySelector("select");
                 input.addEventListener("change", function (e) {
@@ -14429,7 +14429,7 @@
                         this.focus();
                     });
 
-                    const v =
+                    let v =
                         node.properties[property] !== undefined
                             ? node.properties[property]
                             : "";
@@ -14508,8 +14508,8 @@
             dialog.is_modified = false;
 
             const rect = this.canvas.getBoundingClientRect();
-            const offsetx = -20;
-            const offsety = -20;
+            let offsetx = -20;
+            let offsety = -20;
             if (rect) {
                 offsetx -= rect.left;
                 offsety -= rect.top;
@@ -14563,8 +14563,8 @@
                 }
             };
 
-            const dialogCloseTimer = null;
-            const prevent_timeout = false;
+            let dialogCloseTimer = null;
+            let prevent_timeout = false;
             dialog.addEventListener("mouseleave", function (e) {
                 if (prevent_timeout) return;
                 if (
@@ -15761,7 +15761,7 @@
 
         //called by processContextMenu to extract the menu list
         getNodeMenuOptions(node) {
-            const options = null;
+            let options = null;
 
             if (node.getMenuOptions) {
                 options = node.getMenuOptions(this);
@@ -16037,7 +16037,7 @@
             };
             const title = dialog.querySelector(".name");
             title.innerText = property;
-            const input = dialog.querySelector(".value");
+            let input = dialog.querySelector(".value");
             if (input) {
                 input.value = value;
                 // input.addEventListener("blur", function (e) {
@@ -16086,7 +16086,7 @@
 
             // if (input) input.focus();
 
-            const dialogCloseTimer = null;
+            let dialogCloseTimer = null;
             dialog.addEventListener("mouseleave", function (e) {
                 if (LiteGraph.dialog_close_on_mouse_leave)
                     if (
@@ -16553,7 +16553,7 @@
             if (node) options.title = node.type;
 
             //check if mouse is in input
-            const slot = null;
+            let slot = null;
             if (node) {
                 slot = node.getSlotInPosition(event.canvasX, event.canvasY);
                 LGraphCanvas.active_node = node;
