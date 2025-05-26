@@ -97,7 +97,7 @@
         static registered_node_types = {}; //nodetypes by string
         static node_types_by_file_extension = {}; //used for dropping files in the canvas
         static Nodes = {}; //node types by classname
-        static Globals = {}; //used to store vars between graphs
+        static Globals = {}; //used to store lets between graphs
 
         static searchbox_extras = {}; //used to add extra features to the search box
         static auto_sort_node_types = false; // [true!] If set to true, will automatically sort node types / categories in the context menus
@@ -115,7 +115,7 @@
         static search_filter_enabled = false; // [true!] enable filtering slots type in the search widget, !requires auto_load_slot_types or manual set registered_slot_[in/out]_types and slot_types_[in/out]
         static search_show_all_on_open = true; // [true!] opens the results list when opening the search widget
 
-        static auto_load_slot_types = false; // [if want false, use true, run, get vars values to be statically set, than disable] nodes types and nodeclass association with node types need to be calculated, if dont want this, calculate once and set registered_slot_[in/out]_types and slot_types_[in/out]
+        static auto_load_slot_types = false; // [if want false, use true, run, get lets values to be statically set, than disable] nodes types and nodeclass association with node types need to be calculated, if dont want this, calculate once and set registered_slot_[in/out]_types and slot_types_[in/out]
 
         // set these values if not using auto_load_slot_types
         static registered_slot_in_types = {}; // slot types for nodeclass
@@ -162,18 +162,18 @@
         static closeAllContextMenus(ref_window) {
             ref_window = ref_window || window;
 
-            var elements =
+            let elements =
                 ref_window.document.querySelectorAll(".litecontextmenu");
             if (!elements.length) {
                 return;
             }
 
-            var result = [];
-            for (var i = 0; i < elements.length; i++) {
+            let result = [];
+            for (let i = 0; i < elements.length; i++) {
                 result.push(elements[i]);
             }
 
-            for (var i = 0; i < result.length; i++) {
+            for (let i = 0; i < result.length; i++) {
                 if (result[i].close) {
                     result[i].close();
                 } else if (result[i].parentNode) {
@@ -345,10 +345,10 @@
 
         //bounding overlap, format: [ startx, starty, width, height ]
         static overlapBounding(a, b) {
-            var A_end_x = a[0] + a[2];
-            var A_end_y = a[1] + a[3];
-            var B_end_x = b[0] + b[2];
-            var B_end_y = b[1] + b[3];
+            let A_end_x = a[0] + a[2];
+            let A_end_y = a[1] + a[3];
+            let B_end_x = b[0] + b[2];
+            let B_end_y = b[1] + b[3];
 
             if (
                 a[0] > B_end_x ||
@@ -388,7 +388,7 @@
             }
 
             //extend class
-            for (var i in LGraphNode.prototype) {
+            for (let i in LGraphNode.prototype) {
                 if (!base_class.prototype[i]) {
                     base_class.prototype[i] = LGraphNode.prototype[i];
                 }
@@ -495,7 +495,7 @@
          * Save a slot type and his node
          * @method registerSlotType
          * @param {String|Object} type name of the node or the node constructor itself
-         * @param {String} slot_type name of the slot type (variable type), eg. string, number, array, boolean, ..
+         * @param {String} slot_type name of the slot type (letiable type), eg. string, number, array, boolean, ..
          */
         static registerNodeAndSlotType(type, slot_type, out) {
             out = out || false;
@@ -554,36 +554,36 @@
          * @param {Object} object methods expected onCreate, inputs, outputs, properties, onExecute
          */
         static buildNodeClassFromObject(name, object) {
-            var ctor_code = "";
+            let ctor_code = "";
             if (object.inputs)
-                for (var i = 0; i < object.inputs.length; ++i) {
-                    var _name = object.inputs[i][0];
-                    var _type = object.inputs[i][1];
+                for (let i = 0; i < object.inputs.length; ++i) {
+                    let _name = object.inputs[i][0];
+                    let _type = object.inputs[i][1];
                     if (_type && _type.constructor === String)
                         _type = '"' + _type + '"';
                     ctor_code +=
                         "this.addInput('" + _name + "'," + _type + ");\n";
                 }
             if (object.outputs)
-                for (var i = 0; i < object.outputs.length; ++i) {
-                    var _name = object.outputs[i][0];
-                    var _type = object.outputs[i][1];
+                for (let i = 0; i < object.outputs.length; ++i) {
+                    let _name = object.outputs[i][0];
+                    let _type = object.outputs[i][1];
                     if (_type && _type.constructor === String)
                         _type = '"' + _type + '"';
                     ctor_code +=
                         "this.addOutput('" + _name + "'," + _type + ");\n";
                 }
             if (object.properties)
-                for (var i in object.properties) {
-                    var prop = object.properties[i];
+                for (let i in object.properties) {
+                    let prop = object.properties[i];
                     if (prop && prop.constructor === String)
                         prop = '"' + prop + '"';
                     ctor_code +=
                         "this.addProperty('" + i + "'," + prop + ");\n";
                 }
             ctor_code += "if(this.onCreate)this.onCreate()";
-            var classobj = Function(ctor_code);
-            for (var i in object)
+            let classobj = Function(ctor_code);
+            for (let i in object)
                 if (i != "inputs" && i != "outputs" && i != "properties")
                     classobj.prototype[i] = object[i];
             classobj.title = object.title || name.split("/").pop();
@@ -609,13 +609,13 @@
             return_type,
             properties
         ) {
-            var params = Array(func.length);
-            var code = "";
+            let params = Array(func.length);
+            let code = "";
             if (param_types !== null) {
                 //null means no inputs
-                var names = LiteGraph.getParameterNames(func);
-                for (var i = 0; i < names.length; ++i) {
-                    var type = 0;
+                let names = LiteGraph.getParameterNames(func);
+                for (let i = 0; i < names.length; ++i) {
+                    let type = 0;
                     if (param_types) {
                         //type = param_types[i] != null ? "'" + param_types[i] + "'" : "0";
                         if (
@@ -642,14 +642,14 @@
                 code +=
                     "this.properties = " + JSON.stringify(properties) + ";\n";
             }
-            var classobj = Function(code);
+            let classobj = Function(code);
             classobj.title = name.split("/").pop();
             classobj.desc = "Generated from " + func.name;
             classobj.prototype.onExecute = function onExecute() {
-                for (var i = 0; i < params.length; ++i) {
+                for (let i = 0; i < params.length; ++i) {
                     params[i] = this.getInputData(i);
                 }
-                var r = func.apply(this, params);
+                let r = func.apply(this, params);
                 this.setOutputData(0, r);
             };
             this.registerNodeType(name, classobj);
@@ -674,8 +674,8 @@
          */
         static addNodeMethod(name, func) {
             LGraphNode.prototype[name] = func;
-            for (var i in LiteGraph.registered_node_types) {
-                var type = LiteGraph.registered_node_types[i];
+            for (let i in LiteGraph.registered_node_types) {
+                let type = LiteGraph.registered_node_types[i];
                 if (type.prototype[name]) {
                     type.prototype["_" + name] = type.prototype[name];
                 } //keep old in case of replacing
@@ -692,7 +692,7 @@
          */
 
         static createNode(type, title, options) {
-            var base_class = LiteGraph.registered_node_types[type];
+            let base_class = LiteGraph.registered_node_types[type];
             if (!base_class) {
                 if (LiteGraph.debug) {
                     console.log(
@@ -702,11 +702,11 @@
                 return null;
             }
 
-            var prototype = base_class.prototype || base_class;
+            let prototype = base_class.prototype || base_class;
 
             title = title || base_class.title || type;
 
-            var node = null;
+            let node = null;
 
             if (LiteGraph.catch_exceptions) {
                 try {
@@ -746,7 +746,7 @@
 
             //extra options
             if (options) {
-                for (var i in options) {
+                for (let i in options) {
                     node[i] = options[i];
                 }
             }
@@ -777,9 +777,9 @@
          */
 
         static getNodeTypesInCategory(category, filter) {
-            var r = [];
-            for (var i in LiteGraph.registered_node_types) {
-                var type = LiteGraph.registered_node_types[i];
+            let r = [];
+            for (let i in LiteGraph.registered_node_types) {
+                let type = LiteGraph.registered_node_types[i];
                 if (type.filter != filter) {
                     continue;
                 }
@@ -809,16 +809,16 @@
          * @return {Array} array with all the names of the categories
          */
         static getNodeTypesCategories(filter) {
-            var categories = { "": 1 };
-            for (var i in LiteGraph.registered_node_types) {
-                var type = LiteGraph.registered_node_types[i];
+            let categories = { "": 1 };
+            for (let i in LiteGraph.registered_node_types) {
+                let type = LiteGraph.registered_node_types[i];
                 if (type.category && !type.skip_list) {
                     if (type.filter != filter) continue;
                     categories[type.category] = 1;
                 }
             }
-            var result = [];
-            for (var i in categories) {
+            let result = [];
+            for (let i in categories) {
                 result.push(i);
             }
             return this.auto_sort_node_types ? result.sort() : result;
@@ -826,18 +826,18 @@
 
         //debug purposes: reloads all the js scripts that matches a wildcard
         static reloadNodes(folder_wildcard) {
-            var tmp = document.getElementsByTagName("script");
+            let tmp = document.getElementsByTagName("script");
             //weird, this array changes by its own, so we use a copy
-            var script_files = [];
-            for (var i = 0; i < tmp.length; i++) {
+            let script_files = [];
+            for (let i = 0; i < tmp.length; i++) {
                 script_files.push(tmp[i]);
             }
 
-            var docHeadObj = document.getElementsByTagName("head")[0];
+            let docHeadObj = document.getElementsByTagName("head")[0];
             folder_wildcard = document.location.href + folder_wildcard;
 
-            for (var i = 0; i < script_files.length; i++) {
-                var src = script_files[i].src;
+            for (let i = 0; i < script_files.length; i++) {
+                let src = script_files[i].src;
                 if (
                     !src ||
                     src.substr(0, folder_wildcard.length) != folder_wildcard
@@ -849,7 +849,7 @@
                     if (LiteGraph.debug) {
                         console.log("Reloading: " + src);
                     }
-                    var dynamicScript = document.createElement("script");
+                    let dynamicScript = document.createElement("script");
                     dynamicScript.type = "text/javascript";
                     dynamicScript.src = src;
                     docHeadObj.appendChild(dynamicScript);
@@ -874,12 +874,12 @@
             if (obj == null) {
                 return null;
             }
-            var r = JSON.parse(JSON.stringify(obj));
+            let r = JSON.parse(JSON.stringify(obj));
             if (!target) {
                 return r;
             }
 
-            for (var i in r) {
+            for (let i in r) {
                 target[i] = r[i];
             }
             return target;
@@ -925,10 +925,10 @@
             }
 
             // Check all permutations to see if one is valid
-            var supported_types_a = type_a.split(",");
-            var supported_types_b = type_b.split(",");
-            for (var i = 0; i < supported_types_a.length; ++i) {
-                for (var j = 0; j < supported_types_b.length; ++j) {
+            let supported_types_a = type_a.split(",");
+            let supported_types_b = type_b.split(",");
+            for (let i = 0; i < supported_types_a.length; ++i) {
+                for (let j = 0; j < supported_types_b.length; ++j) {
                     if (
                         this.isValidConnection(
                             supported_types_a[i],
@@ -970,7 +970,7 @@
          * @return {FileReader|Promise} returns the object used to
          */
         static fetchFile(url, type, on_complete, on_error) {
-            var that = this;
+            let that = this;
             if (!url) return null;
 
             type = type || "text";
@@ -996,9 +996,9 @@
                         if (on_error) on_error(error);
                     });
             } else if (url.constructor === File || url.constructor === Blob) {
-                var reader = new FileReader();
+                let reader = new FileReader();
                 reader.onload = function (e) {
-                    var v = e.target.result;
+                    let v = e.target.result;
                     if (type == "json") v = JSON.parse(v);
                     if (on_complete) on_complete(v);
                 };
@@ -1020,7 +1020,7 @@
         LiteGraph.getTime = Date.now.bind(Date);
     } else if (typeof process != "undefined") {
         LiteGraph.getTime = function () {
-            var t = process.hrtime();
+            let t = process.hrtime();
             return t[0] * 0.001 + t[1] * 1e-6;
         };
     } else {
@@ -5436,7 +5436,7 @@
         }
 
         serialize() {
-            var b = this._bounding;
+            let b = this._bounding;
             return {
                 title: this.title,
                 bounding: [
@@ -5459,8 +5459,8 @@
             if (ignore_nodes) {
                 return;
             }
-            for (var i = 0; i < this._nodes.length; ++i) {
-                var node = this._nodes[i];
+            for (let i = 0; i < this._nodes.length; ++i) {
+                let node = this._nodes[i];
                 node.pos[0] += deltax;
                 node.pos[1] += deltay;
             }
@@ -5468,11 +5468,11 @@
 
         recomputeInsideNodes() {
             this._nodes.length = 0;
-            var nodes = this.graph._nodes;
-            var node_bounding = new Float32Array(4);
+            let nodes = this.graph._nodes;
+            let node_bounding = new Float32Array(4);
 
-            for (var i = 0; i < nodes.length; ++i) {
-                var node = nodes[i];
+            for (let i = 0; i < nodes.length; ++i) {
+                let node = nodes[i];
                 node.getBounding(node_bounding);
                 if (!LiteGraph.overlapBounding(this._bounding, node_bounding)) {
                     continue;
@@ -13725,10 +13725,11 @@
                 root_document.body.style.overflow = "hidden";
             }
             // dialog element has been appended
-
+            let selIn;
+            let selOut;
             if (options.do_type_filter) {
-                const selIn = dialog.querySelector(".slot_in_type_filter");
-                const selOut = dialog.querySelector(".slot_out_type_filter");
+                selIn = dialog.querySelector(".slot_in_type_filter");
+                selOut = dialog.querySelector(".slot_out_type_filter");
             }
 
             dialog.close = function () {
@@ -13751,8 +13752,8 @@
 
             // hide on mouse leave
             if (options.hide_on_mouse_leave) {
-                const prevent_timeout = false;
-                const timeout_close = null;
+                let prevent_timeout = false;
+                let timeout_close = null;
                 LiteGraph.pointerListenerAdd(dialog, "enter", function (e) {
                     if (timeout_close) {
                         clearTimeout(timeout_close);
@@ -13797,9 +13798,9 @@
 
             const helper = dialog.querySelector(".helper");
 
-            const first = null;
-            const timeout = null;
-            const selected = null;
+            let first = null;
+            let timeout = null;
+            let selected = null;
 
             let input = dialog.querySelector("input");
             if (input) {
@@ -13854,7 +13855,7 @@
                       else if(options.type_filter_in === "" || options.type_filter_in === 0)
                           options.type_filter_in = "*";*/
 
-                    for (const iK = 0; iK < nSlots; iK++) {
+                    for (let iK = 0; iK < nSlots; iK++) {
                         const opt = document.createElement("option");
                         opt.value = aSlots[iK];
                         opt.innerHTML = aSlots[iK];
@@ -13888,7 +13889,7 @@
                       else if(options.type_filter_out === "" || options.type_filter_out === 0)
                           options.type_filter_out = "*";*/
 
-                    for (const iK = 0; iK < nSlots; iK++) {
+                    for (let iK = 0; iK < nSlots; iK++) {
                         const opt = document.createElement("option");
                         opt.value = aSlots[iK];
                         opt.innerHTML = aSlots[iK];
@@ -13999,7 +14000,7 @@
 
                         // join node after inserting
                         if (options.node_from) {
-                            const iS = false;
+                            let iS = false;
                             switch (typeof options.slot_from) {
                                 case "string":
                                     iS = options.node_from.findOutputSlot(
@@ -14043,7 +14044,7 @@
                             }
                         }
                         if (options.node_to) {
-                            const iS = false;
+                            let iS = false;
                             switch (typeof options.slot_from) {
                                 case "string":
                                     iS = options.node_to.findInputSlot(
@@ -14121,7 +14122,7 @@
 
             function refreshHelper() {
                 timeout = null;
-                const str = input.value;
+                let str = input.value;
                 first = null;
                 helper.innerHTML = "";
                 if (!str && !options.show_all_if_empty) {
@@ -14136,22 +14137,24 @@
                         }
                     }
                 } else {
-                    const c = 0;
+                    let c = 0;
                     str = str.toLowerCase();
                     const filter =
                         graphcanvas.filter || graphcanvas.graph.filter;
+                    let sIn = null;
+                    let sOut = null;
 
                     // filter by type preprocess
                     if (options.do_type_filter && that.search_box) {
-                        const sIn = that.search_box.querySelector(
+                        sIn = that.search_box.querySelector(
                             ".slot_in_type_filter"
                         );
-                        const sOut = that.search_box.querySelector(
+                        sOut = that.search_box.querySelector(
                             ".slot_out_type_filter"
                         );
                     } else {
-                        const sIn = false;
-                        const sOut = false;
+                        sIn = false;
+                        sOut = false;
                     }
 
                     //extras
@@ -14176,13 +14179,13 @@
                         }
                     }
 
-                    const filtered = null;
+                    let filtered = null;
                     if (Array.prototype.filter) {
                         //filter supported
                         const keys = Object.keys(
                             LiteGraph.registered_node_types
                         ); //types
-                        const filtered = keys.filter(inner_test_filter);
+                        filtered = keys.filter(inner_test_filter);
                     } else {
                         filtered = [];
                         for (const i in LiteGraph.registered_node_types) {
@@ -14205,7 +14208,7 @@
                         options.show_general_after_typefiltered &&
                         (sIn.value || sOut.value)
                     ) {
-                        filtered_extra = [];
+                        const filtered_extra = [];
                         for (const i in LiteGraph.registered_node_types) {
                             if (
                                 inner_test_filter(i, {
@@ -14234,7 +14237,7 @@
                         helper.childNodes.length == 0 &&
                         options.show_general_if_none_on_typefilter
                     ) {
-                        filtered_extra = [];
+                        const filtered_extra = [];
                         for (const i in LiteGraph.registered_node_types) {
                             if (inner_test_filter(i, { skipFilter: true }))
                                 filtered_extra.push(i);
@@ -14270,7 +14273,7 @@
                         if (options.do_type_filter && !opts.skipFilter) {
                             const sType = type;
 
-                            const sV = sIn.value;
+                            let sV = sIn.value;
                             if (opts.inTypeOverride !== false)
                                 sV = opts.inTypeOverride;
                             //if (sV.toLowerCase() == "_event_") sV = LiteGraph.EVENT; // -1
@@ -14373,7 +14376,7 @@
             } else if ((type == "enum" || type == "combo") && info.values) {
                 input_html = "<select autofocus type='text' class='value'>";
                 for (const i in info.values) {
-                    const v = i;
+                    let v = i;
                     if (info.values.constructor === Array) v = info.values[i];
 
                     input_html +=
@@ -14534,7 +14537,7 @@
 
             // acheck for input and use default behaviour: save on enter, close on esc
             if (options.checkForInput) {
-                const aI = [];
+                let aI = [];
                 const focused = false;
                 if ((aI = dialog.querySelectorAll("input"))) {
                     aI.forEach(function (iX) {
@@ -14861,27 +14864,27 @@
                         );
                         input.click();
 
-                        input.addEventListener("change", async (e) => {
-                            const file = e.target.files[0];
-                            const MEGA_BYTES = 1024 * 1024;
-                            if (MEGA_BYTES * 3 < file.size) {
-                                throw "파일은 3메가 이하여야 합니다.";
-                            }
+                        // input.addEventListener("change", async (e) => {
+                        //     const file = e.target.files[0];
+                        //     const MEGA_BYTES = 1024 * 1024;
+                        //     if (MEGA_BYTES * 3 < file.size) {
+                        //         throw "파일은 3메가 이하여야 합니다.";
+                        //     }
 
-                            const fileUrl = changeFileToUrl(file);
+                        //     const fileUrl = changeFileToUrl(file);
 
-                            // 파일명 업데이트
-                            if (options.id) {
-                                const target = document.querySelector(
-                                    `#${options.id}`
-                                );
-                                if (target) target.value = file.name;
-                            }
-                            innerChange("이미지", {
-                                fileUrl,
-                                fileName: file.name,
-                            });
-                        });
+                        //     // 파일명 업데이트
+                        //     if (options.id) {
+                        //         const target = document.querySelector(
+                        //             `#${options.id}`
+                        //         );
+                        //         if (target) target.value = file.name;
+                        //     }
+                        //     innerChange("이미지", {
+                        //         fileUrl,
+                        //         fileName: file.name,
+                        //     });
+                        // });
                     });
 
                     value_element.appendChild(btn);
@@ -14914,7 +14917,7 @@
             }
 
             if (values.constructor === Object) {
-                const desc_value = "";
+                let desc_value = "";
                 for (const k in values) {
                     if (values[k] != value) continue;
                     desc_value = k;
@@ -14932,6 +14935,8 @@
         }
 
         showShowGraphOptionsPanel(refOpts, obEv, refMenu, refMenu2) {
+            let panel = document.querySelector("#node-panel");
+            let graphcanvas;
             if (this.constructor && this.constructor.name == "HTMLDivElement") {
                 // assume coming from the menu event click
                 if (
@@ -14945,10 +14950,10 @@
                       console.debug(event.target);*/
                     return;
                 }
-                const graphcanvas = obEv.event.target.lgraphcanvas;
+                graphcanvas = obEv.event.target.lgraphcanvas;
             } else {
                 // assume called internally
-                const graphcanvas = this;
+                graphcanvas = this;
             }
             graphcanvas.closePanels();
             const ref_window = graphcanvas.getCanvasWindow();
@@ -15661,7 +15666,7 @@
                 //??
                 return;
 
-            const nodes_list = Object.values(graphcanvas.selected_nodes || {});
+            let nodes_list = Object.values(graphcanvas.selected_nodes || {});
             if (!nodes_list.length) nodes_list = [node];
 
             const subgraph_node = LiteGraph.createNode("graph/subgraph");
@@ -15711,52 +15716,6 @@
             node.graph.afterChange();
 
             node.setDirtyCanvas(true, true);
-        }
-
-        getCanvasMenuOptions() {
-            let options = null;
-            const that = this;
-            if (this.getMenuOptions) {
-                options = this.getMenuOptions();
-            } else {
-                options = [
-                    {
-                        content: "노드 추가",
-                        has_submenu: true,
-                        callback: this.onMenuAdd.bind(this),
-                    },
-                    { content: "그룹 추가", callback: LGraphCanvas.onGroupAdd },
-                    //{ content: "Arrange", callback: that.graph.arrange },
-                    //{content:"Collapse All", callback: LGraphCanvas.onMenuCollapseAll }
-                ];
-                /*if (LiteGraph.showCanvasOptions){
-                        options.push({ content: "Options", callback: that.showShowGraphOptionsPanel });
-                    }*/
-
-                if (Object.keys(this.selected_nodes).length > 1) {
-                    options.push({
-                        content: "정렬",
-                        has_submenu: true,
-                        callback: LGraphCanvas.onGroupAlign,
-                    });
-                }
-
-                if (this._graph_stack && this._graph_stack.length > 0) {
-                    options.push(null, {
-                        content: "Close subgraph",
-                        callback: this.closeSubgraph.bind(this),
-                    });
-                }
-            }
-
-            if (this.getExtraMenuOptions) {
-                const extra = this.getExtraMenuOptions(this, options);
-                if (extra) {
-                    options = options.concat(extra);
-                }
-            }
-
-            return options;
         }
 
         //called by processContextMenu to extract the menu list
@@ -16065,8 +16024,8 @@
             const canvas = graphcanvas.canvas;
 
             const rect = canvas.getBoundingClientRect();
-            const offsetx = -20;
-            const offsety = -20;
+            let offsetx = -20;
+            let offsety = -20;
             if (rect) {
                 offsetx -= rect.left;
                 offsety -= rect.top;
@@ -16513,30 +16472,6 @@
 
         //     return options;
         // };
-
-        getGroupMenuOptions(node) {
-            const o = [
-                {
-                    content: "Title",
-                    callback: LGraphCanvas.onShowPropertyEditor,
-                },
-                {
-                    content: "Color",
-                    has_submenu: true,
-                    callback: LGraphCanvas.onMenuNodeColors,
-                },
-                {
-                    content: "Font size",
-                    property: "font_size",
-                    type: "Number",
-                    callback: LGraphCanvas.onShowPropertyEditor,
-                },
-                null,
-                { content: "Remove", callback: LGraphCanvas.onMenuNodeRemove },
-            ];
-
-            return o;
-        }
 
         processContextMenu(node, event) {
             const that = this;
@@ -17205,7 +17140,7 @@
             ctx.stroke();
             ctx.globalAlpha = 1;
             if (!inactive)
-                for (const i = 0; i < points.length; ++i) {
+                for (let i = 0; i < points.length; ++i) {
                     const p = points[i];
                     ctx.fillStyle =
                         this.selected == i
