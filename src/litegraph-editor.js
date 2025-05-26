@@ -28,7 +28,7 @@ export class Editor {
         //create graph
         var graph = (this.graph = new LGraph());
         var graphcanvas = (this.graphcanvas = new LGraphCanvas(canvas, graph, {
-            useWebgl: true,
+            useWebgl: false,
         }));
         graphcanvas.links_render_mode = 0;
         graphcanvas.background_image = "/editor/imgs/grid.png";

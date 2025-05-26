@@ -1,3 +1,6 @@
+import "/css/litegraph-editor.css";
+import "/css/litegraph.css";
+
 import "./gl-matrix-min.js";
 import "./litegl.js";
 import {
