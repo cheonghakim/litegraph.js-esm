@@ -1,9 +1,8 @@
-const { LiteGraph, LGraphNode } = window;
-
 /**
  * addProperty(name: string, default_value: any, type: string, extra_info?: object | undefined)
  * 속성을 추가, 접근 시 this[프로퍼티명]
  */
+import { LiteGraph, LGraphNode } from "../litegraph.js";
 
 // 노드 공통 클래스
 class RootNode extends LGraphNode {
