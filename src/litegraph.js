@@ -5761,6 +5761,8 @@ export class LGraphCanvas {
     constructor(canvas, graph, options) {
         /* Interaction */
 
+        this.graph = graph;
+
         this.options = options = options || {};
 
         this.ALWAYS_FLOW = false;
@@ -5889,14 +5891,25 @@ export class LGraphCanvas {
             graph.attachCanvas(this);
         }
 
-        this.setCanvas(canvas, options.skip_events);
+        // this.setCanvas(this.canvas, this.options.skip_events);
         this.clear();
 
-        if (!options.skip_render) {
-            this.startRendering();
-        }
+        // if (!this.options.skip_render) {
+        //     this.startRendering();
+        // }
 
         this.autoresize = options.autoresize;
+
+        this.fps = 0;
+    }
+
+    async _init(canvas) {
+        await this.setCanvas(canvas, this.options.skip_events);
+        this.clear();
+
+        if (!this.options.skip_render) {
+            this.startRendering();
+        }
     }
 
     /**
@@ -8732,6 +8745,8 @@ export class LGraphCanvas {
 
             visible_nodes.push(n);
         }
+
+        this.visible_nodes = visible_nodes;
         return visible_nodes;
     }
 
@@ -9293,6 +9308,9 @@ export class LGraphCanvas {
         x = x || 10;
         y = y || this.canvas.height - 80;
 
+        const nodesLength = this.visible_nodes?.length || 0;
+        const graphLenght = this.graph._nodes?.length || 0;
+
         ctx.save();
         ctx.translate(x, y);
 
@@ -9307,11 +9325,7 @@ export class LGraphCanvas {
             );
             ctx.fillText("I: " + this.graph.iteration, 5, 13 * 2);
             ctx.fillText(
-                "N: " +
-                    this.graph._nodes.length +
-                    " [" +
-                    this.visible_nodes.length +
-                    "]",
+                "N: " + graphLenght + " [" + nodesLength + "]",
                 5,
                 13 * 3
             );

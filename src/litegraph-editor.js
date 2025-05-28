@@ -4,8 +4,11 @@ import { LGraph, LGraphCanvas } from "./litegraph.js";
 
 export class Editor {
     constructor(container_id, options) {
-        options = options || {};
+        this.options = options || {};
+        this.container_id = container_id;
+    }
 
+    async init() {
         //fill container
         var html =
             "<div class='header'><div class='tools tools-left'></div><div class='tools tools-right'></div></div>";
@@ -30,6 +33,7 @@ export class Editor {
         var graphcanvas = (this.graphcanvas = new LGraphCanvas(canvas, graph, {
             useWebgl: false,
         }));
+        await graphcanvas._init(canvas);
         graphcanvas.links_render_mode = 0;
         graphcanvas.background_image = "/editor/imgs/grid.png";
         graph.onAfterExecute = function () {
@@ -57,7 +61,7 @@ export class Editor {
             ".tools-right"
         );
 
-        if (!options.skip_livemode) {
+        if (!this.options.skip_livemode) {
             this.addToolsButton(
                 "livemode_button",
                 "Live",
@@ -66,7 +70,7 @@ export class Editor {
                 ".tools-right"
             );
         }
-        if (!options.skip_maximize) {
+        if (!this.options.skip_maximize) {
             this.addToolsButton(
                 "maximize_button",
                 "",
@@ -75,12 +79,12 @@ export class Editor {
                 ".tools-right"
             );
         }
-        if (options.miniwindow) {
+        if (this.options.miniwindow) {
             this.addMiniWindow(300, 200);
         }
 
         //append to DOM
-        var parent = document.getElementById(container_id);
+        var parent = document.getElementById(this.container_id);
         if (parent) {
             parent.appendChild(root);
         }

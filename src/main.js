@@ -2,21 +2,6 @@ import "/css/litegraph-editor.css";
 import "/css/litegraph.css";
 
 import {
-    glMatrix,
-    mat2,
-    mat2d,
-    mat3,
-    mat4,
-    quat,
-    quat2,
-    vec2,
-    vec3,
-    vec4,
-} from "gl-matrix/esm/index.js";
-import { GL, global } from "./litegl.js";
-import { enableWebGLCanvas } from "./webglCanvas.js";
-
-import {
     LiteGraph,
     ContextMenu,
     DragAndScale,
@@ -50,18 +35,5 @@ export {
     LGraphNode,
     LLink,
     Editor,
-    enableWebGLCanvas,
     clamp,
-    glMatrix,
-    mat2,
-    mat2d,
-    mat3,
-    mat4,
-    quat,
-    quat2,
-    vec2,
-    vec3,
-    vec4,
-    GL,
-    global,
 };
