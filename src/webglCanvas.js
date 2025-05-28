@@ -1,13 +1,26 @@
-("use strict");
+"use strict";
 
-// import {  glMatrix, mat2, mat2d, mat3, mat4, quat, quat2, vec2, vec3, vec4 } from "gl-matrix/esm/index.js";
+import { global, GL } from "./litegl";
+import {
+    glMatrix,
+    mat2,
+    mat2d,
+    mat3,
+    mat4,
+    quat,
+    quat2,
+    vec2,
+    vec3,
+    vec4,
+} from "gl-matrix/esm/index.js";
+
+const { hexColorToRGBA } = global;
 
 // Canvas2DtoWebGL: https://github.com/jagenjo/Canvas2DtoWebGL
 
 //replaces the Canvas2D functions by WebGL functions, the behaviour is not 100% the same but it kind of works in many cases
 //not all functions have been implemented
 
-const GL = window.GL;
 if (typeof GL == "undefined")
     throw "litegl.js must be included to use enableWebGLCanvas";
 
