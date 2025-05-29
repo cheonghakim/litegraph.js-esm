@@ -7,9 +7,8 @@ import { LiteGraph } from "./litegraph.js";
     LiteGraph.node_images_path = "../nodes_data/";
 
     const editor = new Editor("main", { miniwindow: false });
-
-    const graph = editor.graph;
     await editor.init();
+    const graph = editor.graph;
 
     updateEditorHiPPICanvas();
     window.addEventListener("resize", function () {

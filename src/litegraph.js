@@ -14336,7 +14336,7 @@ export class LGraphCanvas {
         };
 
         root.clear = () => {
-            this.content.innerHTML = "";
+            root.content.innerHTML = "";
         };
 
         root.addHTML = (code, classname, on_footer) => {

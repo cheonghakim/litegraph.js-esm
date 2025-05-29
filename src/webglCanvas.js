@@ -1,18 +1,7 @@
 "use strict";
 
 import { global, GL } from "./litegl";
-import {
-    glMatrix,
-    mat2,
-    mat2d,
-    mat3,
-    mat4,
-    quat,
-    quat2,
-    vec2,
-    vec3,
-    vec4,
-} from "gl-matrix/esm/index.js";
+import { mat3, mat4, vec2, vec4 } from "gl-matrix/esm/index.js";
 
 const { hexColorToRGBA } = global;
 

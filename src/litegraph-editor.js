@@ -29,18 +29,16 @@ export class Editor {
         const canvas = (this.canvas = root.querySelector(".graphcanvas"));
         this.canvas = canvas;
         //create graph
-        this.graph = this.graph = new LGraph();
-        this.graphcanvas = this.graphcanvas = new LGraphCanvas(
-            canvas,
-            this.graph,
-            {
-                useWebgl: false,
-            }
-        );
+        this.graph = new LGraph();
+        this.graphcanvas = new LGraphCanvas(canvas, this.graph, {
+            useWebgl: false,
+        });
+
         await this.graphcanvas._init(canvas);
+
         this.graphcanvas.links_render_mode = 0;
         this.graphcanvas.background_image = "/editor/imgs/grid.png";
-        this.graph.onAfterExecute = function () {
+        this.graph.onAfterExecute = () => {
             this.graphcanvas.draw(true);
         };
 

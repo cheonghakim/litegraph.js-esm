@@ -26,6 +26,7 @@ import "@/nodes/trigger.js";
 import "@/nodes/logic.js";
 import "@/nodes/audio.js";
 import "@/nodes/base.js";
+import "@/nodes/math3d.js";
 
 export {
     LiteGraph,
