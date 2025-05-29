@@ -7082,50 +7082,20 @@ export class LGraphCanvas {
     // 그룹 수정 -> 하위 한글로 변경
     getGroupMenuOptions(grp) {
         const o = [
-            { content: "제목", callback: this.onShowPropertyEditor },
-
+            { content: "Title", callback: LGraphCanvas.onShowPropertyEditor },
             {
-                content: "그룹 위치",
-                property: "그룹 위치",
-                type: "Number",
-                callback: this.onGrpPositionEditor,
-            },
-            {
-                content: "그룹 사이즈",
-                property: "그룹 사이즈",
-                type: "Number",
-                callback: this.onGrpSizeEditor,
-            },
-            {
-                content: "그룹 색",
+                content: "Color",
                 has_submenu: true,
                 callback: LGraphCanvas.onMenuNodeColors,
             },
             {
-                content: "폰트 사이즈",
+                content: "Font size",
                 property: "font_size",
                 type: "Number",
-                callback: this.onShowPropertyEditor,
+                callback: LGraphCanvas.onShowPropertyEditor,
             },
-
-            {
-                content: "앞으로",
-                property: "font_size",
-                type: "Number",
-                callback: this.bringGroupToFront.bind(this, grp),
-            },
-            {
-                content: "뒤로",
-                property: "font_size",
-                type: "Number",
-                callback: this.sendGroupToBack.bind(this, grp),
-            },
-
             null,
-            {
-                content: "그룹 삭제",
-                callback: LGraphCanvas.onMenuNodeRemove,
-            },
+            { content: "Remove", callback: LGraphCanvas.onMenuNodeRemove },
         ];
 
         return o;
@@ -16023,21 +15993,21 @@ export class LGraphCanvas {
         } else {
             options = [
                 {
-                    content: "노드 추가",
+                    content: "Add Node",
                     has_submenu: true,
-                    callback: LGraphCanvas.onMenuAdd.bind(this),
+                    callback: LGraphCanvas.onMenuAdd,
                 },
-                { content: "그룹 추가", callback: LGraphCanvas.onGroupAdd },
+                { content: "Add Group", callback: LGraphCanvas.onGroupAdd },
                 //{ content: "Arrange", callback: that.graph.arrange },
                 //{content:"Collapse All", callback: LGraphCanvas.onMenuCollapseAll }
             ];
             /*if (LiteGraph.showCanvasOptions){
-                    options.push({ content: "Options", callback: that.showShowGraphOptionsPanel });
-                }*/
+                options.push({ content: "Options", callback: that.showShowGraphOptionsPanel });
+            }*/
 
             if (Object.keys(this.selected_nodes).length > 1) {
                 options.push({
-                    content: "정렬",
+                    content: "Align",
                     has_submenu: true,
                     callback: LGraphCanvas.onGroupAlign,
                 });
@@ -16060,52 +16030,6 @@ export class LGraphCanvas {
 
         return options;
     }
-
-    // getCanvasMenuOptions () {
-    //     const options = null;
-    //     const that = this;
-    //     if (this.getMenuOptions) {
-    //         options = this.getMenuOptions();
-    //     } else {
-    //         options = [
-    //             {
-    //                 content: "Add Node",
-    //                 has_submenu: true,
-    //                 callback: LGraphCanvas.onMenuAdd,
-    //             },
-    //             { content: "Add Group", callback: LGraphCanvas.onGroupAdd },
-    //             //{ content: "Arrange", callback: that.graph.arrange },
-    //             //{content:"Collapse All", callback: LGraphCanvas.onMenuCollapseAll }
-    //         ];
-    //         /*if (LiteGraph.showCanvasOptions){
-    //             options.push({ content: "Options", callback: that.showShowGraphOptionsPanel });
-    //         }*/
-
-    //         if (Object.keys(this.selected_nodes).length > 1) {
-    //             options.push({
-    //                 content: "Align",
-    //                 has_submenu: true,
-    //                 callback: LGraphCanvas.onGroupAlign,
-    //             });
-    //         }
-
-    //         if (this._graph_stack && this._graph_stack.length > 0) {
-    //             options.push(null, {
-    //                 content: "Close subgraph",
-    //                 callback: this.closeSubgraph.bind(this),
-    //             });
-    //         }
-    //     }
-
-    //     if (this.getExtraMenuOptions) {
-    //         const extra = this.getExtraMenuOptions(this, options);
-    //         if (extra) {
-    //             options = options.concat(extra);
-    //         }
-    //     }
-
-    //     return options;
-    // };
 
     processContextMenu(node, event) {
         const that = this;
