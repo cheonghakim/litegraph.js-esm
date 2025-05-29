@@ -2,24 +2,26 @@ import { Editor } from "./litegraph-editor.js";
 import { LiteGraph } from "./litegraph.js";
 
 (async function () {
-    var webgl_canvas = null;
+    let webgl_canvas = null;
 
     LiteGraph.node_images_path = "../nodes_data/";
 
-    var editor = new Editor("main", { miniwindow: false });
-    window.graphcanvas = editor.graphcanvas;
-    window.graph = editor.graph;
+    const editor = new Editor("main", { miniwindow: false });
+
+    const graph = editor.graph;
     await editor.init();
 
-    const graph = window.graph;
     updateEditorHiPPICanvas();
     window.addEventListener("resize", function () {
         editor.graphcanvas.resize();
         updateEditorHiPPICanvas();
     });
-    //window.addEventListener("keydown", editor.graphcanvas.processKey.bind(editor.graphcanvas) );
+    window.addEventListener(
+        "keydown",
+        editor.graphcanvas.processKey.bind(editor.graphcanvas)
+    );
     window.onbeforeunload = function () {
-        var data = JSON.stringify(window.graph.serialize());
+        var data = JSON.stringify(graph.serialize());
         localStorage.setItem("litegraphg demo backup", data);
     };
 
@@ -94,7 +96,16 @@ import { LiteGraph } from "./litegraph.js";
 
     elem.querySelector("#webgl").addEventListener("click", enableWebGL);
     elem.querySelector("#multiview").addEventListener("click", function () {
-        editor.addMultiview();
+        const target = elem.querySelector("#multiview");
+        const check = target.getAttribute("data-clicked");
+
+        if (check === "true") {
+            editor.subMultiview();
+            target.removeAttribute("data-clicked");
+        } else {
+            editor.addMultiview();
+            target.setAttribute("data-clicked", true);
+        }
     });
 
     function addDemo(name, url) {
@@ -129,29 +140,30 @@ import { LiteGraph } from "./litegraph.js";
             return;
         }
 
-        var libs = [
-            "js/libs/gl-matrix-min.js",
-            "js/libs/litegl.js",
-            "../src/nodes/gltextures.js",
-            "../src/nodes/glfx.js",
-            "../src/nodes/glshaders.js",
-            "../src/nodes/geometry.js",
-        ];
+        // var libs = [
+        //     // "js/libs/gl-matrix-min.js",
+        //     // "js/libs/litegl.js",
 
-        function fetchJS() {
-            if (libs.length == 0) return on_ready();
+        //     "../src/nodes/gltextures.js",
+        //     "../src/nodes/glfx.js",
+        //     "../src/nodes/glshaders.js",
+        //     "../src/nodes/geometry.js",
+        // ];
 
-            var script = null;
-            script = document.createElement("script");
-            script.onload = fetchJS;
-            script.src = libs.shift();
-            document.head.appendChild(script);
-        }
+        // function fetchJS() {
+        //     if (libs.length == 0) return on_ready();
 
-        fetchJS();
+        //     var script = null;
+        //     script = document.createElement("script");
+        //     script.onload = fetchJS;
+        //     script.src = libs.shift();
+        //     document.head.appendChild(script);
+        // }
 
+        // fetchJS();
+
+        on_ready();
         function on_ready() {
-            console.log(this.src);
             if (!window.GL) return;
             webgl_canvas = document.createElement("canvas");
             webgl_canvas.width = 400;

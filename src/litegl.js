@@ -3,7 +3,7 @@
 //forked from lightgl.js by Evan Wallace (madebyevan.com)
 "use strict";
 
-import earcut from "./earcut.js";
+import earcut from "@/earcut.js";
 import * as glm from "gl-matrix/esm/index.js";
 
 // 수동으로 각 객체를 복제 (동결 해제)
@@ -13,6 +13,7 @@ export const vec4 = Object.assign({}, glm.vec4);
 export const quat = Object.assign({}, glm.quat);
 export const mat3 = Object.assign({}, glm.mat3);
 export const mat4 = Object.assign({}, glm.mat4);
+export const glMatrix = Object.assign({}, glm.glmatrix);
 
 const global =
     typeof window != "undefined"
@@ -11182,7 +11183,7 @@ GL.create = function (options) {
     }
 
     //just some checks
-    if (window.glMatrix == undefined)
+    if (glMatrix == undefined)
         throw "glMatrix not found, LiteGL requires glMatrix to be included";
 
     var last_click_time = 0;

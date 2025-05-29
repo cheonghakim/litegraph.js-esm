@@ -1,4 +1,4 @@
-import { enableWebGLCanvas } from "./webglCanvas.js";
+import { enableWebGLCanvas } from "@/webglCanvas.js";
 
 // *************************************************************
 //   LiteGraph CLASS                                     *******
@@ -1740,7 +1740,7 @@ export class LGraph {
      */
 
     remove(node) {
-        if (node.constructor === LiteGraph.LGraphGroup) {
+        if (node.constructor === LGraphGroup) {
             const index = this._groups.indexOf(node);
             if (index != -1) {
                 this._groups.splice(index, 1);
@@ -6833,7 +6833,7 @@ export class LGraphCanvas {
                                 continue;
                             }
                             //link clicked
-                            this.showLinkMenu(link, e);
+                            LGraphCanvas.showLinkMenu(link, e, this);
                             this.over_link_center = null; //clear tooltip
                             break;
                         }
@@ -12685,8 +12685,8 @@ export class LGraphCanvas {
         node.setDirtyCanvas(true, true);
     }
 
-    static showLinkMenu(link, e) {
-        const that = this;
+    static showLinkMenu(link, e, context) {
+        const that = context;
         // console.log(link);
         const node_left = that.graph.getNodeById(link.origin_id);
         const node_right = that.graph.getNodeById(link.target_id);
@@ -15179,7 +15179,7 @@ export class LGraphCanvas {
 
             const fApplyColor = function (node) {
                 if (color) {
-                    if (node.constructor === LiteGraph.LGraphGroup) {
+                    if (node.constructor === LGraphGroup) {
                         node.color = color.groupcolor;
                     } else {
                         node.color = color.color;

@@ -11,9 +11,9 @@ import {
     LGraphNode,
     LLink,
     clamp,
-} from "./litegraph.js";
+} from "@/litegraph.js";
 
-import { Editor } from "./litegraph-editor.js";
+import { Editor } from "@/litegraph-editor.js";
 
 if (import.meta.env.MODE === "development") {
     import("./code.js");
@@ -22,8 +22,10 @@ if (import.meta.env.MODE === "development") {
 }
 
 // nodes
-import "./nodes/trigger.js";
-import "./nodes/logic.js";
+import "@/nodes/trigger.js";
+import "@/nodes/logic.js";
+import "@/nodes/audio.js";
+import "@/nodes/base.js";
 
 export {
     LiteGraph,
