@@ -3031,6 +3031,16 @@ export class LGraphNode {
         }
     }
 
+    setInputName(index, newName) {
+        if (index === -1) return;
+        this.inputs[index].name = newName;
+    }
+
+    setOutputName(index, newName) {
+        if (index === -1) return;
+        this.outputs[index].name = newName;
+    }
+
     /**
      * sets the output data type, useful when you want to be able to overwrite the data type
      * @method setOutputDataType

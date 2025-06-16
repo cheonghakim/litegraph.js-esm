@@ -11599,6 +11599,12 @@ class LGraphNode {
         o && (o.data = r);
       }
   }
+  setInputName(t, r) {
+    t !== -1 && (this.inputs[t].name = r);
+  }
+  setOutputName(t, r) {
+    t !== -1 && (this.outputs[t].name = r);
+  }
   /**
    * sets the output data type, useful when you want to be able to overwrite the data type
    * @method setOutputDataType
