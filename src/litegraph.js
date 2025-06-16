@@ -10557,7 +10557,7 @@ export class LGraphCanvas {
         function inner_refresh() {
             panel.content.innerHTML = ""; //clear
 
-            panel.addHTML("<h4>속성</h4>", "panel-section");
+            panel.addHTML("<h4>Attributes</h4>", "panel-section");
 
             const fUpdate = (name, value) => {
                 graphcanvas.graph.beforeChange(grp);
@@ -10582,10 +10582,10 @@ export class LGraphCanvas {
                     case "Y":
                         grp.move(0, parseInt(value) - grp.pos[1]);
                         break;
-                    case "넓이":
+                    case "Width":
                         grp.size[0] = parseInt(value);
                         break;
-                    case "높이":
+                    case "Height":
                         grp.size[1] = parseInt(value);
                         break;
 
@@ -10599,21 +10599,34 @@ export class LGraphCanvas {
             panel.addWidget("string", "Title", grp.title, {}, fUpdate);
 
             if (grp.id)
-                panel.addWidget("string", "그룹 아이디", grp.id, {}, fUpdate);
+                panel.addWidget("string", "Group ID", grp.id, {}, fUpdate);
 
-            if (grp.status)
+            if (grp.status) {
                 panel.addWidget(
                     "string",
-                    "상태",
+                    "Status",
                     grp.status,
                     { disabled: true },
                     fUpdate
                 );
+            }
 
             panel.addWidget("number", "X", grp.pos[0], { min: 0 }, fUpdate);
             panel.addWidget("number", "Y", grp.pos[1], { min: 0 }, fUpdate);
-            panel.addWidget("number", "넓이", grp.size[0], { min: 0 }, fUpdate);
-            panel.addWidget("number", "높이", grp.size[1], { min: 0 }, fUpdate);
+            panel.addWidget(
+                "number",
+                "Width",
+                grp.size[0],
+                { min: 0 },
+                fUpdate
+            );
+            panel.addWidget(
+                "number",
+                "Height",
+                grp.size[1],
+                { min: 0 },
+                fUpdate
+            );
 
             // panel.addWidget(
             //   "string",
@@ -14505,7 +14518,7 @@ export class LGraphCanvas {
 
                 const btn = document.createElement("btn");
                 btn.classList.add("btn", "btn-save-image");
-                btn.textContent = "이미지 추가";
+                btn.textContent = "Add Image";
 
                 btn.addEventListener("click", function (e) {
                     e.preventDefault();
@@ -14799,9 +14812,9 @@ export class LGraphCanvas {
 
             // 상태 프로퍼티
             const getDisplayName = (status) => {
-                if (status === -1) return "실패";
-                else if (status === 0) return "미실행";
-                else if (status === 1) return "실행완료";
+                if (status === -1) return "Fail";
+                else if (status === 0) return "Not Executed";
+                else if (status === 1) return "Complete";
             };
 
             // panel.addWidget(
@@ -15490,9 +15503,9 @@ export class LGraphCanvas {
         dialog.className = "graphdialog";
         dialog.innerHTML = `
                 <div class="d-flex flex-column align-items-start p-2" id="grpSizeDialog">
-                  <div> <div><span class='main-tit p-1'>그룹 사이즈 변경</span> </div>
-                  <div class="p-1"><span class='sub-prop'>넓이</span><input  type='number' class='value' id="widthValue" /></div>
-                  <div class="p-1"><span class='sub-prop'>높이</span><input type='number' class='value' id="heightValue"  /></div>
+                  <div> <div><span class='main-tit p-1'>Group Size</span> </div>
+                  <div class="p-1"><span class='sub-prop'>Width</span><input  type='number' class='value' id="widthValue" /></div>
+                  <div class="p-1"><span class='sub-prop'>Height</span><input type='number' class='value' id="heightValue"  /></div>
                   <div class="d-flex align-items-center justify-content-end p-1"><button class="okBtn">OK</button></div>
                 </div>
                
@@ -15719,7 +15732,7 @@ export class LGraphCanvas {
         dialog.className = "graphdialog";
         dialog.innerHTML = `
                 <div class="d-flex flex-column align-items-start p-2" id="grpSizeDialog">
-                  <div> <div><span class='main-tit p-1'>그룹 위치 변경</span> </div>
+                  <div> <div><span class='main-tit p-1'>Group Position</span> </div>
                   <div class="p-1"><span class='sub-prop'>X</span><input  type='number' class='value' id="xValue" /></div>
                   <div class="p-1"><span class='sub-prop'>Y</span><input type='number' class='value' id="yValue" /></div>
                   <div class="d-flex align-items-center justify-content-end p-1"><button class="okBtn">OK</button></div>

@@ -14940,7 +14940,7 @@ const _LGraphCanvas = class _LGraphCanvas {
     });
     r.node_panel = n, n.id = "node-panel", n.node = e, n.classList.add("settings");
     function s() {
-      n.content.innerHTML = "", n.addHTML("<h4>속성</h4>", "panel-section");
+      n.content.innerHTML = "", n.addHTML("<h4>Attributes</h4>", "panel-section");
       const a = (o, l) => {
         switch (r.graph.beforeChange(e), r.saveUndoStack(), o) {
           case "Title":
@@ -14955,22 +14955,34 @@ const _LGraphCanvas = class _LGraphCanvas {
           case "Y":
             e.move(0, parseInt(l) - e.pos[1]);
             break;
-          case "넓이":
+          case "Width":
             e.size[0] = parseInt(l);
             break;
-          case "높이":
+          case "Height":
             e.size[1] = parseInt(l);
             break;
         }
         r.graph.afterChange(), r.dirty_canvas = !0;
       };
-      n.addWidget("string", "Title", e.title, {}, a), e.id && n.addWidget("string", "그룹 아이디", e.id, {}, a), e.status && n.addWidget(
+      n.addWidget("string", "Title", e.title, {}, a), e.id && n.addWidget("string", "Group ID", e.id, {}, a), e.status && n.addWidget(
         "string",
-        "상태",
+        "Status",
         e.status,
         { disabled: !0 },
         a
-      ), n.addWidget("number", "X", e.pos[0], { min: 0 }, a), n.addWidget("number", "Y", e.pos[1], { min: 0 }, a), n.addWidget("number", "넓이", e.size[0], { min: 0 }, a), n.addWidget("number", "높이", e.size[1], { min: 0 }, a), n.addSeparator();
+      ), n.addWidget("number", "X", e.pos[0], { min: 0 }, a), n.addWidget("number", "Y", e.pos[1], { min: 0 }, a), n.addWidget(
+        "number",
+        "Width",
+        e.size[0],
+        { min: 0 },
+        a
+      ), n.addWidget(
+        "number",
+        "Height",
+        e.size[1],
+        { min: 0 },
+        a
+      ), n.addSeparator();
     }
     s(), this.canvas.parentNode.appendChild(n);
   }
@@ -16758,7 +16770,7 @@ const _LGraphCanvas = class _LGraphCanvas {
         const _ = h.querySelector(".property_value_img");
         _.setAttribute("contenteditable", !0), _.innerText = c, h.dataset.property = a, h.dataset.type = l.type || s, h.options = l, h.value = o;
         const b = l.disabled, m = document.createElement("btn");
-        m.classList.add("btn", "btn-save-image"), m.textContent = "이미지 추가", m.addEventListener("click", function(E) {
+        m.classList.add("btn", "btn-save-image"), m.textContent = "Add Image", m.addEventListener("click", function(E) {
           if (E.preventDefault(), b) return;
           const L = document.createElement("input");
           L.type = "file", L.setAttribute("accept", ".png,.jpg,.jpeg,.gif,.webp,"), L.click();
@@ -17265,9 +17277,9 @@ const _LGraphCanvas = class _LGraphCanvas {
     const a = document.createElement("div");
     a.is_modified = !1, a.className = "graphdialog", a.innerHTML = `
                 <div class="d-flex flex-column align-items-start p-2" id="grpSizeDialog">
-                  <div> <div><span class='main-tit p-1'>그룹 사이즈 변경</span> </div>
-                  <div class="p-1"><span class='sub-prop'>넓이</span><input  type='number' class='value' id="widthValue" /></div>
-                  <div class="p-1"><span class='sub-prop'>높이</span><input type='number' class='value' id="heightValue"  /></div>
+                  <div> <div><span class='main-tit p-1'>Group Size</span> </div>
+                  <div class="p-1"><span class='sub-prop'>Width</span><input  type='number' class='value' id="widthValue" /></div>
+                  <div class="p-1"><span class='sub-prop'>Height</span><input type='number' class='value' id="heightValue"  /></div>
                   <div class="d-flex align-items-center justify-content-end p-1"><button class="okBtn">OK</button></div>
                 </div>
                
@@ -17353,7 +17365,7 @@ const _LGraphCanvas = class _LGraphCanvas {
     const a = document.createElement("div");
     a.is_modified = !1, a.className = "graphdialog", a.innerHTML = `
                 <div class="d-flex flex-column align-items-start p-2" id="grpSizeDialog">
-                  <div> <div><span class='main-tit p-1'>그룹 위치 변경</span> </div>
+                  <div> <div><span class='main-tit p-1'>Group Position</span> </div>
                   <div class="p-1"><span class='sub-prop'>X</span><input  type='number' class='value' id="xValue" /></div>
                   <div class="p-1"><span class='sub-prop'>Y</span><input type='number' class='value' id="yValue" /></div>
                   <div class="d-flex align-items-center justify-content-end p-1"><button class="okBtn">OK</button></div>
