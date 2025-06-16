@@ -15948,7 +15948,7 @@ const _LGraphCanvas = class _LGraphCanvas {
         h,
         f.values
       )), h = _LGraphCanvas.decodeHTML(h), l.push({
-        content: "<span class='property_name'>" + (f.label ? f.label : c) + `</span><input class='property_value' value=${h}>`,
+        content: "<span class='property_name'>" + (f.label ? f.label : c) + "</span><span class='property_value'>" + h + "</span>",
         value: c
       });
     }
@@ -16686,7 +16686,7 @@ const _LGraphCanvas = class _LGraphCanvas {
   createPanel(e, t) {
     t = t || {};
     const r = t.window || window, n = document.createElement("div");
-    if (n.className = "litegraph dialog", n.innerHTML = "<div class='dialog-header'><div class='dialog-title'></div></div><div class='dialog-content'></div><div style='display:none;' class='dialog-alt-content'></div><div class='dialog-footer'></div>", n.header = n.querySelector(".dialog-header"), t.width && (n.style.width = t.width + (t.width.constructor === Number ? "px" : "")), t.height && (n.style.height = t.height + (t.height.constructor === Number ? "px" : "")), t.closable) {
+    if (n.className = "litegraph dialog", n.innerHTML = "<div class='dialog-header'><span class='dialog-title'></span></div><div class='dialog-content'></div><div style='display:none;' class='dialog-alt-content'></div><div class='dialog-footer'></div>", n.header = n.querySelector(".dialog-header"), t.width && (n.style.width = t.width + (t.width.constructor === Number ? "px" : "")), t.height && (n.style.height = t.height + (t.height.constructor === Number ? "px" : "")), t.closable) {
       const s = document.createElement("span");
       s.innerHTML = "&#10005;", s.classList.add("close"), s.addEventListener("click", function() {
         n.close();
@@ -16716,11 +16716,11 @@ const _LGraphCanvas = class _LGraphCanvas {
       let c = String(o);
       s = s.toLowerCase(), s == "number" && (c = parseFloat(o).toFixed(3));
       const h = document.createElement("div");
-      h.className = "property", h.innerHTML = "<span class='property_name'></span><input class='property_value'></input>", h.querySelector(".property_name").innerText = l.label || a;
+      h.className = "property", h.innerHTML = "<span class='property_name'></span><span class='property_value'></span>", h.querySelector(".property_name").innerText = l.label || a;
       const f = h.querySelector(".property_value");
-      f.value = c, h.dataset.property = a, h.dataset.type = l.type || s, h.options = l, h.value = o;
+      f.innerText = c, h.dataset.property = a, h.dataset.type = l.type || s, h.options = l, h.value = o;
       const d = l.disabled || !1;
-      if (d && (f.classList.add("disabled"), f.setAttribute("disabled", !0)), s == "code")
+      if (d && f.classList.add("disabled"), s == "code")
         h.addEventListener("click", function(_) {
           _.preventDefault(), !d && n.inner_showCodePad(this.dataset.property);
         });
@@ -16728,7 +16728,7 @@ const _LGraphCanvas = class _LGraphCanvas {
         h.classList.add("boolean"), o && h.classList.add("bool-on"), h.addEventListener("click", function(_) {
           if (_.preventDefault(), d) return;
           const b = this.dataset.property || a;
-          this.value = !this.value, this.classList.toggle("bool-on"), this.querySelector(".property_value").value = this.value ? "true" : "false", p(b, this.value);
+          this.value = !this.value, this.classList.toggle("bool-on"), this.querySelector(".property_value").innerText = this.value ? "true" : "false", p(b, this.value);
         });
       else if (s == "string" || s == "number") {
         const _ = document.createElement("input"), b = s === "string" ? "string" : "number";

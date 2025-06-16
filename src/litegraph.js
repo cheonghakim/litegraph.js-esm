@@ -12642,7 +12642,9 @@ export class LGraphCanvas {
                     "<span class='property_name'>" +
                     (info.label ? info.label : i) +
                     "</span>" +
-                    `<input class='property_value' value=${value}>`,
+                    "<span class='property_value'>" +
+                    value +
+                    "</span>",
                 value: i,
             });
         }
@@ -14287,7 +14289,7 @@ export class LGraphCanvas {
         const root = document.createElement("div");
         root.className = "litegraph dialog";
         root.innerHTML =
-            "<div class='dialog-header'><div class='dialog-title'></div></div><div class='dialog-content'></div><div style='display:none;' class='dialog-alt-content'></div><div class='dialog-footer'></div>";
+            "<div class='dialog-header'><span class='dialog-title'></span></div><div class='dialog-content'></div><div style='display:none;' class='dialog-alt-content'></div><div class='dialog-footer'></div>";
         root.header = root.querySelector(".dialog-header");
 
         if (options.width)
@@ -14394,20 +14396,17 @@ export class LGraphCanvas {
             const elem = document.createElement("div");
             elem.className = "property";
             elem.innerHTML =
-                "<span class='property_name'></span><input class='property_value'></input>";
+                "<span class='property_name'></span><span class='property_value'></span>";
             elem.querySelector(".property_name").innerText =
                 options.label || name;
             const value_element = elem.querySelector(".property_value");
-            value_element.value = str_value;
+            value_element.innerText = str_value;
             elem.dataset["property"] = name;
             elem.dataset["type"] = options.type || type;
             elem.options = options;
             elem.value = value;
             const disabled = options.disabled || false;
-            if (disabled) {
-                value_element.classList.add("disabled");
-                value_element.setAttribute("disabled", true);
-            }
+            if (disabled) value_element.classList.add("disabled");
             if (type == "code")
                 elem.addEventListener("click", function (e) {
                     e.preventDefault();
@@ -14425,7 +14424,7 @@ export class LGraphCanvas {
                     const propname = this.dataset["property"] || name;
                     this.value = !this.value;
                     this.classList.toggle("bool-on");
-                    this.querySelector(".property_value").value = this.value
+                    this.querySelector(".property_value").innerText = this.value
                         ? "true"
                         : "false";
                     innerChange(propname, this.value);
