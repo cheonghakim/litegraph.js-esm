@@ -1767,7 +1767,9 @@ export class LGraph {
             for (let i = 0; i < node.inputs.length; i++) {
                 const slot = node.inputs[i];
                 if (slot.link != null) {
+                    this.removeLink(slot.link);
                     node.disconnectInput(i);
+                  
                 }
             }
         }
@@ -1777,6 +1779,9 @@ export class LGraph {
             for (let i = 0; i < node.outputs.length; i++) {
                 const slot = node.outputs[i];
                 if (slot.links != null && slot.links.length) {
+                    [...slot.links].forEach((linkId) => {
+                        this.removeLink(linkId);
+                      });
                     node.disconnectOutput(i);
                 }
             }
@@ -7963,8 +7968,8 @@ export class LGraphCanvas {
 
             if (e.keyCode === 86 && (e.metaKey || e.ctrlKey)) {
                 this.saveUndoStack();
-                //paste
                 this.pasteFromClipboard(e.shiftKey);
+                block_default = true;  // ✅ 반드시 추가
             }
 
             const arrowEvt = (e) => {

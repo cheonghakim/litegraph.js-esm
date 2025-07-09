@@ -10970,12 +10970,16 @@ const Ge = class Ge {
     if (this._nodes_by_id[t.id] == null || t.ignore_remove)
       return;
     if (this.beforeChange(), t.inputs)
-      for (let n = 0; n < t.inputs.length; n++)
-        t.inputs[n].link != null && t.disconnectInput(n);
+      for (let n = 0; n < t.inputs.length; n++) {
+        const s = t.inputs[n];
+        s.link != null && (this.removeLink(s.link), t.disconnectInput(n));
+      }
     if (t.outputs)
       for (let n = 0; n < t.outputs.length; n++) {
         const s = t.outputs[n];
-        s.links != null && s.links.length && t.disconnectOutput(n);
+        s.links != null && s.links.length && ([...s.links].forEach((a) => {
+          this.removeLink(a);
+        }), t.disconnectOutput(n));
       }
     if (t.onRemoved && t.onRemoved(), t.graph = null, this._version++, this.list_of_graphcanvas)
       for (let n = 0; n < this.list_of_graphcanvas.length; ++n) {
@@ -13893,7 +13897,7 @@ const _LGraphCanvas = class _LGraphCanvas {
     let t = !1;
     if (e.target.localName != "input") {
       if (e.type == "keydown") {
-        this.isKeyPressed = !0, e.keyCode == 32 && (this.saveUndoStack(), this.dragging_canvas = !0, t = !0), e.keyCode == 27 && (this.saveUndoStack(), this.node_panel && this.node_panel.close(), this.options_panel && this.options_panel.close(), t = !0), e.keyCode == 65 && e.ctrlKey && (this.saveUndoStack(), this.selectNodes(), t = !0), e.keyCode === 67 && (e.metaKey || e.ctrlKey) && !e.shiftKey && this.selected_nodes && (this.saveUndoStack(), this.copyToClipboard(), t = !0), e.keyCode === 86 && (e.metaKey || e.ctrlKey) && (this.saveUndoStack(), this.pasteFromClipboard(e.shiftKey));
+        this.isKeyPressed = !0, e.keyCode == 32 && (this.saveUndoStack(), this.dragging_canvas = !0, t = !0), e.keyCode == 27 && (this.saveUndoStack(), this.node_panel && this.node_panel.close(), this.options_panel && this.options_panel.close(), t = !0), e.keyCode == 65 && e.ctrlKey && (this.saveUndoStack(), this.selectNodes(), t = !0), e.keyCode === 67 && (e.metaKey || e.ctrlKey) && !e.shiftKey && this.selected_nodes && (this.saveUndoStack(), this.copyToClipboard(), t = !0), e.keyCode === 86 && (e.metaKey || e.ctrlKey) && (this.saveUndoStack(), this.pasteFromClipboard(e.shiftKey), t = !0);
         const r = (n) => {
           if (this.selected_nodes && n.key === "ArrowUp") {
             this.saveUndoStackEvt();
