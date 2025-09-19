@@ -1769,7 +1769,6 @@ export class LGraph {
                 if (slot.link != null) {
                     this.removeLink(slot.link);
                     node.disconnectInput(i);
-                  
                 }
             }
         }
@@ -1781,7 +1780,7 @@ export class LGraph {
                 if (slot.links != null && slot.links.length) {
                     [...slot.links].forEach((linkId) => {
                         this.removeLink(linkId);
-                      });
+                    });
                     node.disconnectOutput(i);
                 }
             }
@@ -5386,16 +5385,18 @@ export class LGraphGroup {
         };
     }
 
-    move(deltax, deltay, ignore_nodes) {
+    move(deltax, deltay, ignore_nodes, skip_node = false) {
         this._pos[0] += deltax;
         this._pos[1] += deltay;
         if (ignore_nodes) {
             return;
         }
-        for (let i = 0; i < this._nodes.length; ++i) {
-            let node = this._nodes[i];
-            node.pos[0] += deltax;
-            node.pos[1] += deltay;
+        if (skip_node === false) {
+            for (let i = 0; i < this._nodes.length; ++i) {
+                let node = this._nodes[i];
+                node.pos[0] += deltax;
+                node.pos[1] += deltay;
+            }
         }
     }
 
@@ -5779,6 +5780,9 @@ export class LGraphCanvas {
         this.graph = graph;
 
         this.options = options = options || {};
+
+        // 그룹 단독으로 움직이기
+        this.move_grp_alone = false;
 
         this.ALWAYS_FLOW = false;
         this.isKeyPressed = false;
@@ -6491,6 +6495,11 @@ export class LGraphCanvas {
             return;
         }
 
+        const selectedGrp = this.graph.getGroupOnPos(e.canvasX, e.canvasY);
+        if (selectedGrp && e.which == 1 && e.altKey) {
+            this.move_grp_alone = true;
+        }
+
         let node = this.graph.getNodeOnPos(
             e.canvasX,
             e.canvasY,
@@ -7185,7 +7194,12 @@ export class LGraphCanvas {
             } else {
                 const deltax = delta[0] / this.ds.scale;
                 const deltay = delta[1] / this.ds.scale;
-                this.selected_group.move(deltax, deltay, e.ctrlKey);
+                this.selected_group.move(
+                    deltax,
+                    deltay,
+                    e.ctrlKey,
+                    this.move_grp_alone
+                );
                 if (this.selected_group._nodes.length) {
                     this.dirty_canvas = true;
                 }
@@ -7504,6 +7518,8 @@ export class LGraphCanvas {
                     this.dirty_canvas = true;
                 }
                 this.selected_group = null;
+
+                this.move_grp_alone = false;
             }
             this.selected_group_resizing = false;
 
@@ -7969,7 +7985,7 @@ export class LGraphCanvas {
             if (e.keyCode === 86 && (e.metaKey || e.ctrlKey)) {
                 this.saveUndoStack();
                 this.pasteFromClipboard(e.shiftKey);
-                block_default = true;  // ✅ 반드시 추가
+                block_default = true; // ✅ 반드시 추가
             }
 
             const arrowEvt = (e) => {

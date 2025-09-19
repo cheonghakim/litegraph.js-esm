@@ -12885,11 +12885,11 @@ class LGraphGroup {
       group_id: this.group_id
     };
   }
-  move(t, r, n) {
-    if (this._pos[0] += t, this._pos[1] += r, !n)
-      for (let s = 0; s < this._nodes.length; ++s) {
-        let a = this._nodes[s];
-        a.pos[0] += t, a.pos[1] += r;
+  move(t, r, n, s = !1) {
+    if (this._pos[0] += t, this._pos[1] += r, !n && s === !1)
+      for (let a = 0; a < this._nodes.length; ++a) {
+        let o = this._nodes[a];
+        o.pos[0] += t, o.pos[1] += r;
       }
   }
   recomputeInsideNodes() {
@@ -13050,7 +13050,7 @@ const _LGraphCanvas = class _LGraphCanvas {
         this.undoStack[this.undoStack.length - 1]
       )) && this.undoStack.push(t), this.undoStack.length > this.maxStackSize && this.undoStack.shift(), this.redoStack.length = 0;
     });
-    this.graph = t, this.options = r = r || {}, this.ALWAYS_FLOW = !1, this.isKeyPressed = !1, this._menus = [], this.maxStackSize = r.maxStackSize || 1e3, this.undoStack = [], this.redoStack = [], this.saveUndoStackEvt = this.debounceTime(
+    this.graph = t, this.options = r = r || {}, this.move_grp_alone = !1, this.ALWAYS_FLOW = !1, this.isKeyPressed = !1, this._menus = [], this.maxStackSize = r.maxStackSize || 1e3, this.undoStack = [], this.redoStack = [], this.saveUndoStackEvt = this.debounceTime(
       this.saveUndoStack.bind(this),
       50
     ), this.background_image = _LGraphCanvas.DEFAULT_BACKGROUND_IMAGE, e && e.constructor === String && (e = document.querySelector(e)), this.ds = new DragAndScale(), this.zoom_modify_alpha = !0, this.title_text_font = "" + LiteGraph.NODE_TEXT_SIZE + "px Arial", this.inner_text_font = "normal " + LiteGraph.NODE_SUBTEXT_SIZE + "px Arial", this.node_title_color = LiteGraph.NODE_TITLE_COLOR, this.default_link_color = LiteGraph.LINK_COLOR, this.default_connection_color = {
@@ -13319,184 +13319,185 @@ const _LGraphCanvas = class _LGraphCanvas {
       !0
     )), !a)
       return;
-    let o = this.graph.getNodeOnPos(
+    this.graph.getGroupOnPos(e.canvasX, e.canvasY) && e.which == 1 && e.altKey && (this.move_grp_alone = !0);
+    let l = this.graph.getNodeOnPos(
       e.canvasX,
       e.canvasY,
       this.visible_nodes,
       5
-    ), l = !1;
-    const u = LiteGraph.getTime(), c = e.isPrimary === void 0 || !e.isPrimary, h = u - this.last_mouseclick < 300 && c;
-    if (this.mouse[0] = e.clientX, this.mouse[1] = e.clientY, this.graph_mouse[0] = e.canvasX, this.graph_mouse[1] = e.canvasY, this.last_click_position = [this.mouse[0], this.mouse[1]], this.pointer_is_down && c ? this.pointer_is_double = !0 : this.pointer_is_double = !1, this.pointer_is_down = !0, this.canvas.focus(), LiteGraph.closeAllContextMenus(r), !(this.onMouse && this.onMouse(e) == !0)) {
-      if (o || this.closePanels(), e.which == 1 && !this.pointer_is_double) {
-        if (this.saveUndoStack(), e.ctrlKey && (this.dragging_rectangle = new Float32Array(4), this.dragging_rectangle[0] = e.canvasX, this.dragging_rectangle[1] = e.canvasY, this.dragging_rectangle[2] = 1, this.dragging_rectangle[3] = 1, l = !0), LiteGraph.alt_drag_do_clone_nodes && e.altKey && o && this.allow_interaction && !l && !this.read_only) {
-          let d = o.clone();
-          (d = o.clone()) && (d.pos[0] += 5, d.pos[1] += 5, this.graph.add(d, !1, { doCalcSize: !1 }), o = d, l = !0, t || (this.allow_dragnodes && (this.graph.beforeChange(), this.node_dragged = o), this.selected_nodes[o.id] || this.processNodeSelected(o, e)));
+    ), u = !1;
+    const c = LiteGraph.getTime(), h = e.isPrimary === void 0 || !e.isPrimary, f = c - this.last_mouseclick < 300 && h;
+    if (this.mouse[0] = e.clientX, this.mouse[1] = e.clientY, this.graph_mouse[0] = e.canvasX, this.graph_mouse[1] = e.canvasY, this.last_click_position = [this.mouse[0], this.mouse[1]], this.pointer_is_down && h ? this.pointer_is_double = !0 : this.pointer_is_double = !1, this.pointer_is_down = !0, this.canvas.focus(), LiteGraph.closeAllContextMenus(r), !(this.onMouse && this.onMouse(e) == !0)) {
+      if (l || this.closePanels(), e.which == 1 && !this.pointer_is_double) {
+        if (this.saveUndoStack(), e.ctrlKey && (this.dragging_rectangle = new Float32Array(4), this.dragging_rectangle[0] = e.canvasX, this.dragging_rectangle[1] = e.canvasY, this.dragging_rectangle[2] = 1, this.dragging_rectangle[3] = 1, u = !0), LiteGraph.alt_drag_do_clone_nodes && e.altKey && l && this.allow_interaction && !u && !this.read_only) {
+          let p = l.clone();
+          (p = l.clone()) && (p.pos[0] += 5, p.pos[1] += 5, this.graph.add(p, !1, { doCalcSize: !1 }), l = p, u = !0, t || (this.allow_dragnodes && (this.graph.beforeChange(), this.node_dragged = l), this.selected_nodes[l.id] || this.processNodeSelected(l, e)));
         }
-        let f = !1;
-        if (o && (this.allow_interaction || o.flags.allow_interaction) && !l && !this.read_only) {
-          if (!this.live_mode && !o.flags.pinned && this.bringToFront(o), this.allow_interaction && !this.connecting_node && !o.flags.collapsed && !this.live_mode)
-            if (!l && o.resizable !== !1 && LiteGraph.isInsideRectangle(
+        let d = !1;
+        if (l && (this.allow_interaction || l.flags.allow_interaction) && !u && !this.read_only) {
+          if (!this.live_mode && !l.flags.pinned && this.bringToFront(l), this.allow_interaction && !this.connecting_node && !l.flags.collapsed && !this.live_mode)
+            if (!u && l.resizable !== !1 && LiteGraph.isInsideRectangle(
               e.canvasX,
               e.canvasY,
-              o.pos[0] + o.size[0] - 5,
-              o.pos[1] + o.size[1] - 5,
+              l.pos[0] + l.size[0] - 5,
+              l.pos[1] + l.size[1] - 5,
               10,
               10
             ))
-              this.graph.beforeChange(), this.resizing_node = o, this.canvas.style.cursor = "se-resize", l = !0;
+              this.graph.beforeChange(), this.resizing_node = l, this.canvas.style.cursor = "se-resize", u = !0;
             else {
-              if (o.outputs)
-                for (let d = 0, p = o.outputs.length; d < p; ++d) {
-                  const _ = o.outputs[d], b = o.getConnectionPos(
+              if (l.outputs)
+                for (let p = 0, _ = l.outputs.length; p < _; ++p) {
+                  const b = l.outputs[p], m = l.getConnectionPos(
                     !1,
-                    d
+                    p
                   );
                   if (LiteGraph.isInsideRectangle(
                     e.canvasX,
                     e.canvasY,
-                    b[0] - 15,
-                    b[1] - 10,
+                    m[0] - 15,
+                    m[1] - 10,
                     30,
                     20
                   )) {
-                    this.connecting_node = o, this.connecting_output = _, this.connecting_output.slot_index = d, this.connecting_pos = o.getConnectionPos(
+                    this.connecting_node = l, this.connecting_output = b, this.connecting_output.slot_index = p, this.connecting_pos = l.getConnectionPos(
                       !1,
-                      d
-                    ), this.connecting_slot = d, LiteGraph.shift_click_do_break_link_from && e.shiftKey && o.disconnectOutput(d), h ? o.onOutputDblClick && o.onOutputDblClick(d, e) : o.onOutputClick && o.onOutputClick(d, e), l = !0;
+                      p
+                    ), this.connecting_slot = p, LiteGraph.shift_click_do_break_link_from && e.shiftKey && l.disconnectOutput(p), f ? l.onOutputDblClick && l.onOutputDblClick(p, e) : l.onOutputClick && l.onOutputClick(p, e), u = !0;
                     break;
                   }
                 }
-              if (o.inputs)
-                for (let d = 0, p = o.inputs.length; d < p; ++d) {
-                  const _ = o.inputs[d], b = o.getConnectionPos(!0, d);
+              if (l.inputs)
+                for (let p = 0, _ = l.inputs.length; p < _; ++p) {
+                  const b = l.inputs[p], m = l.getConnectionPos(!0, p);
                   if (LiteGraph.isInsideRectangle(
                     e.canvasX,
                     e.canvasY,
-                    b[0] - 15,
-                    b[1] - 10,
+                    m[0] - 15,
+                    m[1] - 10,
                     30,
                     20
                   )) {
-                    if (h ? o.onInputDblClick && o.onInputDblClick(d, e) : o.onInputClick && o.onInputClick(d, e), _.link !== null) {
-                      const m = this.graph.links[_.link];
-                      LiteGraph.click_do_break_link_to && (o.disconnectInput(d), this.dirty_bgcanvas = !0, l = !0), (this.allow_reconnect_links || //this.move_destination_link_without_shift ||
-                      e.shiftKey) && (LiteGraph.click_do_break_link_to || o.disconnectInput(d), this.connecting_node = this.graph._nodes_by_id[m.origin_id], this.connecting_slot = m.origin_slot, this.connecting_output = this.connecting_node.outputs[this.connecting_slot], this.connecting_pos = this.connecting_node.getConnectionPos(
+                    if (f ? l.onInputDblClick && l.onInputDblClick(p, e) : l.onInputClick && l.onInputClick(p, e), b.link !== null) {
+                      const E = this.graph.links[b.link];
+                      LiteGraph.click_do_break_link_to && (l.disconnectInput(p), this.dirty_bgcanvas = !0, u = !0), (this.allow_reconnect_links || //this.move_destination_link_without_shift ||
+                      e.shiftKey) && (LiteGraph.click_do_break_link_to || l.disconnectInput(p), this.connecting_node = this.graph._nodes_by_id[E.origin_id], this.connecting_slot = E.origin_slot, this.connecting_output = this.connecting_node.outputs[this.connecting_slot], this.connecting_pos = this.connecting_node.getConnectionPos(
                         !1,
                         this.connecting_slot
-                      ), this.dirty_bgcanvas = !0, l = !0);
+                      ), this.dirty_bgcanvas = !0, u = !0);
                     }
-                    l || (this.connecting_node = o, this.connecting_input = _, this.connecting_input.slot_index = d, this.connecting_pos = o.getConnectionPos(!0, d), this.connecting_slot = d, this.dirty_bgcanvas = !0, l = !0);
+                    u || (this.connecting_node = l, this.connecting_input = b, this.connecting_input.slot_index = p, this.connecting_pos = l.getConnectionPos(!0, p), this.connecting_slot = p, this.dirty_bgcanvas = !0, u = !0);
                   }
                 }
             }
-          if (!l) {
-            const d = [
-              e.canvasX - o.pos[0],
-              e.canvasY - o.pos[1]
-            ], p = this.processNodeWidgets(
-              o,
+          if (!u) {
+            const p = [
+              e.canvasX - l.pos[0],
+              e.canvasY - l.pos[1]
+            ], _ = this.processNodeWidgets(
+              l,
               this.graph_mouse,
               e
             );
-            if (p && (t = !0, this.node_widget = [o, p]), this.allow_interaction && h && this.selected_nodes[o.id] && (o.onDblClick && o.onDblClick(e, d, this), this.processNodeDblClicked(o), t = !0), o.onMouseDown && o.onMouseDown(e, d, this))
+            if (_ && (t = !0, this.node_widget = [l, _]), this.allow_interaction && f && this.selected_nodes[l.id] && (l.onDblClick && l.onDblClick(e, p, this), this.processNodeDblClicked(l), t = !0), l.onMouseDown && l.onMouseDown(e, p, this))
               t = !0;
             else {
-              if (o.subgraph && !o.skip_subgraph_button && !o.flags.collapsed && d[0] > o.size[0] - LiteGraph.NODE_TITLE_HEIGHT && d[1] < 0) {
-                const _ = this;
+              if (l.subgraph && !l.skip_subgraph_button && !l.flags.collapsed && p[0] > l.size[0] - LiteGraph.NODE_TITLE_HEIGHT && p[1] < 0) {
+                const b = this;
                 setTimeout(function() {
-                  _.openSubgraph(o.subgraph);
+                  b.openSubgraph(l.subgraph);
                 }, 10);
               }
-              this.live_mode && (f = !0, t = !0);
+              this.live_mode && (d = !0, t = !0);
             }
-            t ? o.is_selected || this.processNodeSelected(o, e) : (this.allow_dragnodes && (this.graph.beforeChange(), this.node_dragged = o), this.processNodeSelected(o, e)), this.dirty_canvas = !0;
+            t ? l.is_selected || this.processNodeSelected(l, e) : (this.allow_dragnodes && (this.graph.beforeChange(), this.node_dragged = l), this.processNodeSelected(l, e)), this.dirty_canvas = !0;
           }
-        } else if (!l) {
+        } else if (!u) {
           if (!this.read_only)
-            for (let d = 0; d < this.visible_links.length; ++d) {
-              const p = this.visible_links[d], _ = p._pos;
-              if (!(!_ || e.canvasX < _[0] - 4 || e.canvasX > _[0] + 4 || e.canvasY < _[1] - 4 || e.canvasY > _[1] + 4)) {
-                _LGraphCanvas.showLinkMenu(p, e, this), this.over_link_center = null;
+            for (let p = 0; p < this.visible_links.length; ++p) {
+              const _ = this.visible_links[p], b = _._pos;
+              if (!(!b || e.canvasX < b[0] - 4 || e.canvasX > b[0] + 4 || e.canvasY < b[1] - 4 || e.canvasY > b[1] + 4)) {
+                _LGraphCanvas.showLinkMenu(_, e, this), this.over_link_center = null;
                 break;
               }
             }
           this.selected_group = this.graph.getGroupOnPos(
             e.canvasX,
             e.canvasY
-          ), this.selected_group_resizing = !1, this.selected_group && !this.read_only && h && (e.preventDefault(), e.stopPropagation(), this.showGrpPanel(this.selected_group), this.block_drag_grp = !0), this.selected_group && !this.read_only && !h && (this.block_drag_grp = !1, e.ctrlKey && (this.dragging_rectangle = null), LiteGraph.distance(
+          ), this.selected_group_resizing = !1, this.selected_group && !this.read_only && f && (e.preventDefault(), e.stopPropagation(), this.showGrpPanel(this.selected_group), this.block_drag_grp = !0), this.selected_group && !this.read_only && !f && (this.block_drag_grp = !1, e.ctrlKey && (this.dragging_rectangle = null), LiteGraph.distance(
             [e.canvasX, e.canvasY],
             [
               this.selected_group.pos[0] + this.selected_group.size[0],
               this.selected_group.pos[1] + this.selected_group.size[1]
             ]
-          ) * this.ds.scale < 10 ? this.selected_group_resizing = !0 : this.selected_group.recomputeInsideNodes()), f = !0;
+          ) * this.ds.scale < 10 ? this.selected_group_resizing = !0 : this.selected_group.recomputeInsideNodes()), d = !0;
         }
-        !l && f && this.allow_dragcanvas && (this.dragging_canvas = !0);
+        !u && d && this.allow_dragcanvas && (this.dragging_canvas = !0);
       } else if (e.which == 2)
         if (this.saveUndoStack(), LiteGraph.middle_click_slot_add_default_node) {
-          if (o && this.allow_interaction && !l && !this.read_only && !this.connecting_node && !o.flags.collapsed && !this.live_mode) {
-            let f = !1, d = !1, p = !1;
-            if (o.outputs)
-              for (let _ = 0, b = o.outputs.length; _ < b; ++_) {
-                const m = o.outputs[_], E = o.getConnectionPos(
+          if (l && this.allow_interaction && !u && !this.read_only && !this.connecting_node && !l.flags.collapsed && !this.live_mode) {
+            let d = !1, p = !1, _ = !1;
+            if (l.outputs)
+              for (let b = 0, m = l.outputs.length; b < m; ++b) {
+                const E = l.outputs[b], L = l.getConnectionPos(
                   !1,
-                  _
+                  b
                 );
                 if (LiteGraph.isInsideRectangle(
                   e.canvasX,
                   e.canvasY,
-                  E[0] - 15,
-                  E[1] - 10,
+                  L[0] - 15,
+                  L[1] - 10,
                   30,
                   20
                 )) {
-                  f = m, d = _, p = !0;
+                  d = E, p = b, _ = !0;
                   break;
                 }
               }
-            if (o.inputs)
-              for (let _ = 0, b = o.inputs.length; _ < b; ++_) {
-                const m = o.inputs[_], E = o.getConnectionPos(!0, _);
+            if (l.inputs)
+              for (let b = 0, m = l.inputs.length; b < m; ++b) {
+                const E = l.inputs[b], L = l.getConnectionPos(!0, b);
                 if (LiteGraph.isInsideRectangle(
                   e.canvasX,
                   e.canvasY,
-                  E[0] - 15,
-                  E[1] - 10,
+                  L[0] - 15,
+                  L[1] - 10,
                   30,
                   20
                 )) {
-                  f = m, d = _, p = !1;
+                  d = E, p = b, _ = !1;
                   break;
                 }
               }
-            if (f && d !== !1) {
-              const _ = 0.5 - (d + 1) / (p ? o.outputs.length : o.inputs.length), b = o.getBounding(), m = [
-                p ? b[0] + b[2] : b[0],
+            if (d && p !== !1) {
+              const b = 0.5 - (p + 1) / (_ ? l.outputs.length : l.inputs.length), m = l.getBounding(), E = [
+                _ ? m[0] + m[2] : m[0],
                 // + node_bounding[0]/this.canvas.width*150
                 e.canvasY - 80
                 // + node_bounding[0]/this.canvas.width*66 // vertical "derive"
               ];
               this.createDefaultNodeForSlot({
-                nodeFrom: p ? o : null,
-                slotFrom: p ? d : null,
-                nodeTo: p ? null : o,
-                slotTo: p ? null : d,
-                position: m,
+                nodeFrom: _ ? l : null,
+                slotFrom: _ ? p : null,
+                nodeTo: _ ? null : l,
+                slotTo: _ ? null : p,
+                position: E,
                 //,e: e
                 nodeType: "AUTO",
                 //nodeNewType
                 posAdd: [
-                  p ? 30 : -30,
-                  -_ * 130
+                  _ ? 30 : -30,
+                  -b * 130
                 ],
                 //-alphaPosY*30]
-                posSizeFix: [p ? 0 : -1, 0]
+                posSizeFix: [_ ? 0 : -1, 0]
                 //-alphaPosY*2*/
               });
             }
           }
-        } else !l && this.allow_dragcanvas && (this.dragging_canvas = !0);
-      else (e.which == 3 || this.pointer_is_double) && (this.saveUndoStack(), this.allow_interaction && !l && !this.read_only && (o && (Object.keys(this.selected_nodes).length && (this.selected_nodes[o.id] || e.shiftKey || e.ctrlKey || e.metaKey) ? this.selected_nodes[o.id] || this.selectNodes([o], !0) : this.selectNodes([o])), this.processContextMenu(o, e)));
+        } else !u && this.allow_dragcanvas && (this.dragging_canvas = !0);
+      else (e.which == 3 || this.pointer_is_double) && (this.saveUndoStack(), this.allow_interaction && !u && !this.read_only && (l && (Object.keys(this.selected_nodes).length && (this.selected_nodes[l.id] || e.shiftKey || e.ctrlKey || e.metaKey) ? this.selected_nodes[l.id] || this.selectNodes([l], !0) : this.selectNodes([l])), this.processContextMenu(l, e)));
       return this.last_mouse[0] = e.clientX, this.last_mouse[1] = e.clientY, this.last_mouseclick = LiteGraph.getTime(), this.last_mouse_dragging = !0, this.graph.change(), (!r.document.activeElement || r.document.activeElement.nodeName.toLowerCase() != "input" && r.document.activeElement.nodeName.toLowerCase() != "textarea") && e.preventDefault(), e.stopPropagation(), this.onMouseDown && this.onMouseDown(e), !1;
     }
   }
@@ -13556,7 +13557,12 @@ const _LGraphCanvas = class _LGraphCanvas {
         ];
       else {
         const s = r[0] / this.ds.scale, a = r[1] / this.ds.scale;
-        this.selected_group.move(s, a, e.ctrlKey), this.selected_group._nodes.length && (this.dirty_canvas = !0);
+        this.selected_group.move(
+          s,
+          a,
+          e.ctrlKey,
+          this.move_grp_alone
+        ), this.selected_group._nodes.length && (this.dirty_canvas = !0);
       }
       this.dirty_bgcanvas = !0;
     } else if (this.dragging_canvas)
@@ -13690,7 +13696,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           this.selected_group.pos[0]
         ), this.selected_group.pos[1] = Math.round(
           this.selected_group.pos[1]
-        ), this.selected_group._nodes.length && (this.dirty_canvas = !0), this.selected_group = null;
+        ), this.selected_group._nodes.length && (this.dirty_canvas = !0), this.selected_group = null, this.move_grp_alone = !1;
       }
       this.selected_group_resizing = !1;
       const a = this.graph.getNodeOnPos(
