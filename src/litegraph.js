@@ -3942,10 +3942,8 @@ export class LGraphNode {
             }
         }
 
-        const minW = LiteGraph.NODE_MIN_WIDTH;
-        const calcW = input_width + output_width + 10;
-        size[0] = calcW < minW ? minW : calcW;
-
+        size[0] = Math.max(input_width + output_width + 10, title_width);
+        size[0] = Math.max(size[0], LiteGraph.NODE_WIDTH);
         if (this.widgets && this.widgets.length) {
             size[0] = Math.max(size[0], LiteGraph.NODE_WIDTH * 1.5);
         }
