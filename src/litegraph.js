@@ -3942,8 +3942,10 @@ export class LGraphNode {
             }
         }
 
-        size[0] = Math.max(input_width + output_width + 10, title_width);
-        size[0] = Math.max(size[0], LiteGraph.NODE_WIDTH);
+        const minW = LiteGraph.NODE_MIN_WIDTH;
+        const calcW = input_width + output_width + 10;
+        size[0] = calcW < minW ? minW : calcW;
+
         if (this.widgets && this.widgets.length) {
             size[0] = Math.max(size[0], LiteGraph.NODE_WIDTH * 1.5);
         }
@@ -11215,7 +11217,10 @@ export class LGraphCanvas {
         ctx.stroke();
         //end line shape
 
-        let pos = this.computeConnectionPoint(a, b, 0.5, start_dir, end_dir);
+        let pos =
+            this.links_render_mode === LiteGraph.STRAIGHT_LINK
+                ? this.computeStraightLinkPoint(a, b, 0.5, start_dir, end_dir)
+                : this.computeConnectionPoint(a, b, 0.5, start_dir, end_dir);
         if (link && link._pos) {
             link._pos[0] = pos[0];
             link._pos[1] = pos[1];
@@ -11400,6 +11405,52 @@ export class LGraphCanvas {
                 ctx.fill();
             }
         }
+    }
+
+    computeStraightLinkPoint(a, b, t, start_dir, end_dir) {
+        // STRAIGHT_LINK에서 그린 꺾인 경로와 동일한 로직
+
+        let start_x = a[0];
+        let start_y = a[1];
+        let end_x = b[0];
+        let end_y = b[1];
+
+        // 시작 방향 보정
+        if (start_dir === LiteGraph.RIGHT) start_x += 10;
+        else if (start_dir === LiteGraph.LEFT) start_x -= 10;
+        else if (start_dir === LiteGraph.DOWN) start_y += 10;
+        else if (start_dir === LiteGraph.UP) start_y -= 10;
+
+        // 끝 방향 보정
+        if (end_dir === LiteGraph.LEFT) end_x -= 10;
+        else if (end_dir === LiteGraph.RIGHT) end_x += 10;
+        else if (end_dir === LiteGraph.UP) end_y -= 10;
+        else if (end_dir === LiteGraph.DOWN) end_y += 10;
+
+        const mid_x = (start_x + end_x) * 0.5;
+
+        // 경로 길이 계산
+        const l1 = Math.abs(mid_x - start_x); // 1번 수평
+        const l2 = Math.abs(end_y - start_y); // 수직
+        const l3 = Math.abs(end_x - mid_x); // 2번 수평
+        const total = l1 + l2 + l3;
+
+        let d = t * total;
+
+        // 1번 구간
+        if (d <= l1) {
+            return [start_x + (mid_x > start_x ? d : -d), start_y];
+        }
+
+        // 2번 구간
+        d -= l1;
+        if (d <= l2) {
+            return [mid_x, start_y + (end_y > start_y ? d : -d)];
+        }
+
+        // 3번 구간
+        d -= l2;
+        return [mid_x + (end_x > mid_x ? d : -d), end_y];
     }
 
     //returns the link center point based on curvature
