@@ -1,0 +1,49 @@
+/* Overlay styles */
+.lgraph-overlay-container {
+    font-family: Arial, sans-serif;
+}
+
+.lgraph-node-overlay {
+    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); */
+    font-size: 13px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.lgraph-node-overlay input[type="text"],
+.lgraph-node-overlay input[type="email"],
+.lgraph-node-overlay input[type="number"],
+.lgraph-node-overlay textarea,
+.lgraph-node-overlay select {
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.lgraph-node-overlay input[type="text"]:focus,
+.lgraph-node-overlay input[type="email"]:focus,
+.lgraph-node-overlay input[type="number"]:focus,
+.lgraph-node-overlay textarea:focus {
+    outline: none;
+    border-color: #4a9eff !important;
+    background-color: #3a3a3a !important;
+}
+
+.lgraph-node-overlay input[type="range"] {
+    cursor: pointer;
+}
+
+.lgraph-node-overlay input[type="color"] {
+    cursor: pointer;
+}
+
+.lgraph-node-overlay input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+.lgraph-node-overlay label {
+    cursor: default;
+    user-select: none;
+}

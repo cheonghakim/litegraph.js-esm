@@ -1,192 +1,388 @@
 # litegraph.js
 
-A library in Javascript to create graphs in the browser similar to Unreal Blueprints. Nodes can be programmed easily and it includes an editor to construct and tests the graphs.
+A powerful library in JavaScript to create node-based graphs in the browser, similar to Unreal Blueprints or PureData. Nodes can be programmed easily and it includes an editor to construct and test the graphs.
 
 It can be integrated easily in any existing web applications and graphs can be run without the need of the editor.
 
-Try it in the [demo site](https://tamats.com/projects/litegraph/editor).
-
-![Node Graph](imgs/node_graph_example.png "WebGLStudio")
+![Node Graph](imgs/node_graph_example.png "LiteGraph")
 
 ## Features
-- Renders on Canvas2D (zoom in/out and panning, easy to render complex interfaces, can be used inside a WebGLTexture)
-- Easy to use editor (searchbox, keyboard shortcuts, multiple selection, context menu, ...)
-- Optimized to support hundreds of nodes per graph (on editor but also on execution)
-- Customizable theme (colors, shapes, background)
-- Callbacks to personalize every action/drawing/event of nodes
-- Subgraphs (nodes that contain graphs themselves)
-- Live mode system (hides the graph but calls nodes to render whatever they want, useful to create UIs)
-- Graphs can be executed in NodeJS
-- Highly customizable nodes (color, shape, slots vertical or horizontal, widgets, custom rendering)
-- Easy to integrate in any JS application (one single file, no dependencies)
-- Typescript support
 
-## Nodes provided
-Although it is easy to create new node types, LiteGraph comes with some default nodes that could be useful for many cases:
-- Interface (Widgets)
-- Math (trigonometry, math operations)
-- Audio (AudioAPI and MIDI)
-- 3D Graphics (Postprocessing in WebGL)
-- Input (read Gamepad)
+- **Canvas2D Rendering** - Optimized rendering with zoom/pan support
+- **Easy-to-use Editor** - Searchbox, keyboard shortcuts, multiple selection, context menu
+- **High Performance** - Optimized to support hundreds of nodes per graph
+- **Customizable Theme** - Colors, shapes, background all customizable
+- **Flexible Callbacks** - Personalize every action/drawing/event of nodes
+- **Subgraphs** - Nodes that contain graphs themselves
+- **Live Mode** - Hides the graph but calls nodes to render custom UIs
+- **NodeJS Support** - Graphs can be executed server-side
+- **Highly Customizable Nodes** - Color, shape, slots, widgets, custom rendering
+- **Easy Integration** - Single file, minimal dependencies
+- **TypeScript Support** - Full TypeScript definitions included
+- **HTML Overlays** - Rich property editors with standard HTML form elements
 
 ## Installation
 
-You can install it using npm 
-```
+### Using npm
+
+```bash
 npm install litegraph.js
 ```
 
-Or downloading the ```build/litegraph.js``` and ```css/litegraph.css``` version from this repository.
+### Using yarn
 
-## First project ##
+```bash
+yarn add litegraph.js
+```
+
+### Manual Installation
+
+Download the built files from the `dist` folder:
+- `dist/litegraph-bundle.js` - ES module format
+- `dist/litegraph-bundle.umd.js` - UMD format (browser global)
+- `dist/litegraph-bundle.cjs` - CommonJS format (Node.js)
+- `dist/litegraph.js.css` - Required CSS styles
+
+Also include the CSS files from the `css` folder:
+- `css/litegraph.css` - Core styles
+- `css/litegraph-editor.css` - Editor styles
+- `css/overlay.css` - HTML overlay styles (optional)
+
+## Quick Start
+
+### Basic Example
 
 ```html
+<!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="litegraph.css">
-	<script type="text/javascript" src="litegraph.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/litegraph.css">
+    <script type="module">
+        import { LiteGraph, LGraph, LGraphCanvas } from './dist/litegraph-bundle.js';
+        
+        // Create graph
+        const graph = new LGraph();
+        
+        // Create canvas
+        const canvas = new LGraphCanvas("#mycanvas", graph);
+        
+        // Create nodes
+        const nodeConst = LiteGraph.createNode("basic/const");
+        nodeConst.pos = [200, 200];
+        graph.add(nodeConst);
+        nodeConst.setValue(4.5);
+        
+        const nodeWatch = LiteGraph.createNode("basic/watch");
+        nodeWatch.pos = [700, 200];
+        graph.add(nodeWatch);
+        
+        // Connect nodes
+        nodeConst.connect(0, nodeWatch, 0);
+        
+        // Start execution
+        graph.start();
+    </script>
 </head>
-<body style='width:100%; height:100%'>
-<canvas id='mycanvas' width='1024' height='720' style='border: 1px solid'></canvas>
-<script>
-var graph = new LGraph();
-
-var canvas = new LGraphCanvas("#mycanvas", graph);
-
-var node_const = LiteGraph.createNode("basic/const");
-node_const.pos = [200,200];
-graph.add(node_const);
-node_const.setValue(4.5);
-
-var node_watch = LiteGraph.createNode("basic/watch");
-node_watch.pos = [700,200];
-graph.add(node_watch);
-
-node_const.connect(0, node_watch, 0 );
-
-graph.start()
-</script>
+<body>
+    <canvas id="mycanvas" width="1024" height="720"></canvas>
 </body>
 </html>
 ```
 
-## How to code a new Node type
+### Using UMD (Browser Global)
 
-Here is an example of how to build a node that sums two inputs:
+```html
+<script src="dist/litegraph-bundle.umd.js"></script>
+<script>
+    const { LiteGraph, LGraph, LGraphCanvas } = window.LiteGraph;
+    // Use as shown above
+</script>
+```
+
+## Creating Custom Nodes
+
+### Simple Node Example
 
 ```javascript
-//node constructor class
-function MyAddNode()
-{
-  this.addInput("A","number");
-  this.addInput("B","number");
-  this.addOutput("A+B","number");
-  this.properties = { precision: 1 };
+// Node constructor
+function MyAddNode() {
+    this.addInput("A", "number");
+    this.addInput("B", "number");
+    this.addOutput("A+B", "number");
+    this.properties = { precision: 1 };
 }
 
-//name to show
+// Display name
 MyAddNode.title = "Sum";
 
-//function to call when the node is executed
-MyAddNode.prototype.onExecute = function()
-{
-  var A = this.getInputData(0);
-  if( A === undefined )
-    A = 0;
-  var B = this.getInputData(1);
-  if( B === undefined )
-    B = 0;
-  this.setOutputData( 0, A + B );
+// Execution logic
+MyAddNode.prototype.onExecute = function() {
+    let A = this.getInputData(0);
+    if (A === undefined) A = 0;
+    let B = this.getInputData(1);
+    if (B === undefined) B = 0;
+    this.setOutputData(0, A + B);
 }
 
-//register in the system
-LiteGraph.registerNodeType("basic/sum", MyAddNode );
-
+// Register the node type
+LiteGraph.registerNodeType("basic/sum", MyAddNode);
 ```
 
-or you can wrap an existing function:
+### Wrapping Functions
 
-```js
-function sum(a,b)
-{
-   return a+b;
+```javascript
+function sum(a, b) {
+    return a + b;
 }
 
-LiteGraph.wrapFunctionAsNode("math/sum",sum, ["Number","Number"],"Number");
+LiteGraph.wrapFunctionAsNode("math/sum", sum, ["Number", "Number"], "Number");
 ```
 
-## Server side
+## HTML Overlay Property Editors
 
-It also works server-side using NodeJS although some nodes do not work in server (audio, graphics, input, etc).
+LiteGraph supports custom HTML overlays for nodes, allowing you to create rich property editors with standard HTML form elements. This is useful for creating complex UIs that go beyond simple widget controls.
 
-```js
-var LiteGraph = require("./litegraph.js").LiteGraph;
+### Creating a Node with HTML Overlay
 
-var graph = new LiteGraph.LGraph();
+To add an HTML overlay to your node, implement the `createPropertyOverlay()` method:
 
-var node_time = LiteGraph.createNode("basic/time");
-graph.add(node_time);
+```javascript
+function MyCustomNode() {
+    this.properties = {
+        text: "Hello",
+        value: 100
+    };
+    this.size = [200, 100];
+}
 
-var node_console = LiteGraph.createNode("basic/console");
-node_console.mode = LiteGraph.ALWAYS;
-graph.add(node_console);
+MyCustomNode.title = "Custom Node";
 
-node_time.connect( 0, node_console, 1 );
+// Inherit from LGraphNode
+MyCustomNode.prototype = Object.create(LGraphNode.prototype);
+MyCustomNode.prototype.constructor = MyCustomNode;
 
-graph.start()
+// Create the HTML overlay
+MyCustomNode.prototype.createPropertyOverlay = function() {
+    const container = document.createElement("div");
+    container.style.padding = "10px";
+    container.style.backgroundColor = "rgba(40, 40, 40, 0.95)";
+    container.style.border = "1px solid #555";
+    container.style.borderRadius = "4px";
+    container.style.color = "#fff";
+
+    // Add form elements
+    const textInput = document.createElement("input");
+    textInput.type = "text";
+    textInput.value = this.properties.text;
+    textInput.style.width = "100%";
+    textInput.style.padding = "4px";
+    
+    // Update node properties when input changes
+    const self = this;
+    textInput.addEventListener("input", function(e) {
+        self.updatePropertyFromOverlay("text", e.target.value);
+    });
+
+    container.appendChild(textInput);
+    return container;
+};
+
+// Handle property changes
+MyCustomNode.prototype.onPropertyChanged = function(name, value) {
+    console.log(`Property ${name} changed to:`, value);
+    this.updateOverlayFromProperties();
+};
+
+LiteGraph.registerNodeType("custom/my_node", MyCustomNode);
 ```
 
+### Enabling Overlays
 
-## Projects using it
+After creating nodes with overlays, ensure they are created and positioned:
 
-### [comfyUI](https://github.com/comfyanonymous/ComfyUI)
-![screenshot](https://github.com/comfyanonymous/ComfyUI/blob/6efe561c2a7321501b1b27f47039c7616dda1860/comfyui_screenshot.png)
+```javascript
+const graph = new LGraph();
+const canvas = new LGraphCanvas("#mycanvas", graph);
 
-### [webglstudio.org](http://webglstudio.org)
+// Create your node
+const node = LiteGraph.createNode("custom/my_node");
+node.pos = [100, 100];
+graph.add(node);
 
-![WebGLStudio](imgs/webglstudio.gif "WebGLStudio")
+// Enable the overlay
+canvas.ensureNodeOverlay(node);
+```
+
+### Key Features
+
+- **Positioning**: Overlays are automatically positioned below the input/output slots
+- **Scaling**: Overlays scale with the canvas zoom level
+- **Auto-sizing**: Nodes automatically adjust their height to fit the overlay content
+- **Interactive**: Full support for HTML form elements (inputs, checkboxes, sliders, color pickers, etc.)
+- **Synchronized**: Properties sync bidirectionally between node and overlay UI
+
+### CSS Styling
+
+Include the overlay CSS for proper styling:
+
+```html
+<link rel="stylesheet" href="css/litegraph.css">
+<link rel="stylesheet" href="css/overlay.css">
+```
+
+For a complete example, see `editor/overlay_demo.html` in the repository.
+
+## Development
+
+### Setup
+
+```bash
+# Install dependencies
+npm install
+# or
+yarn install
+```
+
+### Running Development Server
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+The development server will start at `http://localhost:8084`
+
+### Building
+
+```bash
+# Production build
+npm run build
+# or
+yarn build
+
+# Development build
+npm run build-dev
+# or
+yarn build-dev
+```
+
+Build outputs will be generated in the `dist` folder:
+- `litegraph-bundle.js` - ES module (for modern bundlers)
+- `litegraph-bundle.umd.js` - UMD format (for browsers)
+- `litegraph-bundle.cjs` - CommonJS (for Node.js)
+- `litegraph.js.css` - Bundled CSS
+
+### Code Quality
+
+```bash
+# Run linter
+npm run lint
+
+# Fix linting issues
+npm run lint:fix
+
+# Format code
+npm run prettier
+
+# Run tests
+npm test
+```
+
+## Demos and Examples
+
+### Main Editor
+Open `index.html` in your browser or visit the development server to access the full editor with various example graphs.
+
+### HTML Overlay Demo
+See `editor/overlay_demo.html` for examples of HTML overlay property editors with:
+- Text Editor Node - Simple text and font size inputs
+- Color Picker Node - Color picker and opacity slider
+- Form Editor Node - Complex form with multiple field types
+
+### Additional Examples
+Check the `editor/examples/` folder for more demonstrations.
+
+## Server-Side Usage (Node.js)
+
+LiteGraph can run server-side using Node.js, though some nodes (audio, graphics, input) won't work:
+
+```javascript
+const { LiteGraph, LGraph } = require("./dist/litegraph-bundle.cjs");
+
+const graph = new LGraph();
+
+const nodeTime = LiteGraph.createNode("basic/time");
+graph.add(nodeTime);
+
+const nodeConsole = LiteGraph.createNode("basic/console");
+nodeConsole.mode = LiteGraph.ALWAYS;
+graph.add(nodeConsole);
+
+nodeTime.connect(0, nodeConsole, 1);
+
+graph.start();
+```
+
+## Project Structure
+
+```
+litegraph.js/
+├── src/              # Source files
+│   ├── litegraph.js  # Main library file
+│   ├── nodes/        # Built-in node definitions
+│   └── main.js       # Entry point
+├── css/              # Stylesheets
+│   ├── litegraph.css
+│   ├── litegraph-editor.css
+│   └── overlay.css
+├── dist/             # Built files (generated)
+├── editor/           # Editor demos and examples
+└── vite.config.js    # Build configuration
+```
+
+## Browser Compatibility
+
+- Modern browsers with ES6+ support
+- Chrome, Firefox, Safari, Edge (latest versions)
+- For older browsers, use the UMD build with a polyfill
+
+## TypeScript
+
+TypeScript definitions are included in `src/litegraph.d.ts`.
+
+```typescript
+import { LiteGraph, LGraph, LGraphCanvas, LGraphNode } from 'litegraph.js';
+
+const graph: LGraph = new LGraph();
+const canvas: LGraphCanvas = new LGraphCanvas("#mycanvas", graph);
+```
+
+## Projects Using LiteGraph
+
+### [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
+A powerful node-based UI for Stable Diffusion
+
+### [WebGLStudio](http://webglstudio.org)
+A full 3D graphics editor in the browser
 
 ### [MOI Elephant](http://moiscript.weebly.com/elephant-systegraveme-nodal.html)
+Node-based modeling system
 
-![MOI Elephant](imgs/elephant.gif "MOI Elephant")
+## License
 
-### Mynodes
+MIT License - see LICENSE file for details
 
-![MyNodes](imgs/mynodes.png "MyNodes")
+## Contributing
 
-## Utils
------
-
-It includes several commands in the utils folder to generate doc, check errors and build minifyed version.
-
-
-## Demo
------
-The demo includes some examples of graphs. In order to try them you can visit [demo site](http://tamats.com/projects/litegraph/editor) or install it on your local computer, to do so you need `git`, `node` and `npm`. Given those dependencies are installed, run the following commands to try it out:
-```sh
-$ git clone https://github.com/jagenjo/litegraph.js.git
-$ cd litegraph.js
-$ npm install
-$ node utils/server.js
-Example app listening on port 80!
-```
-Open your browser and point it to http://localhost:8000/. You can select a demo from the dropdown at the top of the page.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Feedback
---------
 
-You can write any feedback to javi.agenjo@gmail.com
+For bugs, feature requests, or questions, please open an issue on [GitHub](https://github.com/jagenjo/litegraph.js/issues).
 
-## Contributors
+## Credits
 
-- atlasan
-- kriffe
-- rappestad
-- InventivetalentDev
-- NateScarlet
-- coderofsalvation
-- ilyabesk
-- gausszhou
+Original author: Javi Agenjo (javi.agenjo@gmail.com)
 
-
-
+Contributors: atlasan, kriffe, rappestad, InventivetalentDev, NateScarlet, coderofsalvation, ilyabesk, gausszhou

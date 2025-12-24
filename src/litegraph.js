@@ -145,7 +145,7 @@ export class LiteGraph {
     // use this if you must have node IDs that are unique across all graphs and subgraphs.
     static use_uuids = false;
 
-    constructor() {}
+    constructor() { }
 
     static distance(a, b) {
         return Math.sqrt(
@@ -447,8 +447,8 @@ export class LiteGraph {
         if (base_class.prototype.onPropertyChange) {
             console.warn(
                 "LiteGraph node class " +
-                    type +
-                    " has onPropertyChange method, it must be called onPropertyChanged with d at the end"
+                type +
+                " has onPropertyChange method, it must be called onPropertyChanged with d at the end"
             );
         }
 
@@ -487,7 +487,7 @@ export class LiteGraph {
         out = out || false;
         const base_class =
             type.constructor === String &&
-            LiteGraph.registered_node_types[type] !== "anonymous"
+                LiteGraph.registered_node_types[type] !== "anonymous"
                 ? LiteGraph.registered_node_types[type]
                 : type;
 
@@ -1012,10 +1012,10 @@ if (typeof performance != "undefined") {
 
 /**
      * LGraph is the class that contain a full graph. We instantiate one and add nodes to it, and then we can run the execution loop.
-	 * supported callbacks:
-		+ onNodeAdded: when a new node is added to the graph
-		+ onNodeRemoved: when a node inside this graph is removed
-		+ onNodeConnectionChange: some connection has changed in the graph (connected or disconnected)
+     * supported callbacks:
+        + onNodeAdded: when a new node is added to the graph
+        + onNodeRemoved: when a node inside this graph is removed
+        + onNodeConnectionChange: some connection has changed in the graph (connected or disconnected)
      *
      * @class LGraph
      * @constructor
@@ -2108,7 +2108,7 @@ export class LGraph {
         if (
             this.inputs[name].type &&
             String(this.inputs[name].type).toLowerCase() ==
-                String(type).toLowerCase()
+            String(type).toLowerCase()
         ) {
             return;
         }
@@ -2235,7 +2235,7 @@ export class LGraph {
         if (
             this.outputs[name].type &&
             String(this.outputs[name].type).toLowerCase() ==
-                String(type).toLowerCase()
+            String(type).toLowerCase()
         ) {
             return;
         }
@@ -2622,54 +2622,54 @@ export class LLink {
 // *************************************************************
 
 /*
-	title: string
-	pos: [x,y]
-	size: [x,y]
+    title: string
+    pos: [x,y]
+    size: [x,y]
 
-	input|output: every connection
-		+  { name:string, type:string, pos: [x,y]=Optional, direction: "input"|"output", links: Array });
+    input|output: every connection
+        +  { name:string, type:string, pos: [x,y]=Optional, direction: "input"|"output", links: Array });
 
-	general properties:
-		+ clip_area: if you render outside the node, it will be clipped
-		+ unsafe_execution: not allowed for safe execution
-		+ skip_repeated_outputs: when adding new outputs, it wont show if there is one already connected
-		+ resizable: if set to false it wont be resizable with the mouse
-		+ horizontal: slots are distributed horizontally
-		+ widgets_start_y: widgets start at y distance from the top of the node
+    general properties:
+        + clip_area: if you render outside the node, it will be clipped
+        + unsafe_execution: not allowed for safe execution
+        + skip_repeated_outputs: when adding new outputs, it wont show if there is one already connected
+        + resizable: if set to false it wont be resizable with the mouse
+        + horizontal: slots are distributed horizontally
+        + widgets_start_y: widgets start at y distance from the top of the node
 	
-	flags object:
-		+ collapsed: if it is collapsed
+    flags object:
+        + collapsed: if it is collapsed
 
-	supported callbacks:
-		+ onAdded: when added to graph (warning: this is called BEFORE the node is configured when loading)
-		+ onRemoved: when removed from graph
-		+ onStart:	when the graph starts playing
-		+ onStop:	when the graph stops playing
-		+ onDrawForeground: render the inside widgets inside the node
-		+ onDrawBackground: render the background area inside the node (only in edit mode)
-		+ onMouseDown
-		+ onMouseMove
-		+ onMouseUp
-		+ onMouseEnter
-		+ onMouseLeave
-		+ onExecute: execute the node
-		+ onPropertyChanged: when a property is changed in the panel (return true to skip default behaviour)
-		+ onGetInputs: returns an array of possible inputs
-		+ onGetOutputs: returns an array of possible outputs
-		+ onBounding: in case this node has a bigger bounding than the node itself (the callback receives the bounding as [x,y,w,h])
-		+ onDblClick: double clicked in the node
-		+ onInputDblClick: input slot double clicked (can be used to automatically create a node connected)
-		+ onOutputDblClick: output slot double clicked (can be used to automatically create a node connected)
-		+ onConfigure: called after the node has been configured
-		+ onSerialize: to add extra info when serializing (the callback receives the object that should be filled with the data)
-		+ onSelected
-		+ onDeselected
-		+ onDropItem : DOM item dropped over the node
-		+ onDropFile : file dropped over the node
-		+ onConnectInput : if returns false the incoming connection will be canceled
-		+ onConnectionsChange : a connection changed (new one or removed) (LiteGraph.INPUT or LiteGraph.OUTPUT, slot, true if connected, link_info, input_info )
-		+ onAction: action slot triggered
-		+ getExtraMenuOptions: to add option to context menu
+    supported callbacks:
+        + onAdded: when added to graph (warning: this is called BEFORE the node is configured when loading)
+        + onRemoved: when removed from graph
+        + onStart:	when the graph starts playing
+        + onStop:	when the graph stops playing
+        + onDrawForeground: render the inside widgets inside the node
+        + onDrawBackground: render the background area inside the node (only in edit mode)
+        + onMouseDown
+        + onMouseMove
+        + onMouseUp
+        + onMouseEnter
+        + onMouseLeave
+        + onExecute: execute the node
+        + onPropertyChanged: when a property is changed in the panel (return true to skip default behaviour)
+        + onGetInputs: returns an array of possible inputs
+        + onGetOutputs: returns an array of possible outputs
+        + onBounding: in case this node has a bigger bounding than the node itself (the callback receives the bounding as [x,y,w,h])
+        + onDblClick: double clicked in the node
+        + onInputDblClick: input slot double clicked (can be used to automatically create a node connected)
+        + onOutputDblClick: output slot double clicked (can be used to automatically create a node connected)
+        + onConfigure: called after the node has been configured
+        + onSerialize: to add extra info when serializing (the callback receives the object that should be filled with the data)
+        + onSelected
+        + onDeselected
+        + onDropItem : DOM item dropped over the node
+        + onDropFile : file dropped over the node
+        + onConnectInput : if returns false the incoming connection will be canceled
+        + onConnectionsChange : a connection changed (new one or removed) (LiteGraph.INPUT or LiteGraph.OUTPUT, slot, true if connected, link_info, input_info )
+        + onAction: action slot triggered
+        + getExtraMenuOptions: to add option to context menu
 */
 
 /**
@@ -2721,6 +2721,10 @@ export class LGraphNode {
         this.properties_info = []; //for the info
 
         this.flags = {};
+
+        // HTML overlay for property editing
+        this._overlay_element = null; // HTML element for overlay UI
+        this._overlay_enabled = false; // Whether overlay is enabled for this node
     }
 
     /**
@@ -2995,6 +2999,122 @@ export class LGraphNode {
                     break;
                 }
             }
+    }
+
+    // HTML Overlay Property Editor *************************
+    /**
+     * Creates and returns HTML overlay element for this node
+     * Override this method in node subclasses to provide custom UI
+     * @method createPropertyOverlay
+     * @return {HTMLElement} HTML element to display over node, or null for no overlay
+     */
+    createPropertyOverlay() {
+        // Default implementation - no overlay
+        // Override this in node subclasses to create custom UI
+        return null;
+    }
+
+    /**
+     * Updates the overlay UI from node properties
+     * Called automatically when properties change programmatically
+     * @method updateOverlayFromProperties
+     */
+    updateOverlayFromProperties() {
+        if (!this._overlay_element) {
+            return;
+        }
+
+        // Find all elements with data-property attribute
+        const propertyElements = this._overlay_element.querySelectorAll('[data-property]');
+        propertyElements.forEach(element => {
+            const propertyName = element.getAttribute('data-property');
+            if (propertyName && this.properties[propertyName] !== undefined) {
+                const value = this.properties[propertyName];
+
+                // Update element based on its type
+                if (element.type === 'checkbox') {
+                    element.checked = !!value;
+                } else if (element.type === 'number' || element.type === 'range') {
+                    element.value = value;
+                } else if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
+                    element.value = value;
+                } else {
+                    element.textContent = value;
+                }
+            }
+        });
+    }
+
+    /**
+     * Updates a node property from overlay UI input
+     * Call this from overlay event handlers when user changes a value
+     * @method updatePropertyFromOverlay
+     * @param {String} propertyName name of the property to update
+     * @param {*} value new value for the property
+     */
+    updatePropertyFromOverlay(propertyName, value) {
+        if (!this.properties) {
+            this.properties = {};
+        }
+
+        // Update the property
+        const prev_value = this.properties[propertyName];
+        this.properties[propertyName] = value;
+
+        // Trigger onPropertyChanged callback
+        if (this.onPropertyChanged) {
+            if (this.onPropertyChanged(propertyName, value, prev_value) === false) {
+                // Abort change if callback returns false
+                this.properties[propertyName] = prev_value;
+                return;
+            }
+        }
+
+        // Update graph version and set dirty
+        if (this.graph) {
+            this.graph._version++;
+            this.graph.setDirtyCanvas(true, true);
+        }
+
+        // Update widgets linked to this property
+        if (this.widgets) {
+            for (let i = 0; i < this.widgets.length; ++i) {
+                const w = this.widgets[i];
+                if (!w) continue;
+                if (w.options && w.options.property == propertyName) {
+                    w.value = value;
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets the visibility of the property overlay
+     * @method setPropertyOverlayVisibility
+     * @param {Boolean} visible whether the overlay should be visible
+     */
+    setPropertyOverlayVisibility(visible) {
+        if (this._overlay_element) {
+            this._overlay_element.style.display = visible ? 'block' : 'none';
+        }
+    }
+
+    /**
+     * Gets the overlay element, creating it if it doesn't exist
+     * @method getOrCreateOverlayElement
+     * @return {HTMLElement} the overlay element
+     */
+    getOrCreateOverlayElement() {
+        if (!this._overlay_element) {
+            this._overlay_element = this.createPropertyOverlay();
+            if (this._overlay_element) {
+                this._overlay_enabled = true;
+                // Initial sync from properties to UI
+                this.updateOverlayFromProperties();
+            }
+        }
+        return this._overlay_element;
     }
 
     // Execution *************************
@@ -4134,7 +4254,7 @@ export class LGraphNode {
         out[1] = nodePos[1] - LiteGraph.NODE_TITLE_HEIGHT - top_offset;
         out[2] = isCollapsed
             ? (this._collapsed_width || LiteGraph.NODE_COLLAPSED_WIDTH) +
-              right_offset
+            right_offset
             : nodeSize[0] + right_offset;
         out[3] = isCollapsed
             ? LiteGraph.NODE_TITLE_HEIGHT + bottom_offset
@@ -4170,7 +4290,7 @@ export class LGraphNode {
                     this.pos[0] - margin,
                     this.pos[1] - LiteGraph.NODE_TITLE_HEIGHT - margin,
                     (this._collapsed_width || LiteGraph.NODE_COLLAPSED_WIDTH) +
-                        2 * margin,
+                    2 * margin,
                     LiteGraph.NODE_TITLE_HEIGHT + 2 * margin
                 )
             ) {
@@ -5432,7 +5552,7 @@ export class LGraphGroup {
                     this.pos[0] - margin,
                     this.pos[1] - LiteGraph.NODE_TITLE_HEIGHT - margin,
                     (this._collapsed_width || LiteGraph.NODE_COLLAPSED_WIDTH) +
-                        2 * margin,
+                    2 * margin,
                     LiteGraph.NODE_TITLE_HEIGHT + 2 * margin
                 )
             ) {
@@ -5519,7 +5639,7 @@ export class DragAndScale {
                 this.visible_area[1] =
                 this.visible_area[2] =
                 this.visible_area[3] =
-                    0;
+                0;
             return;
         }
         let width = this.element.width;
@@ -5628,8 +5748,8 @@ export class DragAndScale {
             e.delta = e.wheelDelta
                 ? e.wheelDelta / 40
                 : e.deltaY
-                ? -e.deltaY / 3
-                : 0;
+                    ? -e.deltaY / 3
+                    : 0;
             this.changeDeltaScale(1.0 + e.delta * 0.05);
         }
 
@@ -6133,6 +6253,25 @@ export class LGraphCanvas {
             this.bgcanvas.height = this.canvas.height;
         }
 
+        // HTML overlay container: for property editors
+        if (!this._overlay_container) {
+            this._overlay_container = document.createElement("div");
+            this._overlay_container.className = "lgraph-overlay-container";
+            this._overlay_container.style.position = "absolute";
+            this._overlay_container.style.top = "0";
+            this._overlay_container.style.left = "0";
+            this._overlay_container.style.width = "100%";
+            this._overlay_container.style.height = "100%";
+            this._overlay_container.style.pointerEvents = "none"; // Container doesn't block clicks
+            this._overlay_container.style.overflow = "hidden";
+            this._overlay_container.style.zIndex = "10";
+
+            // Insert overlay container after canvas
+            if (parent) {
+                parent.appendChild(this._overlay_container);
+            }
+        }
+
         if (canvas.getContext == null) {
             if (canvas.localName != "canvas") {
                 throw (
@@ -6310,6 +6449,161 @@ export class LGraphCanvas {
         this._ondrop_callback = null;
 
         this._events_binded = false;
+    }
+
+    // HTML Overlay Management *************************
+    /**
+     * Creates an HTML overlay for a node
+     * @method createNodeOverlay
+     * @param {LGraphNode} node
+     */
+    createNodeOverlay(node) {
+        if (!node || !this._overlay_container) {
+            return;
+        }
+
+        // Get or create the overlay element from the node
+        const overlay_element = node.getOrCreateOverlayElement();
+        if (!overlay_element) {
+            return;
+        }
+
+        // Set up overlay element styles
+        overlay_element.style.position = "absolute";
+        overlay_element.style.pointerEvents = "auto"; // Allow interaction with overlay
+        overlay_element.className = (overlay_element.className || "") + " lgraph-node-overlay";
+
+        // Add to container
+        this._overlay_container.appendChild(overlay_element);
+
+        // Store reference
+        node._overlay_element = overlay_element;
+
+        // Initial position update
+        this.updateNodeOverlayPosition(node);
+    }
+
+    /**
+     * Removes the HTML overlay for a node
+     * @method removeNodeOverlay
+     * @param {LGraphNode} node
+     */
+    removeNodeOverlay(node) {
+        if (!node || !node._overlay_element) {
+            return;
+        }
+
+        if (this._overlay_container && node._overlay_element.parentNode === this._overlay_container) {
+            this._overlay_container.removeChild(node._overlay_element);
+        }
+
+        node._overlay_element = null;
+        node._overlay_enabled = false;
+    }
+
+    /**
+     * Updates the position and size of a node's overlay to match the node
+     * @method updateNode OverlayPosition
+     * @param {LGraphNode} node
+     */
+    updateNodeOverlayPosition(node) {
+        if (!node || !node._overlay_element) {
+            return;
+        }
+
+        const overlay = node._overlay_element;
+
+        // Get node position in canvas coordinates
+        const scale = this.ds.scale;
+        const offset = this.ds.offset;
+
+        // Calculate the Y position after input/output slots
+        let slots_end_y = LiteGraph.NODE_TITLE_HEIGHT;
+
+        // Find the maximum Y position of input/output slots
+        if (!node.flags.collapsed) {
+            const max_slots = Math.max(
+                node.inputs ? node.inputs.length : 0,
+                node.outputs ? node.outputs.length : 0
+            );
+            if (max_slots > 0) {
+                // Tighter calculation - reduce gap above overlay
+                slots_end_y = LiteGraph.NODE_TITLE_HEIGHT + (max_slots - 0.3) * LiteGraph.NODE_SLOT_HEIGHT;
+            }
+        }
+
+        // Temporarily set overlay visibility to measure its height
+        const prevDisplay = overlay.style.display;
+        overlay.style.display = 'block';
+        overlay.style.visibility = 'hidden';
+        overlay.style.position = 'absolute';
+        overlay.style.width = (node.size[0] * scale) + "px";
+
+        // Get the actual height of the overlay content
+        const overlayHeight = overlay.scrollHeight / scale;
+
+        // Restore visibility
+        overlay.style.visibility = '';
+
+        // Adjust node size to fit overlay if needed
+        const required_height = slots_end_y + overlayHeight + 20; // Increased bottom padding to 20px
+        if (node.size[1] < required_height) {
+            node.size[1] = required_height;
+        }
+
+        // Transform node coordinates to screen coordinates
+        const x = (node.pos[0] + offset[0]) * scale;
+        const y = (node.pos[1] + slots_end_y + offset[1]) * scale; // Below the slots
+        const width = node.size[0] * scale;
+
+        // Apply transform
+        overlay.style.left = x + "px";
+        overlay.style.top = y + "px";
+        overlay.style.width = width + "px";
+        overlay.style.height = "auto"; // Let content determine height
+        overlay.style.maxHeight = (200 * scale) + "px"; // Max height scaled
+        overlay.style.transform = "";
+        overlay.style.transformOrigin = "top left";
+        overlay.style.display = prevDisplay;
+    }
+
+    /**
+     * Updates all node overlays' positions
+     * Called during rendering to keep overlays in sync with nodes
+     * @method updateNodeOverlays
+     */
+    updateNodeOverlays() {
+        if (!this.graph || !this._overlay_container) {
+            return;
+        }
+
+        const nodes = this.graph._nodes;
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
+            if (node._overlay_enabled && node._overlay_element) {
+                this.updateNodeOverlayPosition(node);
+            }
+        }
+    }
+
+    /**
+     * Ensures a node has an overlay if it defines one
+     * @method ensureNodeOverlay
+     * @param {LGraphNode} node
+     */
+    ensureNodeOverlay(node) {
+        if (!node) {
+            return;
+        }
+
+        // Check if node wants an overlay
+        if (!node._overlay_element && typeof node.createPropertyOverlay === 'function') {
+            // Try to create overlay
+            const overlay = node.createPropertyOverlay();
+            if (overlay) {
+                this.createNodeOverlay(node);
+            }
+        }
     }
 
     static getFileExtension(url) {
@@ -6724,13 +7018,13 @@ export class LGraphCanvas {
                                             }
                                             this.connecting_node =
                                                 this.graph._nodes_by_id[
-                                                    link_info.origin_id
+                                                link_info.origin_id
                                                 ];
                                             this.connecting_slot =
                                                 link_info.origin_slot;
                                             this.connecting_output =
                                                 this.connecting_node.outputs[
-                                                    this.connecting_slot
+                                                this.connecting_slot
                                                 ];
                                             this.connecting_pos =
                                                 this.connecting_node.getConnectionPos(
@@ -6804,8 +7098,8 @@ export class LGraphCanvas {
                             if (
                                 !node.flags.collapsed &&
                                 pos[0] >
-                                    node.size[0] -
-                                        LiteGraph.NODE_TITLE_HEIGHT &&
+                                node.size[0] -
+                                LiteGraph.NODE_TITLE_HEIGHT &&
                                 pos[1] < 0
                             ) {
                                 const that = this;
@@ -6894,9 +7188,9 @@ export class LGraphCanvas {
                             [e.canvasX, e.canvasY],
                             [
                                 this.selected_group.pos[0] +
-                                    this.selected_group.size[0],
+                                this.selected_group.size[0],
                                 this.selected_group.pos[1] +
-                                    this.selected_group.size[1],
+                                this.selected_group.size[1],
                             ]
                         );
                         if (dist * this.ds.scale < 10) {
@@ -7005,9 +7299,9 @@ export class LGraphCanvas {
                             const alphaPosY =
                                 0.5 -
                                 (mClikSlot_index + 1) /
-                                    (mClikSlot_isOut
-                                        ? node.outputs.length
-                                        : node.inputs.length);
+                                (mClikSlot_isOut
+                                    ? node.outputs.length
+                                    : node.inputs.length);
                             const node_bounding = node.getBounding();
                             // estimate a position: this is a bad semi-bad-working mess .. REFACTOR with a correct autoplacement that knows about the others slots and nodes
                             const posRef = [
@@ -7090,7 +7384,7 @@ export class LGraphCanvas {
             (ref_window.document.activeElement.nodeName.toLowerCase() !=
                 "input" &&
                 ref_window.document.activeElement.nodeName.toLowerCase() !=
-                    "textarea")
+                "textarea")
         ) {
             e.preventDefault();
         }
@@ -9064,6 +9358,8 @@ export class LGraphCanvas {
                 this.onDrawForeground(ctx, this.visible_rect);
             }
 
+            // Update HTML overlays to sync with node positions
+            this.updateNodeOverlays();
             ctx.restore();
         }
 
@@ -9602,7 +9898,7 @@ export class LGraphCanvas {
                 node._collapsed_width = Math.min(
                     node.size[0],
                     ctx.measureText(title).width +
-                        LiteGraph.NODE_TITLE_HEIGHT * 2
+                    LiteGraph.NODE_TITLE_HEIGHT * 2
                 ); //LiteGraph.NODE_COLLAPSED_WIDTH;
                 size[0] = node._collapsed_width;
                 size[1] = 0;
@@ -9684,14 +9980,14 @@ export class LGraphCanvas {
                     ctx.fillStyle =
                         slot.link != null
                             ? slot.color_on ||
-                              this.default_connection_color_byType[slot_type] ||
-                              this.default_connection_color.input_on
+                            this.default_connection_color_byType[slot_type] ||
+                            this.default_connection_color.input_on
                             : slot.color_off ||
-                              this.default_connection_color_byTypeOff[
-                                  slot_type
-                              ] ||
-                              this.default_connection_color_byType[slot_type] ||
-                              this.default_connection_color.input_off;
+                            this.default_connection_color_byTypeOff[
+                            slot_type
+                            ] ||
+                            this.default_connection_color_byType[slot_type] ||
+                            this.default_connection_color.input_off;
 
                     const pos = node.getConnectionPos(true, i, slot_pos);
                     pos[0] -= node.pos[0];
@@ -9801,14 +10097,14 @@ export class LGraphCanvas {
                     ctx.fillStyle =
                         slot.links && slot.links.length
                             ? slot.color_on ||
-                              this.default_connection_color_byType[slot_type] ||
-                              this.default_connection_color.output_on
+                            this.default_connection_color_byType[slot_type] ||
+                            this.default_connection_color.output_on
                             : slot.color_off ||
-                              this.default_connection_color_byTypeOff[
-                                  slot_type
-                              ] ||
-                              this.default_connection_color_byType[slot_type] ||
-                              this.default_connection_color.output_off;
+                            this.default_connection_color_byTypeOff[
+                            slot_type
+                            ] ||
+                            this.default_connection_color_byType[slot_type] ||
+                            this.default_connection_color.output_off;
                     ctx.beginPath();
                     //ctx.rect( node.size[0] - 14,i*14,10,10);
 
@@ -10196,8 +10492,8 @@ export class LGraphCanvas {
                 colState = node.action_triggered
                     ? "#FFF"
                     : node.execute_triggered
-                    ? "#AAA"
-                    : colState;
+                        ? "#AAA"
+                        : colState;
             }
 
             //title box
@@ -10911,11 +11207,13 @@ export class LGraphCanvas {
                 const fontSize = group.font_size * 0.6;
                 ctx.font = `${fontSize}px Arial`;
                 ctx.fillStyle = "#c6c6c6";
-                const boxInfo = `x/y/넓이/높이: ${parseInt(
+                const boxInfo = `x / y / 넓이 / 높이: ${parseInt(
                     group.pos[0]
-                )}/${parseInt(group.pos[1])}/${parseInt(
-                    group.size[0]
-                )}/${parseInt(group.size[1])}`;
+                )
+                    } /${parseInt(group.pos[1])}/${parseInt(
+                        group.size[0]
+                    )
+                    }/${parseInt(group.size[1])}`;
 
                 let line = "";
                 for (let n = 0; n < boxInfo.length; n++) {
@@ -11000,6 +11298,261 @@ export class LGraphCanvas {
             }
         }
     }
+
+    /**
+     * 선분과 사각형(노드)의 충돌 여부를 확인합니다
+     * @method checkLineSegmentIntersectsRect
+     * @param {vec2} lineStart 선분의 시작점
+     * @param {vec2} lineEnd 선분의 끝점
+     * @param {vec4} rect 사각형 [x, y, width, height]
+     * @param {number} padding 여유 공간 (노드 주변 패딩)
+     * @returns {boolean} 충돌 여부
+     */
+    checkLineSegmentIntersectsRect(lineStart, lineEnd, rect, padding = 10) {
+        const [rx, ry, rw, rh] = rect;
+
+        // 패딩을 적용한 사각형
+        const left = rx - padding;
+        const right = rx + rw + padding;
+        const top = ry - padding;
+        const bottom = ry + rh + padding;
+
+        // 선분의 시작과 끝이 모두 사각형 밖에 있는지 확인
+        const x1 = lineStart[0];
+        const y1 = lineStart[1];
+        const x2 = lineEnd[0];
+        const y2 = lineEnd[1];
+
+        // Cohen-Sutherland 알고리즘을 사용한 선분-사각형 교차 검사
+        const getOutCode = (x, y) => {
+            let code = 0;
+            if (x < left) code |= 1;      // left
+            else if (x > right) code |= 2; // right
+            if (y < top) code |= 4;        // top
+            else if (y > bottom) code |= 8; // bottom
+            return code;
+        };
+
+        let outcode1 = getOutCode(x1, y1);
+        let outcode2 = getOutCode(x2, y2);
+
+        // 둘 다 같은 영역 밖에 있으면 교차하지 않음
+        if (outcode1 & outcode2) {
+            return false;
+        }
+
+        // 둘 다 안에 있거나, 하나라도 안에 있으면 교차
+        if (!outcode1 || !outcode2) {
+            return true;
+        }
+
+        // Liang-Barsky 알고리즘으로 정밀 검사
+        let t0 = 0, t1 = 1;
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+
+        const clipTest = (p, q) => {
+            if (p === 0) {
+                return q >= 0;
+            }
+            const r = q / p;
+            if (p < 0) {
+                if (r > t1) return false;
+                if (r > t0) t0 = r;
+            } else {
+                if (r < t0) return false;
+                if (r < t1) t1 = r;
+            }
+            return true;
+        };
+
+        if (clipTest(-dx, x1 - left) &&
+            clipTest(dx, right - x1) &&
+            clipTest(-dy, y1 - top) &&
+            clipTest(dy, bottom - y1)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 링크 경로를 막고 있는 노드들을 찾습니다
+     * @method findObstructingNodes
+     * @param {vec2} start 시작점
+     * @param {vec2} end 끝점
+     * @param {Object} link 링크 객체
+     * @returns {Array} 방해하는 노드 배열
+     */
+    findObstructingNodes(start, end, link) {
+        if (!this.graph || !link) return [];
+
+        const obstructingNodes = [];
+        const nodes = this.graph._nodes;
+
+        // 링크의 시작 노드와 끝 노드 ID
+        const startNodeId = link.origin_id;
+        const endNodeId = link.target_id;
+
+        // 기본 경로 계산 (start_dir와 end_dir는 기본값 사용)
+        const start_dir = LiteGraph.RIGHT;
+        const end_dir = LiteGraph.LEFT;
+        const pathPoints = this.computeDefaultPath(start, end, start_dir, end_dir);
+
+        console.log('[DEBUG] Checking obstruction for link', link.id, 'with', nodes.length, 'nodes');
+        console.log('[DEBUG] Path points:', pathPoints);
+
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
+
+            // 링크의 시작/끝 노드는 제외
+            if (node.id === startNodeId || node.id === endNodeId) {
+                continue;
+            }
+
+            // 노드의 바운딩 박스
+            const rect = [node.pos[0], node.pos[1], node.size[0], node.size[1]];
+
+            // 경로의 각 세그먼트와 노드가 교차하는지 확인
+            let intersects = false;
+            for (let j = 0; j < pathPoints.length - 1; j++) {
+                if (this.checkLineSegmentIntersectsRect(pathPoints[j], pathPoints[j + 1], rect)) {
+                    intersects = true;
+                    console.log('[DEBUG] Node', node.id, node.title, 'obstructs segment', j);
+                    break;
+                }
+            }
+
+            if (intersects) {
+                obstructingNodes.push(node);
+            }
+        }
+
+        console.log('[DEBUG] Found', obstructingNodes.length, 'obstructing nodes');
+        return obstructingNodes;
+    }
+
+    /**
+     * 노드를 피하는 우회 경로를 계산합니다
+     * @method computeAvoidancePath
+     * @param {vec2} start 시작점
+     * @param {vec2} end 끝점
+     * @param {Array} obstructingNodes 방해 노드 배열
+     * @param {number} start_dir 시작 방향
+     * @param {number} end_dir 끝 방향
+     * @returns {Array} 경로 포인트 배열 [[x1,y1], [x2,y2], ...]
+     */
+    computeAvoidancePath(start, end, obstructingNodes, start_dir, end_dir) {
+        if (!obstructingNodes || obstructingNodes.length === 0) {
+            // 방해 노드가 없으면 기본 경로 반환
+            return this.computeDefaultPath(start, end, start_dir, end_dir);
+        }
+
+        // 각 노드에 대해 위/아래 우회 경로 계산
+        const padding = 15;
+        const path = [start];
+
+        let currentStart = [...start];
+
+        for (let i = 0; i < obstructingNodes.length; i++) {
+            const node = obstructingNodes[i];
+            const nodeRect = [
+                node.pos[0] - padding,
+                node.pos[1] - padding,
+                node.size[0] + padding * 2,
+                node.size[1] + padding * 2
+            ];
+
+            // 노드의 위쪽과 아래쪽으로 우회하는 경로 계산
+            const topY = nodeRect[1];
+            const bottomY = nodeRect[1] + nodeRect[3];
+            const leftX = nodeRect[0];
+            const rightX = nodeRect[0] + nodeRect[2];
+
+            // 위쪽 우회 경로와 아래쪽 우회 경로 중 짧은 것 선택
+            const distToTop = Math.abs(currentStart[1] - topY);
+            const distToBottom = Math.abs(currentStart[1] - bottomY);
+
+            const useTop = distToTop < distToBottom;
+            const avoidY = useTop ? topY : bottomY;
+
+            // 좌우 우회도 고려
+            const distToLeft = Math.abs(currentStart[0] - leftX);
+            const distToRight = Math.abs(currentStart[0] - rightX);
+
+            // 수평 우회가 더 짧으면 좌우로 우회
+            if (Math.min(distToLeft, distToRight) < Math.min(distToTop, distToBottom)) {
+                const useLeft = distToLeft < distToRight;
+                const avoidX = useLeft ? leftX : rightX;
+
+                // 수평 우회 포인트 추가
+                path.push([avoidX, currentStart[1]]);
+                path.push([avoidX, end[1]]);
+            } else {
+                // 수직 우회 포인트 추가
+                path.push([currentStart[0], avoidY]);
+                path.push([end[0], avoidY]);
+            }
+
+            currentStart = path[path.length - 1];
+        }
+
+        path.push(end);
+        return path;
+    }
+
+    /**
+     * 기본 직선 경로를 계산합니다 (중간에 꺾는 경로)
+     * @method computeDefaultPath
+     * @param {vec2} start 시작점
+     * @param {vec2} end 끝점
+     * @param {number} start_dir 시작 방향
+     * @param {number} end_dir 끝 방향
+     * @returns {Array} 경로 포인트 배열
+     */
+    computeDefaultPath(start, end, start_dir, end_dir) {
+        const path = [];
+
+        let start_x = start[0];
+        let start_y = start[1];
+        let end_x = end[0];
+        let end_y = end[1];
+
+        // 시작 방향 보정
+        if (start_dir == LiteGraph.RIGHT) {
+            start_x += 10;
+        } else if (start_dir == LiteGraph.LEFT) {
+            start_x -= 10;
+        } else if (start_dir == LiteGraph.DOWN) {
+            start_y += 10;
+        } else if (start_dir == LiteGraph.UP) {
+            start_y -= 10;
+        }
+
+        // 끝 방향 보정
+        if (end_dir == LiteGraph.LEFT) {
+            end_x -= 10;
+        } else if (end_dir == LiteGraph.RIGHT) {
+            end_x += 10;
+        } else if (end_dir == LiteGraph.UP) {
+            end_y -= 10;
+        } else if (end_dir == LiteGraph.DOWN) {
+            end_y += 10;
+        }
+
+        // 중간 지점
+        const mid_x = (start_x + end_x) * 0.5;
+
+        path.push([start[0], start[1]]);
+        path.push([start_x, start_y]);
+        path.push([mid_x, start_y]);
+        path.push([mid_x, end_y]);
+        path.push([end_x, end_y]);
+        path.push([end[0], end[1]]);
+
+        return path;
+    }
+
     /**
      * draws a link between two points
      * @method renderLink
@@ -11137,63 +11690,58 @@ export class LGraphCanvas {
                 let end_offset_y = 0;
                 switch (start_dir) {
                     case LiteGraph.LEFT:
-                        start_offset_x = -1;
+                        start_offset_x = dist * -0.25;
                         break;
                     case LiteGraph.RIGHT:
-                        start_offset_x = 1;
+                        start_offset_x = dist * 0.25;
                         break;
                     case LiteGraph.UP:
-                        start_offset_y = -1;
+                        start_offset_y = dist * -0.25;
                         break;
                     case LiteGraph.DOWN:
-                        start_offset_y = 1;
+                        start_offset_y = dist * 0.25;
                         break;
                 }
                 switch (end_dir) {
                     case LiteGraph.LEFT:
-                        end_offset_x = -1;
+                        end_offset_x = dist * -0.25;
                         break;
                     case LiteGraph.RIGHT:
-                        end_offset_x = 1;
+                        end_offset_x = dist * 0.25;
                         break;
                     case LiteGraph.UP:
-                        end_offset_y = -1;
+                        end_offset_y = dist * -0.25;
                         break;
                     case LiteGraph.DOWN:
-                        end_offset_y = 1;
+                        end_offset_y = dist * 0.25;
                         break;
                 }
-                const l = 15;
                 ctx.lineTo(
-                    a[0] + start_offset_x * l,
-                    a[1] + start_offset_y * l + offsety
+                    a[0] + start_offset_x,
+                    a[1] + start_offset_y + offsety
                 );
                 ctx.lineTo(
-                    b[0] + end_offset_x * l,
-                    b[1] + end_offset_y * l + offsety
+                    b[0] + end_offset_x,
+                    b[1] + end_offset_y + offsety
                 );
                 ctx.lineTo(b[0], b[1] + offsety);
             } else if (this.links_render_mode == LiteGraph.STRAIGHT_LINK) {
                 ctx.moveTo(a[0], a[1]);
-                let start_x = a[0];
-                let start_y = a[1];
-                let end_x = b[0];
-                let end_y = b[1];
-                if (start_dir == LiteGraph.RIGHT) {
-                    start_x += 10;
+
+                // 방해 노드 찾기 (link 객체가 있을 때만)
+                let pathPoints;
+                if (link) {
+                    const obstructingNodes = this.findObstructingNodes(a, b, link);
+                    pathPoints = this.computeAvoidancePath(a, b, obstructingNodes, start_dir, end_dir);
                 } else {
-                    start_y += 10;
+                    // link 객체가 없으면 기본 경로 사용
+                    pathPoints = this.computeDefaultPath(a, b, start_dir, end_dir);
                 }
-                if (end_dir == LiteGraph.LEFT) {
-                    end_x -= 10;
-                } else {
-                    end_y -= 10;
+
+                // 계산된 경로를 따라 링크 그리기
+                for (let i = 1; i < pathPoints.length; i++) {
+                    ctx.lineTo(pathPoints[i][0], pathPoints[i][1] + offsety);
                 }
-                ctx.lineTo(start_x, start_y);
-                ctx.lineTo((start_x + end_x) * 0.5, start_y);
-                ctx.lineTo((start_x + end_x) * 0.5, end_y);
-                ctx.lineTo(end_x, end_y);
-                ctx.lineTo(b[0], b[1]);
             } else {
                 return;
             } //unknown
@@ -11305,82 +11853,48 @@ export class LGraphCanvas {
 
             for (let i = 0; i < 3; ++i) {
                 let f = (LiteGraph.getTime() * 0.0002 + i * 0.2) % 1;
+                let pos;
 
-                // render_mode가 직선(STRAIGHT_LINK)일 경우 직선 경로로 애니메이션 계산
-
+                // render_mode가 직선(STRAIGHT_LINK)일 경우 우회 경로로 애니메이션 계산
                 if (this.links_render_mode === LiteGraph.STRAIGHT_LINK) {
-                    // 꺾인 직선 경로 계산
-                    let start_x = a[0];
-                    let start_y = a[1];
-                    let end_x = b[0];
-                    let end_y = b[1];
-
-                    // 시작 방향에 따른 조정
-                    if (start_dir == LiteGraph.RIGHT) {
-                        start_x += 10; // 오른쪽으로 선이 나가야 할 때
-                    } else if (start_dir == LiteGraph.LEFT) {
-                        start_x -= 10; // 왼쪽으로 선이 나가야 할 때
-                    } else if (start_dir == LiteGraph.DOWN) {
-                        start_y += 10; // 아래쪽으로 선이 나가야 할 때
-                    } else if (start_dir == LiteGraph.UP) {
-                        start_y -= 10; // 위쪽으로 선이 나가야 할 때
+                    // 우회 경로 계산 (링크가 있으면 실제 경로 사용)
+                    let pathPoints;
+                    if (link) {
+                        const obstructingNodes = this.findObstructingNodes(a, b, link);
+                        pathPoints = this.computeAvoidancePath(a, b, obstructingNodes, start_dir, end_dir);
+                    } else {
+                        pathPoints = this.computeDefaultPath(a, b, start_dir, end_dir);
                     }
 
-                    // 끝 방향에 따른 조정
-                    if (end_dir == LiteGraph.LEFT) {
-                        end_x -= 10; // 왼쪽으로 끝날 때
-                    } else if (end_dir == LiteGraph.RIGHT) {
-                        end_x += 10; // 오른쪽으로 끝날 때
-                    } else if (end_dir == LiteGraph.UP) {
-                        end_y -= 10; // 위로 끝날 때
-                    } else if (end_dir == LiteGraph.DOWN) {
-                        end_y += 10; // 아래로 끝날 때
+                    // 경로의 총 길이 계산
+                    let totalLength = 0;
+                    const segmentLengths = [];
+                    for (let j = 1; j < pathPoints.length; j++) {
+                        const dx = pathPoints[j][0] - pathPoints[j - 1][0];
+                        const dy = pathPoints[j][1] - pathPoints[j - 1][1];
+                        const segmentLength = Math.sqrt(dx * dx + dy * dy);
+                        segmentLengths.push(segmentLength);
+                        totalLength += segmentLength;
                     }
 
-                    // 중간점 계산 (꺾이는 지점)
-                    const mid_x = (start_x + end_x) * 0.5; // 수평 중간 위치
-                    const mid_y = (start_y + end_y) * 0.5; // 수직 중간 위치 (필요시 사용 가능)
+                    // 애니메이션 진행도에 따른 위치 계산
+                    const targetDistance = f * totalLength;
+                    let accumulatedDistance = 0;
 
-                    // 각 구간별 길이 계산
-                    const segment1_length = Math.abs(mid_x - start_x); // 첫 번째 수평 구간
-                    const segment2_length = Math.abs(end_y - start_y); // 수직 구간
-                    const segment3_length = Math.abs(end_x - mid_x); // 마지막 수평 구간
-
-                    // 총 구간 길이 계산
-                    const total_length =
-                        segment1_length + segment2_length + segment3_length;
-
-                    // 애니메이션 진행도 계산
-                    const progress = f * total_length; // 애니메이션 진행도
-
-                    let pos = [start_x, start_y]; // 시작점
-
-                    // 첫 번째 수평 구간에서의 애니메이션
-                    if (progress <= segment1_length) {
-                        pos = [
-                            start_x + progress * (start_x < mid_x ? 1 : -1),
-                            start_y,
-                        ]; // 방향에 따른 수평 이동
-                    }
-                    // 두 번째 수직 구간에서의 애니메이션 (위아래 구분)
-                    else if (progress <= segment1_length + segment2_length) {
-                        const remaining = progress - segment1_length;
-
-                        // 위로 이동해야 하는지 아래로 이동해야 하는지 결정
-                        if (start_y < end_y) {
-                            pos = [mid_x, start_y + remaining]; // 아래로 이동
-                        } else {
-                            pos = [mid_x, start_y - remaining]; // 위로 이동
+                    pos = pathPoints[0];
+                    for (let j = 0; j < segmentLengths.length; j++) {
+                        if (accumulatedDistance + segmentLengths[j] >= targetDistance) {
+                            // 현재 세그먼트 내에서의 위치 계산
+                            const segmentProgress = (targetDistance - accumulatedDistance) / segmentLengths[j];
+                            const p0 = pathPoints[j];
+                            const p1 = pathPoints[j + 1];
+                            pos = [
+                                p0[0] + (p1[0] - p0[0]) * segmentProgress,
+                                p0[1] + (p1[1] - p0[1]) * segmentProgress
+                            ];
+                            break;
                         }
-                    }
-                    // 세 번째 수평 구간에서의 애니메이션 (마지막 수평 이동)
-                    else if (progress <= total_length) {
-                        const remaining =
-                            progress - (segment1_length + segment2_length);
-                        pos = [
-                            mid_x + remaining * (mid_x < end_x ? 1 : -1),
-                            end_y,
-                        ]; // 방향에 따른 수평 이동
+                        accumulatedDistance += segmentLengths[j];
                     }
 
                     // 애니메이션 점 그리기
@@ -11397,10 +11911,10 @@ export class LGraphCanvas {
                         start_dir,
                         end_dir
                     );
+                    ctx.beginPath();
+                    ctx.arc(pos[0], pos[1], 5, 0, 2 * Math.PI);
+                    ctx.fill();
                 }
-                ctx.beginPath();
-                ctx.arc(pos[0], pos[1], 5, 0, 2 * Math.PI);
-                ctx.fill();
             }
         }
     }
@@ -11646,8 +12160,8 @@ export class LGraphCanvas {
                     )
                         ? w.options.slider_color
                         : active_widget == w
-                        ? "#89A"
-                        : "#678";
+                            ? "#89A"
+                            : "#678";
                     ctx.fillRect(
                         margin,
                         y,
@@ -11668,7 +12182,7 @@ export class LGraphCanvas {
                             : "#AA9";
                         ctx.fillRect(
                             margin +
-                                marker_nvalue * (widget_width - margin * 2),
+                            marker_nvalue * (widget_width - margin * 2),
                             y,
                             2,
                             H
@@ -11679,13 +12193,13 @@ export class LGraphCanvas {
                         ctx.fillStyle = text_color;
                         ctx.fillText(
                             w.label ||
-                                w.name +
-                                    "  " +
-                                    Number(w.value).toFixed(
-                                        w.options.precision != null
-                                            ? w.options.precision
-                                            : 3
-                                    ),
+                            w.name +
+                            "  " +
+                            Number(w.value).toFixed(
+                                w.options.precision != null
+                                    ? w.options.precision
+                                    : 3
+                            ),
                             widget_width * 0.5,
                             y + H * 0.7
                         );
@@ -11977,7 +12491,7 @@ export class LGraphCanvas {
                                         try {
                                             //solve the equation if possible
                                             v = eval(v);
-                                        } catch (e) {}
+                                        } catch (e) { }
                                     }
                                     this.value = Number(v);
                                     inner_value_change(this, this.value);
@@ -12466,9 +12980,9 @@ export class LGraphCanvas {
         return false;
     }
 
-    static onMenuCollapseAll() {}
+    static onMenuCollapseAll() { }
 
-    static onMenuNodeEdit() {}
+    static onMenuNodeEdit() { }
 
     static showMenuNodeOptionalInputs(v, _options, e, prev_menu, node) {
         if (!node) {
@@ -12885,13 +13399,13 @@ export class LGraphCanvas {
         if (!isFrom && !isTo) {
             console.warn(
                 "No data passed to createDefaultNodeForSlot " +
-                    opts.nodeFrom +
-                    " " +
-                    opts.slotFrom +
-                    " " +
-                    opts.nodeTo +
-                    " " +
-                    opts.slotTo
+                opts.nodeFrom +
+                " " +
+                opts.slotFrom +
+                " " +
+                opts.nodeTo +
+                " " +
+                opts.slotTo
             );
             return false;
         }
@@ -12955,7 +13469,7 @@ export class LGraphCanvas {
                 for (const typeX in slotTypesDefault[fromSlotType]) {
                     if (
                         opts.nodeType ==
-                            slotTypesDefault[fromSlotType][typeX] ||
+                        slotTypesDefault[fromSlotType][typeX] ||
                         opts.nodeType == "AUTO"
                     ) {
                         nodeNewType = slotTypesDefault[fromSlotType][typeX];
@@ -13021,15 +13535,15 @@ export class LGraphCanvas {
                     that.graph.add(newNode);
                     newNode.pos = [
                         opts.position[0] +
-                            opts.posAdd[0] +
-                            (opts.posSizeFix[0]
-                                ? opts.posSizeFix[0] * newNode.size[0]
-                                : 0),
+                        opts.posAdd[0] +
+                        (opts.posSizeFix[0]
+                            ? opts.posSizeFix[0] * newNode.size[0]
+                            : 0),
                         opts.position[1] +
-                            opts.posAdd[1] +
-                            (opts.posSizeFix[1]
-                                ? opts.posSizeFix[1] * newNode.size[1]
-                                : 0),
+                        opts.posAdd[1] +
+                        (opts.posSizeFix[1]
+                            ? opts.posSizeFix[1] * newNode.size[1]
+                            : 0),
                     ]; //that.last_click_position; //[e.canvasX+30, e.canvasX+5];*/
 
                     //that.graph.afterChange();
@@ -13628,7 +14142,7 @@ export class LGraphCanvas {
                     if (
                         options.type_filter_in !== false &&
                         (options.type_filter_in + "").toLowerCase() ==
-                            (aSlots[iK] + "").toLowerCase()
+                        (aSlots[iK] + "").toLowerCase()
                     ) {
                         //selIn.selectedIndex ..
                         opt.selected = true;
@@ -13662,7 +14176,7 @@ export class LGraphCanvas {
                     if (
                         options.type_filter_out !== false &&
                         (options.type_filter_out + "").toLowerCase() ==
-                            (aSlots[iK] + "").toLowerCase()
+                        (aSlots[iK] + "").toLowerCase()
                     ) {
                         //selOut.selectedIndex ..
                         opt.selected = true;
@@ -13779,7 +14293,7 @@ export class LGraphCanvas {
                                 if (
                                     iS == -1 &&
                                     typeof options.slot_from.slot_index !==
-                                        "undefined"
+                                    "undefined"
                                 )
                                     iS = options.slot_from.slot_index;
                                 break;
@@ -13822,7 +14336,7 @@ export class LGraphCanvas {
                                 if (
                                     iS == -1 &&
                                     typeof options.slot_from.slot_index !==
-                                        "undefined"
+                                    "undefined"
                                 )
                                     iS = options.slot_from.slot_index;
                                 break;
@@ -14150,10 +14664,10 @@ export class LGraphCanvas {
 
         const dialog = this.createDialog(
             "<span class='name'>" +
-                (info.label ? info.label : property) +
-                "</span>" +
-                input_html +
-                "<button>OK</button>",
+            (info.label ? info.label : property) +
+            "</span>" +
+            input_html +
+            "<button>OK</button>",
             options
         );
 
@@ -14803,10 +15317,10 @@ export class LGraphCanvas {
             panel.content.innerHTML = ""; //clear
             panel.addHTML(
                 "<span class='node_type'>" +
-                    node.type +
-                    "</span><span class='node_desc'>" +
-                    (node.constructor.desc || "") +
-                    "</span><span class='separator'></span>"
+                node.type +
+                "</span><span class='node_desc'>" +
+                (node.constructor.desc || "") +
+                "</span><span class='separator'></span>"
             );
 
             panel.addHTML("<h4>Properties</h4>");
@@ -16336,8 +16850,8 @@ export class ContextMenu {
         ) {
             console.error(
                 "Event passed to ContextMenu is not of type MouseEvent or CustomEvent. Ignoring it. (" +
-                    eventClass +
-                    ")"
+                eventClass +
+                ")"
             );
             options.event = null;
         }
@@ -16783,8 +17297,8 @@ export class CurveEditor {
                     this.selected == i
                         ? "#FFF"
                         : this.nearest == i
-                        ? "#DDD"
-                        : "#AAA";
+                            ? "#DDD"
+                            : "#AAA";
                 ctx.beginPath();
                 ctx.arc(p[0] * w, (1.0 - p[1]) * h, 2, 0, Math.PI * 2);
                 ctx.fill();

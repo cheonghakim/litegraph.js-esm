@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>LiteGraph - HTML Overlay Property Editor Demo</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        #graphCanvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            max-width: 300px;
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        #info h3 {
+            margin: 0 0 10px 0;
+        }
+
+        #info ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+    </style>
+
+    <!-- LiteGraph CSS -->
+    <link rel="stylesheet" href="../css/litegraph.css">
+    <link rel="stylesheet" href="../css/overlay.css">
+</head>
+
+<body>
+    <div id="container">
+        <canvas id="graphCanvas"></canvas>
+
+        <div id="info">
+            <h3>HTML Overlay Property Editor Demo</h3>
+            <p>This demo shows three example nodes with custom HTML overlays for editing properties:</p>
+            <ul>
+                <li><strong>Text Editor</strong> - Simple text and font size inputs</li>
+                <li><strong>Color Picker</strong> - Color picker and opacity slider</li>
+                <li><strong>Form Editor</strong> - Complex form with multiple field types</li>
+            </ul>
+            <p><small>Right-click on canvas to add nodes from the "examples" category.</small></p>
+        </div>
+    </div>
+
+    <!-- LiteGraph Library (loaded as ES module) -->
+    <script type="module">
+        // Import LiteGraph
+        import { LiteGraph, LGraph, LGraphCanvas, LGraphNode } from "../src/litegraph.js";
+
+        // Make LiteGraph available globally for node registration
+        window.LiteGraph = LiteGraph;
+        window.LGraph = LGraph;
+        window.LGraphCanvas = LGraphCanvas;
+        window.LGraphNode = LGraphNode;
+
+        // Import example nodes
+        await import("../src/nodes/PropertyEditorExamples.js");
+
+        // Create graph
+        const graph = new LGraph();
+
+        // Create canvas - pass the DOM element directly, not selector
+        const canvasElement = document.getElementById("graphCanvas");
+        const canvas = new LGraphCanvas(canvasElement, graph);
+
+        // Initialize canvas properly
+        await canvas._init(canvasElement);
+
+        // Add example nodes to the graph by default
+        const textEditorNode = LiteGraph.createNode("examples/simple_text_editor");
+        textEditorNode.pos = [100, 100];
+        textEditorNode.addInput("INPUT", LiteGraph.ACTION);
+        textEditorNode.addOutput("OUTPUT", LiteGraph.ACTION);
+        graph.add(textEditorNode);
+
+        const colorPickerNode = LiteGraph.createNode("examples/color_picker");
+        colorPickerNode.pos = [100, 250];
+        graph.add(colorPickerNode);
+
+        const formEditorNode = LiteGraph.createNode("examples/form_editor");
+        formEditorNode.pos = [350, 100];
+        graph.add(formEditorNode);
+
+        // Create overlays for all nodes
+        setTimeout(() => {
+            graph._nodes.forEach(node => {
+                canvas.ensureNodeOverlay(node);
+            });
+        }, 100);
+
+        // Start graph execution
+        graph.start();
+
+        // Handle window resize
+        function resizeCanvas() {
+            const canvas_elem = document.getElementById("graphCanvas");
+            canvas_elem.width = window.innerWidth;
+            canvas_elem.height = window.innerHeight;
+            canvas.setDirty(true, true);
+        }
+
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+    </script>
+</body>
+
+</html>
