@@ -1,7 +1,6 @@
-(function(global) {
-    var LiteGraph = global.LiteGraph;
+import { LiteGraph, LGraphNode, LGraphCanvas } from "@/litegraph.js";
 
-    function GamepadInput() {
+function GamepadInput() {
         this.addOutput("left_x_axis", "number");
         this.addOutput("left_y_axis", "number");
         this.addOutput("button_pressed", LiteGraph.EVENT);
@@ -350,5 +349,3 @@
     };
 
     LiteGraph.registerNodeType("input/gamepad", GamepadInput);
-
-})(this);

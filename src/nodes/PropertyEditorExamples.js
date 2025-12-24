@@ -3,6 +3,8 @@
  * These nodes show how to create custom UI overlays for editing node properties
  */
 
+import { LGraphNode, LiteGraph } from "@/litegraph.js";
+
 // Simple Text Editor Node
 function SimpleTextEditorNode() {
     this.properties = {

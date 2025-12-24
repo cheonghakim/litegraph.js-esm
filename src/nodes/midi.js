@@ -1,6 +1,6 @@
-(function(global) {
-    var LiteGraph = global.LiteGraph;
-    var MIDI_COLOR = "#243";
+import { LiteGraph, LGraphNode, LGraphCanvas } from "@/litegraph.js";
+
+var MIDI_COLOR = "#243";
 
     function MIDIEvent(data) {
         this.channel = 0;
@@ -1583,4 +1583,3 @@
     function now() {
         return window.performance.now();
     }
-})(this);

@@ -1,8 +1,6 @@
-//widgets
-(function(global) {
-    var LiteGraph = global.LiteGraph;
+import { LiteGraph, LGraphNode, LGraphCanvas } from "@/litegraph.js";
 
-    /* Button ****************/
+//widgets    /* Button ****************/
 
     function WidgetButton() {
         this.addOutput("", LiteGraph.EVENT);
@@ -795,4 +793,3 @@
     };
 
     LiteGraph.registerNodeType("widget/panel", WidgetPanel);
-})(this);

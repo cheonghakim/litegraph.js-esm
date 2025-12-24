@@ -51,17 +51,9 @@ import { LiteGraph } from "./litegraph.js";
     elem.className = "selector";
     elem.innerHTML = "";
     elem.innerHTML +=
-        "Demo <select><option>Empty</option></select> <button class='btn' id='save'>Save</button><button class='btn' id='load'>Load</button><button class='btn' id='download'>Download</button> | <button class='btn' id='webgl'>WebGL</button> <button class='btn' id='multiview'>Multiview</button>";
+        "Demo <button class='btn' id='save'>Save</button><button class='btn' id='load'>Load</button><button class='btn' id='download'>Download</button> | <button class='btn' id='webgl'>WebGL</button> <button class='btn' id='multiview'>Multiview</button>";
     editor.tools.appendChild(elem);
-    var select = elem.querySelector("select");
-    select.addEventListener("change", function (e) {
-        var option = this.options[this.selectedIndex];
-        var url = option.dataset["url"];
 
-        if (url) graph.load(url);
-        else if (option.callback) option.callback();
-        else graph.clear();
-    });
 
     elem.querySelector("#save").addEventListener("click", function () {
         console.log("saved");
@@ -107,29 +99,6 @@ import { LiteGraph } from "./litegraph.js";
         }
     });
 
-    function addDemo(name, url) {
-        var option = document.createElement("option");
-        if (url.constructor === String) option.dataset["url"] = url;
-        else option.callback = url;
-        option.innerHTML = name;
-        select.appendChild(option);
-    }
-
-    //some examples
-    addDemo("Features", "examples/features.json");
-    addDemo("Benchmark", "examples/benchmark.json");
-    addDemo("Subgraph", "examples/subgraph.json");
-    addDemo("Audio", "examples/audio.json");
-    addDemo("Audio Delay", "examples/audio_delay.json");
-    addDemo("Audio Reverb", "examples/audio_reverb.json");
-    addDemo("MIDI Generation", "examples/midi_generation.json");
-    addDemo("Copy Paste", "examples/copypaste.json");
-    addDemo("autobackup", function () {
-        var data = localStorage.getItem("litegraphg demo backup");
-        if (!data) return;
-        var graph_data = JSON.parse(data);
-        graph.configure(graph_data);
-    });
 
     //allows to use the WebGL nodes like textures
     function enableWebGL() {

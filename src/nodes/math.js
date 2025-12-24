@@ -1,7 +1,6 @@
-(function(global) {
-    var LiteGraph = global.LiteGraph;
+import { LiteGraph, LGraphNode, LGraphCanvas } from "@/litegraph.js";
 
-    //Converter
+//Converter
     function Converter() {
         this.addInput("in", 0);
 		this.addOutput("out", 0);
@@ -1329,5 +1328,3 @@
     };
 
     LiteGraph.registerNodeType("math3d/xyzw-to-vec4", Math3DXYZWToVec4);
-
-})(this);
