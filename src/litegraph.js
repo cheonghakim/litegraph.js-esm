@@ -6538,37 +6538,38 @@ export class LGraphCanvas {
             }
         }
 
-        // Temporarily set overlay visibility to measure its height
+        // Temporarily set overlay to measure its natural height at base scale
         const prevDisplay = overlay.style.display;
         overlay.style.display = 'block';
         overlay.style.visibility = 'hidden';
         overlay.style.position = 'absolute';
-        overlay.style.width = (node.size[0] * scale) + "px";
+        overlay.style.width = node.size[0] + "px";  // Set to canvas size (not scaled)
+        overlay.style.transform = "";  // Reset transform for measurement
 
-        // Get the actual height of the overlay content
-        const overlayHeight = overlay.scrollHeight / scale;
+        // Get the actual height of the overlay content at base scale
+        const overlayHeight = overlay.scrollHeight;
 
         // Restore visibility
         overlay.style.visibility = '';
 
-        // Adjust node size to fit overlay if needed
-        const required_height = slots_end_y + overlayHeight + 20; // Increased bottom padding to 20px
+        // Adjust node size to fit overlay if needed (in canvas coordinates)
+        const required_height = slots_end_y + overlayHeight + 20;
         if (node.size[1] < required_height) {
             node.size[1] = required_height;
         }
 
         // Transform node coordinates to screen coordinates
         const x = (node.pos[0] + offset[0]) * scale;
-        const y = (node.pos[1] + slots_end_y + offset[1]) * scale; // Below the slots
-        const width = node.size[0] * scale;
+        const y = (node.pos[1] + slots_end_y + offset[1]) * scale;
 
-        // Apply transform
+        // Apply position and scale transform
+        // Position is in screen coordinates, size is in canvas coordinates with transform scale
         overlay.style.left = x + "px";
         overlay.style.top = y + "px";
-        overlay.style.width = width + "px";
-        overlay.style.height = "auto"; // Let content determine height
-        overlay.style.maxHeight = (200 * scale) + "px"; // Max height scaled
-        overlay.style.transform = "";
+        overlay.style.width = node.size[0] + "px";  // Canvas size
+        overlay.style.height = "auto";
+        overlay.style.maxHeight = "200px";  // Max height in canvas coordinates
+        overlay.style.transform = `scale(${scale})`;  // Apply zoom scale
         overlay.style.transformOrigin = "top left";
         overlay.style.display = prevDisplay;
     }

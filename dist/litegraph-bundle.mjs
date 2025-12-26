@@ -13318,20 +13318,20 @@ const _LGraphCanvas = class _LGraphCanvas {
     const t = e._overlay_element, r = this.ds.scale, s = this.ds.offset;
     let n = LiteGraph.NODE_TITLE_HEIGHT;
     if (!e.flags.collapsed) {
-      const p = Math.max(
+      const u = Math.max(
         e.inputs ? e.inputs.length : 0,
         e.outputs ? e.outputs.length : 0
       );
-      p > 0 && (n = LiteGraph.NODE_TITLE_HEIGHT + (p - 0.3) * LiteGraph.NODE_SLOT_HEIGHT);
+      u > 0 && (n = LiteGraph.NODE_TITLE_HEIGHT + (u - 0.3) * LiteGraph.NODE_SLOT_HEIGHT);
     }
     const a = t.style.display;
-    t.style.display = "block", t.style.visibility = "hidden", t.style.position = "absolute", t.style.width = e.size[0] * r + "px";
-    const o = t.scrollHeight / r;
+    t.style.display = "block", t.style.visibility = "hidden", t.style.position = "absolute", t.style.width = e.size[0] + "px", t.style.transform = "";
+    const o = t.scrollHeight;
     t.style.visibility = "";
     const l = n + o + 20;
     e.size[1] < l && (e.size[1] = l);
-    const h = (e.pos[0] + s[0]) * r, c = (e.pos[1] + n + s[1]) * r, u = e.size[0] * r;
-    t.style.left = h + "px", t.style.top = c + "px", t.style.width = u + "px", t.style.height = "auto", t.style.maxHeight = 200 * r + "px", t.style.transform = "", t.style.transformOrigin = "top left", t.style.display = a;
+    const h = (e.pos[0] + s[0]) * r, c = (e.pos[1] + n + s[1]) * r;
+    t.style.left = h + "px", t.style.top = c + "px", t.style.width = e.size[0] + "px", t.style.height = "auto", t.style.maxHeight = "200px", t.style.transform = `scale(${r})`, t.style.transformOrigin = "top left", t.style.display = a;
   }
   /**
    * Updates all node overlays' positions
