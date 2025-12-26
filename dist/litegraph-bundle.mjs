@@ -13297,7 +13297,7 @@ const _LGraphCanvas = class _LGraphCanvas {
     if (!e || !this._overlay_container)
       return;
     const t = e.getOrCreateOverlayElement();
-    t && (t.style.position = "absolute", t.style.pointerEvents = "auto", t.className = (t.className || "") + " lgraph-node-overlay", this._overlay_container.appendChild(t), e._overlay_element = t, this.updateNodeOverlayPosition(e));
+    t && (t.style.position = "absolute", t.style.pointerEvents = "auto", t.className = (t.className || "") + " lgraph-node-overlay", this._overlay_container.appendChild(t), e._overlay_element = t, this.updateNodeOverlayPosition(e), e._overlay_initial_size || (e._overlay_initial_size = [e.size[0], e.size[1]]));
   }
   /**
    * Removes the HTML overlay for a node
@@ -13785,8 +13785,9 @@ const _LGraphCanvas = class _LGraphCanvas {
         const n = [
           e.canvasX - this.resizing_node.pos[0],
           e.canvasY - this.resizing_node.pos[1]
-        ], a = this.resizing_node.computeSize();
-        n[0] = Math.max(a[0], n[0]), n[1] = Math.max(a[1], n[1]), this.resizing_node.setSize(n), this.canvas.style.cursor = "se-resize", this.dirty_canvas = !0, this.dirty_bgcanvas = !0;
+        ];
+        let a = this.resizing_node.computeSize();
+        this.resizing_node._overlay_initial_size && (a[0] = Math.max(a[0], this.resizing_node._overlay_initial_size[0]), a[1] = Math.max(a[1], this.resizing_node._overlay_initial_size[1])), n[0] = Math.max(a[0], n[0]), n[1] = Math.max(a[1], n[1]), this.resizing_node.setSize(n), this.canvas.style.cursor = "se-resize", this.dirty_canvas = !0, this.dirty_bgcanvas = !0;
       }
     }
     return e.preventDefault(), !1;

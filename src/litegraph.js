@@ -6481,6 +6481,12 @@ export class LGraphCanvas {
 
         // Initial position update
         this.updateNodeOverlayPosition(node);
+
+        // Store the initial size as the minimum size for overlay nodes
+        // This prevents the node from being resized smaller than the overlay content
+        if (!node._overlay_initial_size) {
+            node._overlay_initial_size = [node.size[0], node.size[1]];
+        }
     }
 
     /**
@@ -7706,7 +7712,14 @@ export class LGraphCanvas {
                     e.canvasX - this.resizing_node.pos[0],
                     e.canvasY - this.resizing_node.pos[1],
                 ];
-                const min_size = this.resizing_node.computeSize();
+                let min_size = this.resizing_node.computeSize();
+
+                // For overlay nodes, use the initial size as minimum to prevent resizing below optimal size
+                if (this.resizing_node._overlay_initial_size) {
+                    min_size[0] = Math.max(min_size[0], this.resizing_node._overlay_initial_size[0]);
+                    min_size[1] = Math.max(min_size[1], this.resizing_node._overlay_initial_size[1]);
+                }
+
                 desired_size[0] = Math.max(min_size[0], desired_size[0]);
                 desired_size[1] = Math.max(min_size[1], desired_size[1]);
                 this.resizing_node.setSize(desired_size);
