@@ -6532,7 +6532,7 @@ export class LGraphCanvas {
                 node.inputs ? node.inputs.length : 0,
                 node.outputs ? node.outputs.length : 0
             );
-            if (max_slots > 0) {
+            if (max_slots > 0 && !node.horizontal) {
                 // Tighter calculation - reduce gap above overlay
                 slots_end_y = LiteGraph.NODE_TITLE_HEIGHT + (max_slots - 0.3) * LiteGraph.NODE_SLOT_HEIGHT;
             }

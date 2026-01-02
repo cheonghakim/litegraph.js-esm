@@ -57,11 +57,13 @@
 
         <div id="info">
             <h3>HTML Overlay Property Editor Demo</h3>
-            <p>This demo shows three example nodes with custom HTML overlays for editing properties:</p>
+            <p>This demo shows example nodes with custom HTML overlays:</p>
             <ul>
                 <li><strong>Text Editor</strong> - Simple text and font size inputs</li>
                 <li><strong>Color Picker</strong> - Color picker and opacity slider</li>
                 <li><strong>Form Editor</strong> - Complex form with multiple field types</li>
+                <li><strong>Horizontal Button</strong> - Interactive button with event trigger (horizontal layout)</li>
+                <li><strong>Horizontal Slider</strong> - Value slider control (horizontal layout)</li>
             </ul>
             <p><small>Right-click on canvas to add nodes from the "examples" category.</small></p>
         </div>
@@ -80,6 +82,7 @@
 
         // Import example nodes
         await import("../src/nodes/PropertyEditorExamples.js");
+        await import("../src/nodes/HorizontalOverlayExample.js");
 
         // Create graph
         const graph = new LGraph();
@@ -105,6 +108,15 @@
         const formEditorNode = LiteGraph.createNode("examples/form_editor");
         formEditorNode.pos = [350, 100];
         graph.add(formEditorNode);
+
+        // Add horizontal overlay example nodes
+        const horizontalButtonNode = LiteGraph.createNode("examples/horizontal_button");
+        horizontalButtonNode.pos = [100, 450];
+        graph.add(horizontalButtonNode);
+
+        const horizontalSliderNode = LiteGraph.createNode("examples/horizontal_slider");
+        horizontalSliderNode.pos = [350, 450];
+        graph.add(horizontalSliderNode);
 
         // Create overlays for all nodes
         setTimeout(() => {

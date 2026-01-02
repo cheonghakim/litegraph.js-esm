@@ -13322,7 +13322,7 @@ const _LGraphCanvas = class _LGraphCanvas {
         e.inputs ? e.inputs.length : 0,
         e.outputs ? e.outputs.length : 0
       );
-      u > 0 && (n = LiteGraph.NODE_TITLE_HEIGHT + (u - 0.3) * LiteGraph.NODE_SLOT_HEIGHT);
+      u > 0 && !e.horizontal && (n = LiteGraph.NODE_TITLE_HEIGHT + (u - 0.3) * LiteGraph.NODE_SLOT_HEIGHT);
     }
     const a = t.style.display;
     t.style.display = "block", t.style.visibility = "hidden", t.style.position = "absolute", t.style.width = e.size[0] + "px", t.style.transform = "";
