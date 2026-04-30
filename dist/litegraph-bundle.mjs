@@ -6,17 +6,17 @@ function earcut(e, t, r = 2) {
   let a = linkedList(e, 0, n, r, !0);
   const o = [];
   if (!a || a.next === a.prev) return o;
-  let l, h, c;
+  let l, u, c;
   if (s && (a = eliminateHoles(e, t, a, r)), e.length > 80 * r) {
-    l = 1 / 0, h = 1 / 0;
-    let u = -1 / 0, p = -1 / 0;
+    l = 1 / 0, u = 1 / 0;
+    let h = -1 / 0, p = -1 / 0;
     for (let f = r; f < n; f += r) {
       const d = e[f], g = e[f + 1];
-      d < l && (l = d), g < h && (h = g), d > u && (u = d), g > p && (p = g);
+      d < l && (l = d), g < u && (u = g), d > h && (h = d), g > p && (p = g);
     }
-    c = Math.max(u - l, p - h), c = c !== 0 ? 32767 / c : 0;
+    c = Math.max(h - l, p - u), c = c !== 0 ? 32767 / c : 0;
   }
-  return earcutLinked(a, o, r, l, h, c, 0), o;
+  return earcutLinked(a, o, r, l, u, c, 0), o;
 }
 function linkedList(e, t, r, s, n) {
   let a;
@@ -46,9 +46,9 @@ function earcutLinked(e, t, r, s, n, a, o) {
   !o && a && indexCurve(e, s, n, a);
   let l = e;
   for (; e.prev !== e.next; ) {
-    const h = e.prev, c = e.next;
+    const u = e.prev, c = e.next;
     if (a ? isEarHashed(e, s, n, a) : isEar(e)) {
-      t.push(h.i, e.i, c.i), removeNode(e), e = c.next, l = c.next;
+      t.push(u.i, e.i, c.i), removeNode(e), e = c.next, l = c.next;
       continue;
     }
     if (e = c, e === l) {
@@ -68,10 +68,10 @@ function earcutLinked(e, t, r, s, n, a, o) {
 function isEar(e) {
   const t = e.prev, r = e, s = e.next;
   if (area(t, r, s) >= 0) return !1;
-  const n = t.x, a = r.x, o = s.x, l = t.y, h = r.y, c = s.y, u = Math.min(n, a, o), p = Math.min(l, h, c), f = Math.max(n, a, o), d = Math.max(l, h, c);
+  const n = t.x, a = r.x, o = s.x, l = t.y, u = r.y, c = s.y, h = Math.min(n, a, o), p = Math.min(l, u, c), f = Math.max(n, a, o), d = Math.max(l, u, c);
   let g = s.next;
   for (; g !== t; ) {
-    if (g.x >= u && g.x <= f && g.y >= p && g.y <= d && pointInTriangleExceptFirst(n, l, a, h, o, c, g.x, g.y) && area(g.prev, g, g.next) >= 0)
+    if (g.x >= h && g.x <= f && g.y >= p && g.y <= d && pointInTriangleExceptFirst(n, l, a, u, o, c, g.x, g.y) && area(g.prev, g, g.next) >= 0)
       return !1;
     g = g.next;
   }
@@ -80,20 +80,20 @@ function isEar(e) {
 function isEarHashed(e, t, r, s) {
   const n = e.prev, a = e, o = e.next;
   if (area(n, a, o) >= 0) return !1;
-  const l = n.x, h = a.x, c = o.x, u = n.y, p = a.y, f = o.y, d = Math.min(l, h, c), g = Math.min(u, p, f), m = Math.max(l, h, c), b = Math.max(u, p, f), E = zOrder(d, g, t, r, s), L = zOrder(m, b, t, r, s);
+  const l = n.x, u = a.x, c = o.x, h = n.y, p = a.y, f = o.y, d = Math.min(l, u, c), g = Math.min(h, p, f), m = Math.max(l, u, c), b = Math.max(h, p, f), E = zOrder(d, g, t, r, s), L = zOrder(m, b, t, r, s);
   let T = e.prevZ, _ = e.nextZ;
   for (; T && T.z >= E && _ && _.z <= L; ) {
-    if (T.x >= d && T.x <= m && T.y >= g && T.y <= b && T !== n && T !== o && pointInTriangleExceptFirst(l, u, h, p, c, f, T.x, T.y) && area(T.prev, T, T.next) >= 0 || (T = T.prevZ, _.x >= d && _.x <= m && _.y >= g && _.y <= b && _ !== n && _ !== o && pointInTriangleExceptFirst(l, u, h, p, c, f, _.x, _.y) && area(_.prev, _, _.next) >= 0))
+    if (T.x >= d && T.x <= m && T.y >= g && T.y <= b && T !== n && T !== o && pointInTriangleExceptFirst(l, h, u, p, c, f, T.x, T.y) && area(T.prev, T, T.next) >= 0 || (T = T.prevZ, _.x >= d && _.x <= m && _.y >= g && _.y <= b && _ !== n && _ !== o && pointInTriangleExceptFirst(l, h, u, p, c, f, _.x, _.y) && area(_.prev, _, _.next) >= 0))
       return !1;
     _ = _.nextZ;
   }
   for (; T && T.z >= E; ) {
-    if (T.x >= d && T.x <= m && T.y >= g && T.y <= b && T !== n && T !== o && pointInTriangleExceptFirst(l, u, h, p, c, f, T.x, T.y) && area(T.prev, T, T.next) >= 0)
+    if (T.x >= d && T.x <= m && T.y >= g && T.y <= b && T !== n && T !== o && pointInTriangleExceptFirst(l, h, u, p, c, f, T.x, T.y) && area(T.prev, T, T.next) >= 0)
       return !1;
     T = T.prevZ;
   }
   for (; _ && _.z <= L; ) {
-    if (_.x >= d && _.x <= m && _.y >= g && _.y <= b && _ !== n && _ !== o && pointInTriangleExceptFirst(l, u, h, p, c, f, _.x, _.y) && area(_.prev, _, _.next) >= 0)
+    if (_.x >= d && _.x <= m && _.y >= g && _.y <= b && _ !== n && _ !== o && pointInTriangleExceptFirst(l, h, u, p, c, f, _.x, _.y) && area(_.prev, _, _.next) >= 0)
       return !1;
     _ = _.nextZ;
   }
@@ -113,8 +113,8 @@ function splitEarcut(e, t, r, s, n, a) {
     let l = o.next.next;
     for (; l !== o.prev; ) {
       if (o.i !== l.i && isValidDiagonal(o, l)) {
-        let h = splitPolygon(o, l);
-        o = filterPoints(o, o.next), h = filterPoints(h, h.next), earcutLinked(o, t, r, s, n, a, 0), earcutLinked(h, t, r, s, n, a, 0);
+        let u = splitPolygon(o, l);
+        o = filterPoints(o, o.next), u = filterPoints(u, u.next), earcutLinked(o, t, r, s, n, a, 0), earcutLinked(u, t, r, s, n, a, 0);
         return;
       }
       l = l.next;
@@ -125,7 +125,7 @@ function splitEarcut(e, t, r, s, n, a) {
 function eliminateHoles(e, t, r, s) {
   const n = [];
   for (let a = 0, o = t.length; a < o; a++) {
-    const l = t[a] * s, h = a < o - 1 ? t[a + 1] * s : e.length, c = linkedList(e, l, h, s, !1);
+    const l = t[a] * s, u = a < o - 1 ? t[a + 1] * s : e.length, c = linkedList(e, l, u, s, !1);
     c === c.next && (c.steiner = !0), n.push(getLeftmost(c));
   }
   n.sort(compareXYSlope);
@@ -163,14 +163,14 @@ function findHoleBridge(e, t) {
     r = r.next;
   } while (r !== t);
   if (!o) return null;
-  const l = o, h = o.x, c = o.y;
-  let u = 1 / 0;
+  const l = o, u = o.x, c = o.y;
+  let h = 1 / 0;
   r = o;
   do {
-    if (s >= r.x && r.x >= h && s !== r.x && pointInTriangle(
+    if (s >= r.x && r.x >= u && s !== r.x && pointInTriangle(
       n < c ? s : a,
       n,
-      h,
+      u,
       c,
       n < c ? a : s,
       n,
@@ -178,7 +178,7 @@ function findHoleBridge(e, t) {
       r.y
     )) {
       const p = Math.abs(n - r.y) / (s - r.x);
-      locallyInside(r, e) && (p < u || p === u && (r.x > o.x || r.x === o.x && sectorContainsSector(o, r))) && (o = r, u = p);
+      locallyInside(r, e) && (p < h || p === h && (r.x > o.x || r.x === o.x && sectorContainsSector(o, r))) && (o = r, h = p);
     }
     r = r.next;
   } while (r !== l);
@@ -205,9 +205,9 @@ function sortLinked(e) {
       let o = s, l = 0;
       for (let c = 0; c < r && (l++, o = o.nextZ, !!o); c++)
         ;
-      let h = r;
-      for (; l > 0 || h > 0 && o; )
-        l !== 0 && (h === 0 || !o || s.z <= o.z) ? (n = s, s = s.nextZ, l--) : (n = o, o = o.nextZ, h--), a ? a.nextZ = n : e = n, n.prevZ = a, a = n;
+      let u = r;
+      for (; l > 0 || u > 0 && o; )
+        l !== 0 && (u === 0 || !o || s.z <= o.z) ? (n = s, s = s.nextZ, l--) : (n = o, o = o.nextZ, u--), a ? a.nextZ = n : e = n, n.prevZ = a, a = n;
       s = o;
     }
     a.nextZ = null, r *= 2;
@@ -328,12 +328,12 @@ function clone$5(e) {
 function copy$5(e, t) {
   return e[0] = t[0], e[1] = t[1], e[2] = t[2], e[3] = t[3], e[4] = t[4], e[5] = t[5], e[6] = t[6], e[7] = t[7], e[8] = t[8], e;
 }
-function fromValues$5(e, t, r, s, n, a, o, l, h) {
+function fromValues$5(e, t, r, s, n, a, o, l, u) {
   var c = new ARRAY_TYPE(9);
-  return c[0] = e, c[1] = t, c[2] = r, c[3] = s, c[4] = n, c[5] = a, c[6] = o, c[7] = l, c[8] = h, c;
+  return c[0] = e, c[1] = t, c[2] = r, c[3] = s, c[4] = n, c[5] = a, c[6] = o, c[7] = l, c[8] = u, c;
 }
-function set$5(e, t, r, s, n, a, o, l, h, c) {
-  return e[0] = t, e[1] = r, e[2] = s, e[3] = n, e[4] = a, e[5] = o, e[6] = l, e[7] = h, e[8] = c, e;
+function set$5(e, t, r, s, n, a, o, l, u, c) {
+  return e[0] = t, e[1] = r, e[2] = s, e[3] = n, e[4] = a, e[5] = o, e[6] = l, e[7] = u, e[8] = c, e;
 }
 function identity$2(e) {
   return e[0] = 1, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 1, e[5] = 0, e[6] = 0, e[7] = 0, e[8] = 1, e;
@@ -347,28 +347,28 @@ function transpose$1(e, t) {
   return e;
 }
 function invert$2(e, t) {
-  var r = t[0], s = t[1], n = t[2], a = t[3], o = t[4], l = t[5], h = t[6], c = t[7], u = t[8], p = u * o - l * c, f = -u * a + l * h, d = c * a - o * h, g = r * p + s * f + n * d;
-  return g ? (g = 1 / g, e[0] = p * g, e[1] = (-u * s + n * c) * g, e[2] = (l * s - n * o) * g, e[3] = f * g, e[4] = (u * r - n * h) * g, e[5] = (-l * r + n * a) * g, e[6] = d * g, e[7] = (-c * r + s * h) * g, e[8] = (o * r - s * a) * g, e) : null;
+  var r = t[0], s = t[1], n = t[2], a = t[3], o = t[4], l = t[5], u = t[6], c = t[7], h = t[8], p = h * o - l * c, f = -h * a + l * u, d = c * a - o * u, g = r * p + s * f + n * d;
+  return g ? (g = 1 / g, e[0] = p * g, e[1] = (-h * s + n * c) * g, e[2] = (l * s - n * o) * g, e[3] = f * g, e[4] = (h * r - n * u) * g, e[5] = (-l * r + n * a) * g, e[6] = d * g, e[7] = (-c * r + s * u) * g, e[8] = (o * r - s * a) * g, e) : null;
 }
 function adjoint$1(e, t) {
-  var r = t[0], s = t[1], n = t[2], a = t[3], o = t[4], l = t[5], h = t[6], c = t[7], u = t[8];
-  return e[0] = o * u - l * c, e[1] = n * c - s * u, e[2] = s * l - n * o, e[3] = l * h - a * u, e[4] = r * u - n * h, e[5] = n * a - r * l, e[6] = a * c - o * h, e[7] = s * h - r * c, e[8] = r * o - s * a, e;
+  var r = t[0], s = t[1], n = t[2], a = t[3], o = t[4], l = t[5], u = t[6], c = t[7], h = t[8];
+  return e[0] = o * h - l * c, e[1] = n * c - s * h, e[2] = s * l - n * o, e[3] = l * u - a * h, e[4] = r * h - n * u, e[5] = n * a - r * l, e[6] = a * c - o * u, e[7] = s * u - r * c, e[8] = r * o - s * a, e;
 }
 function determinant$1(e) {
-  var t = e[0], r = e[1], s = e[2], n = e[3], a = e[4], o = e[5], l = e[6], h = e[7], c = e[8];
-  return t * (c * a - o * h) + r * (-c * n + o * l) + s * (h * n - a * l);
+  var t = e[0], r = e[1], s = e[2], n = e[3], a = e[4], o = e[5], l = e[6], u = e[7], c = e[8];
+  return t * (c * a - o * u) + r * (-c * n + o * l) + s * (u * n - a * l);
 }
 function multiply$5(e, t, r) {
-  var s = t[0], n = t[1], a = t[2], o = t[3], l = t[4], h = t[5], c = t[6], u = t[7], p = t[8], f = r[0], d = r[1], g = r[2], m = r[3], b = r[4], E = r[5], L = r[6], T = r[7], _ = r[8];
-  return e[0] = f * s + d * o + g * c, e[1] = f * n + d * l + g * u, e[2] = f * a + d * h + g * p, e[3] = m * s + b * o + E * c, e[4] = m * n + b * l + E * u, e[5] = m * a + b * h + E * p, e[6] = L * s + T * o + _ * c, e[7] = L * n + T * l + _ * u, e[8] = L * a + T * h + _ * p, e;
+  var s = t[0], n = t[1], a = t[2], o = t[3], l = t[4], u = t[5], c = t[6], h = t[7], p = t[8], f = r[0], d = r[1], g = r[2], m = r[3], b = r[4], E = r[5], L = r[6], T = r[7], _ = r[8];
+  return e[0] = f * s + d * o + g * c, e[1] = f * n + d * l + g * h, e[2] = f * a + d * u + g * p, e[3] = m * s + b * o + E * c, e[4] = m * n + b * l + E * h, e[5] = m * a + b * u + E * p, e[6] = L * s + T * o + _ * c, e[7] = L * n + T * l + _ * h, e[8] = L * a + T * u + _ * p, e;
 }
 function translate$1(e, t, r) {
-  var s = t[0], n = t[1], a = t[2], o = t[3], l = t[4], h = t[5], c = t[6], u = t[7], p = t[8], f = r[0], d = r[1];
-  return e[0] = s, e[1] = n, e[2] = a, e[3] = o, e[4] = l, e[5] = h, e[6] = f * s + d * o + c, e[7] = f * n + d * l + u, e[8] = f * a + d * h + p, e;
+  var s = t[0], n = t[1], a = t[2], o = t[3], l = t[4], u = t[5], c = t[6], h = t[7], p = t[8], f = r[0], d = r[1];
+  return e[0] = s, e[1] = n, e[2] = a, e[3] = o, e[4] = l, e[5] = u, e[6] = f * s + d * o + c, e[7] = f * n + d * l + h, e[8] = f * a + d * u + p, e;
 }
 function rotate$2(e, t, r) {
-  var s = t[0], n = t[1], a = t[2], o = t[3], l = t[4], h = t[5], c = t[6], u = t[7], p = t[8], f = Math.sin(r), d = Math.cos(r);
-  return e[0] = d * s + f * o, e[1] = d * n + f * l, e[2] = d * a + f * h, e[3] = d * o - f * s, e[4] = d * l - f * n, e[5] = d * h - f * a, e[6] = c, e[7] = u, e[8] = p, e;
+  var s = t[0], n = t[1], a = t[2], o = t[3], l = t[4], u = t[5], c = t[6], h = t[7], p = t[8], f = Math.sin(r), d = Math.cos(r);
+  return e[0] = d * s + f * o, e[1] = d * n + f * l, e[2] = d * a + f * u, e[3] = d * o - f * s, e[4] = d * l - f * n, e[5] = d * u - f * a, e[6] = c, e[7] = h, e[8] = p, e;
 }
 function scale$5(e, t, r) {
   var s = r[0], n = r[1];
@@ -388,12 +388,12 @@ function fromMat2d(e, t) {
   return e[0] = t[0], e[1] = t[1], e[2] = 0, e[3] = t[2], e[4] = t[3], e[5] = 0, e[6] = t[4], e[7] = t[5], e[8] = 1, e;
 }
 function fromQuat$1(e, t) {
-  var r = t[0], s = t[1], n = t[2], a = t[3], o = r + r, l = s + s, h = n + n, c = r * o, u = s * o, p = s * l, f = n * o, d = n * l, g = n * h, m = a * o, b = a * l, E = a * h;
-  return e[0] = 1 - p - g, e[3] = u - E, e[6] = f + b, e[1] = u + E, e[4] = 1 - c - g, e[7] = d - m, e[2] = f - b, e[5] = d + m, e[8] = 1 - c - p, e;
+  var r = t[0], s = t[1], n = t[2], a = t[3], o = r + r, l = s + s, u = n + n, c = r * o, h = s * o, p = s * l, f = n * o, d = n * l, g = n * u, m = a * o, b = a * l, E = a * u;
+  return e[0] = 1 - p - g, e[3] = h - E, e[6] = f + b, e[1] = h + E, e[4] = 1 - c - g, e[7] = d - m, e[2] = f - b, e[5] = d + m, e[8] = 1 - c - p, e;
 }
 function normalFromMat4(e, t) {
-  var r = t[0], s = t[1], n = t[2], a = t[3], o = t[4], l = t[5], h = t[6], c = t[7], u = t[8], p = t[9], f = t[10], d = t[11], g = t[12], m = t[13], b = t[14], E = t[15], L = r * l - s * o, T = r * h - n * o, _ = r * c - a * o, I = s * h - n * l, A = s * c - a * l, M = n * c - a * h, O = u * m - p * g, D = u * b - f * g, P = u * E - d * g, N = p * b - f * m, k = p * E - d * m, B = f * E - d * b, S = L * B - T * k + _ * N + I * P - A * D + M * O;
-  return S ? (S = 1 / S, e[0] = (l * B - h * k + c * N) * S, e[1] = (h * P - o * B - c * D) * S, e[2] = (o * k - l * P + c * O) * S, e[3] = (n * k - s * B - a * N) * S, e[4] = (r * B - n * P + a * D) * S, e[5] = (s * P - r * k - a * O) * S, e[6] = (m * M - b * A + E * I) * S, e[7] = (b * _ - g * M - E * T) * S, e[8] = (g * A - m * _ + E * L) * S, e) : null;
+  var r = t[0], s = t[1], n = t[2], a = t[3], o = t[4], l = t[5], u = t[6], c = t[7], h = t[8], p = t[9], f = t[10], d = t[11], g = t[12], m = t[13], b = t[14], E = t[15], L = r * l - s * o, T = r * u - n * o, _ = r * c - a * o, I = s * u - n * l, A = s * c - a * l, M = n * c - a * u, O = h * m - p * g, D = h * b - f * g, P = h * E - d * g, N = p * b - f * m, k = p * E - d * m, B = f * E - d * b, S = L * B - T * k + _ * N + I * P - A * D + M * O;
+  return S ? (S = 1 / S, e[0] = (l * B - u * k + c * N) * S, e[1] = (u * P - o * B - c * D) * S, e[2] = (o * k - l * P + c * O) * S, e[3] = (n * k - s * B - a * N) * S, e[4] = (r * B - n * P + a * D) * S, e[5] = (s * P - r * k - a * O) * S, e[6] = (m * M - b * A + E * I) * S, e[7] = (b * _ - g * M - E * T) * S, e[8] = (g * A - m * _ + E * L) * S, e) : null;
 }
 function projection(e, t, r) {
   return e[0] = 2 / t, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = -2 / r, e[5] = 0, e[6] = -1, e[7] = 1, e[8] = 1, e;
@@ -420,8 +420,8 @@ function exactEquals$5(e, t) {
   return e[0] === t[0] && e[1] === t[1] && e[2] === t[2] && e[3] === t[3] && e[4] === t[4] && e[5] === t[5] && e[6] === t[6] && e[7] === t[7] && e[8] === t[8];
 }
 function equals$5(e, t) {
-  var r = e[0], s = e[1], n = e[2], a = e[3], o = e[4], l = e[5], h = e[6], c = e[7], u = e[8], p = t[0], f = t[1], d = t[2], g = t[3], m = t[4], b = t[5], E = t[6], L = t[7], T = t[8];
-  return Math.abs(r - p) <= EPSILON * Math.max(1, Math.abs(r), Math.abs(p)) && Math.abs(s - f) <= EPSILON * Math.max(1, Math.abs(s), Math.abs(f)) && Math.abs(n - d) <= EPSILON * Math.max(1, Math.abs(n), Math.abs(d)) && Math.abs(a - g) <= EPSILON * Math.max(1, Math.abs(a), Math.abs(g)) && Math.abs(o - m) <= EPSILON * Math.max(1, Math.abs(o), Math.abs(m)) && Math.abs(l - b) <= EPSILON * Math.max(1, Math.abs(l), Math.abs(b)) && Math.abs(h - E) <= EPSILON * Math.max(1, Math.abs(h), Math.abs(E)) && Math.abs(c - L) <= EPSILON * Math.max(1, Math.abs(c), Math.abs(L)) && Math.abs(u - T) <= EPSILON * Math.max(1, Math.abs(u), Math.abs(T));
+  var r = e[0], s = e[1], n = e[2], a = e[3], o = e[4], l = e[5], u = e[6], c = e[7], h = e[8], p = t[0], f = t[1], d = t[2], g = t[3], m = t[4], b = t[5], E = t[6], L = t[7], T = t[8];
+  return Math.abs(r - p) <= EPSILON * Math.max(1, Math.abs(r), Math.abs(p)) && Math.abs(s - f) <= EPSILON * Math.max(1, Math.abs(s), Math.abs(f)) && Math.abs(n - d) <= EPSILON * Math.max(1, Math.abs(n), Math.abs(d)) && Math.abs(a - g) <= EPSILON * Math.max(1, Math.abs(a), Math.abs(g)) && Math.abs(o - m) <= EPSILON * Math.max(1, Math.abs(o), Math.abs(m)) && Math.abs(l - b) <= EPSILON * Math.max(1, Math.abs(l), Math.abs(b)) && Math.abs(u - E) <= EPSILON * Math.max(1, Math.abs(u), Math.abs(E)) && Math.abs(c - L) <= EPSILON * Math.max(1, Math.abs(c), Math.abs(L)) && Math.abs(h - T) <= EPSILON * Math.max(1, Math.abs(h), Math.abs(T));
 }
 var mul$5 = multiply$5, sub$4 = subtract$4;
 const mat3$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -470,12 +470,12 @@ function clone$4(e) {
 function copy$4(e, t) {
   return e[0] = t[0], e[1] = t[1], e[2] = t[2], e[3] = t[3], e[4] = t[4], e[5] = t[5], e[6] = t[6], e[7] = t[7], e[8] = t[8], e[9] = t[9], e[10] = t[10], e[11] = t[11], e[12] = t[12], e[13] = t[13], e[14] = t[14], e[15] = t[15], e;
 }
-function fromValues$4(e, t, r, s, n, a, o, l, h, c, u, p, f, d, g, m) {
+function fromValues$4(e, t, r, s, n, a, o, l, u, c, h, p, f, d, g, m) {
   var b = new ARRAY_TYPE(16);
-  return b[0] = e, b[1] = t, b[2] = r, b[3] = s, b[4] = n, b[5] = a, b[6] = o, b[7] = l, b[8] = h, b[9] = c, b[10] = u, b[11] = p, b[12] = f, b[13] = d, b[14] = g, b[15] = m, b;
+  return b[0] = e, b[1] = t, b[2] = r, b[3] = s, b[4] = n, b[5] = a, b[6] = o, b[7] = l, b[8] = u, b[9] = c, b[10] = h, b[11] = p, b[12] = f, b[13] = d, b[14] = g, b[15] = m, b;
 }
-function set$4(e, t, r, s, n, a, o, l, h, c, u, p, f, d, g, m, b) {
-  return e[0] = t, e[1] = r, e[2] = s, e[3] = n, e[4] = a, e[5] = o, e[6] = l, e[7] = h, e[8] = c, e[9] = u, e[10] = p, e[11] = f, e[12] = d, e[13] = g, e[14] = m, e[15] = b, e;
+function set$4(e, t, r, s, n, a, o, l, u, c, h, p, f, d, g, m, b) {
+  return e[0] = t, e[1] = r, e[2] = s, e[3] = n, e[4] = a, e[5] = o, e[6] = l, e[7] = u, e[8] = c, e[9] = h, e[10] = p, e[11] = f, e[12] = d, e[13] = g, e[14] = m, e[15] = b, e;
 }
 function identity$1(e) {
   return e[0] = 1, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = 1, e[6] = 0, e[7] = 0, e[8] = 0, e[9] = 0, e[10] = 1, e[11] = 0, e[12] = 0, e[13] = 0, e[14] = 0, e[15] = 1, e;
@@ -489,44 +489,44 @@ function transpose(e, t) {
   return e;
 }
 function invert$1(e, t) {
-  var r = t[0], s = t[1], n = t[2], a = t[3], o = t[4], l = t[5], h = t[6], c = t[7], u = t[8], p = t[9], f = t[10], d = t[11], g = t[12], m = t[13], b = t[14], E = t[15], L = r * l - s * o, T = r * h - n * o, _ = r * c - a * o, I = s * h - n * l, A = s * c - a * l, M = n * c - a * h, O = u * m - p * g, D = u * b - f * g, P = u * E - d * g, N = p * b - f * m, k = p * E - d * m, B = f * E - d * b, S = L * B - T * k + _ * N + I * P - A * D + M * O;
-  return S ? (S = 1 / S, e[0] = (l * B - h * k + c * N) * S, e[1] = (n * k - s * B - a * N) * S, e[2] = (m * M - b * A + E * I) * S, e[3] = (f * A - p * M - d * I) * S, e[4] = (h * P - o * B - c * D) * S, e[5] = (r * B - n * P + a * D) * S, e[6] = (b * _ - g * M - E * T) * S, e[7] = (u * M - f * _ + d * T) * S, e[8] = (o * k - l * P + c * O) * S, e[9] = (s * P - r * k - a * O) * S, e[10] = (g * A - m * _ + E * L) * S, e[11] = (p * _ - u * A - d * L) * S, e[12] = (l * D - o * N - h * O) * S, e[13] = (r * N - s * D + n * O) * S, e[14] = (m * T - g * I - b * L) * S, e[15] = (u * I - p * T + f * L) * S, e) : null;
+  var r = t[0], s = t[1], n = t[2], a = t[3], o = t[4], l = t[5], u = t[6], c = t[7], h = t[8], p = t[9], f = t[10], d = t[11], g = t[12], m = t[13], b = t[14], E = t[15], L = r * l - s * o, T = r * u - n * o, _ = r * c - a * o, I = s * u - n * l, A = s * c - a * l, M = n * c - a * u, O = h * m - p * g, D = h * b - f * g, P = h * E - d * g, N = p * b - f * m, k = p * E - d * m, B = f * E - d * b, S = L * B - T * k + _ * N + I * P - A * D + M * O;
+  return S ? (S = 1 / S, e[0] = (l * B - u * k + c * N) * S, e[1] = (n * k - s * B - a * N) * S, e[2] = (m * M - b * A + E * I) * S, e[3] = (f * A - p * M - d * I) * S, e[4] = (u * P - o * B - c * D) * S, e[5] = (r * B - n * P + a * D) * S, e[6] = (b * _ - g * M - E * T) * S, e[7] = (h * M - f * _ + d * T) * S, e[8] = (o * k - l * P + c * O) * S, e[9] = (s * P - r * k - a * O) * S, e[10] = (g * A - m * _ + E * L) * S, e[11] = (p * _ - h * A - d * L) * S, e[12] = (l * D - o * N - u * O) * S, e[13] = (r * N - s * D + n * O) * S, e[14] = (m * T - g * I - b * L) * S, e[15] = (h * I - p * T + f * L) * S, e) : null;
 }
 function adjoint(e, t) {
-  var r = t[0], s = t[1], n = t[2], a = t[3], o = t[4], l = t[5], h = t[6], c = t[7], u = t[8], p = t[9], f = t[10], d = t[11], g = t[12], m = t[13], b = t[14], E = t[15];
-  return e[0] = l * (f * E - d * b) - p * (h * E - c * b) + m * (h * d - c * f), e[1] = -(s * (f * E - d * b) - p * (n * E - a * b) + m * (n * d - a * f)), e[2] = s * (h * E - c * b) - l * (n * E - a * b) + m * (n * c - a * h), e[3] = -(s * (h * d - c * f) - l * (n * d - a * f) + p * (n * c - a * h)), e[4] = -(o * (f * E - d * b) - u * (h * E - c * b) + g * (h * d - c * f)), e[5] = r * (f * E - d * b) - u * (n * E - a * b) + g * (n * d - a * f), e[6] = -(r * (h * E - c * b) - o * (n * E - a * b) + g * (n * c - a * h)), e[7] = r * (h * d - c * f) - o * (n * d - a * f) + u * (n * c - a * h), e[8] = o * (p * E - d * m) - u * (l * E - c * m) + g * (l * d - c * p), e[9] = -(r * (p * E - d * m) - u * (s * E - a * m) + g * (s * d - a * p)), e[10] = r * (l * E - c * m) - o * (s * E - a * m) + g * (s * c - a * l), e[11] = -(r * (l * d - c * p) - o * (s * d - a * p) + u * (s * c - a * l)), e[12] = -(o * (p * b - f * m) - u * (l * b - h * m) + g * (l * f - h * p)), e[13] = r * (p * b - f * m) - u * (s * b - n * m) + g * (s * f - n * p), e[14] = -(r * (l * b - h * m) - o * (s * b - n * m) + g * (s * h - n * l)), e[15] = r * (l * f - h * p) - o * (s * f - n * p) + u * (s * h - n * l), e;
+  var r = t[0], s = t[1], n = t[2], a = t[3], o = t[4], l = t[5], u = t[6], c = t[7], h = t[8], p = t[9], f = t[10], d = t[11], g = t[12], m = t[13], b = t[14], E = t[15];
+  return e[0] = l * (f * E - d * b) - p * (u * E - c * b) + m * (u * d - c * f), e[1] = -(s * (f * E - d * b) - p * (n * E - a * b) + m * (n * d - a * f)), e[2] = s * (u * E - c * b) - l * (n * E - a * b) + m * (n * c - a * u), e[3] = -(s * (u * d - c * f) - l * (n * d - a * f) + p * (n * c - a * u)), e[4] = -(o * (f * E - d * b) - h * (u * E - c * b) + g * (u * d - c * f)), e[5] = r * (f * E - d * b) - h * (n * E - a * b) + g * (n * d - a * f), e[6] = -(r * (u * E - c * b) - o * (n * E - a * b) + g * (n * c - a * u)), e[7] = r * (u * d - c * f) - o * (n * d - a * f) + h * (n * c - a * u), e[8] = o * (p * E - d * m) - h * (l * E - c * m) + g * (l * d - c * p), e[9] = -(r * (p * E - d * m) - h * (s * E - a * m) + g * (s * d - a * p)), e[10] = r * (l * E - c * m) - o * (s * E - a * m) + g * (s * c - a * l), e[11] = -(r * (l * d - c * p) - o * (s * d - a * p) + h * (s * c - a * l)), e[12] = -(o * (p * b - f * m) - h * (l * b - u * m) + g * (l * f - u * p)), e[13] = r * (p * b - f * m) - h * (s * b - n * m) + g * (s * f - n * p), e[14] = -(r * (l * b - u * m) - o * (s * b - n * m) + g * (s * u - n * l)), e[15] = r * (l * f - u * p) - o * (s * f - n * p) + h * (s * u - n * l), e;
 }
 function determinant(e) {
-  var t = e[0], r = e[1], s = e[2], n = e[3], a = e[4], o = e[5], l = e[6], h = e[7], c = e[8], u = e[9], p = e[10], f = e[11], d = e[12], g = e[13], m = e[14], b = e[15], E = t * o - r * a, L = t * l - s * a, T = t * h - n * a, _ = r * l - s * o, I = r * h - n * o, A = s * h - n * l, M = c * g - u * d, O = c * m - p * d, D = c * b - f * d, P = u * m - p * g, N = u * b - f * g, k = p * b - f * m;
+  var t = e[0], r = e[1], s = e[2], n = e[3], a = e[4], o = e[5], l = e[6], u = e[7], c = e[8], h = e[9], p = e[10], f = e[11], d = e[12], g = e[13], m = e[14], b = e[15], E = t * o - r * a, L = t * l - s * a, T = t * u - n * a, _ = r * l - s * o, I = r * u - n * o, A = s * u - n * l, M = c * g - h * d, O = c * m - p * d, D = c * b - f * d, P = h * m - p * g, N = h * b - f * g, k = p * b - f * m;
   return E * k - L * N + T * P + _ * D - I * O + A * M;
 }
 function multiply$4(e, t, r) {
-  var s = t[0], n = t[1], a = t[2], o = t[3], l = t[4], h = t[5], c = t[6], u = t[7], p = t[8], f = t[9], d = t[10], g = t[11], m = t[12], b = t[13], E = t[14], L = t[15], T = r[0], _ = r[1], I = r[2], A = r[3];
-  return e[0] = T * s + _ * l + I * p + A * m, e[1] = T * n + _ * h + I * f + A * b, e[2] = T * a + _ * c + I * d + A * E, e[3] = T * o + _ * u + I * g + A * L, T = r[4], _ = r[5], I = r[6], A = r[7], e[4] = T * s + _ * l + I * p + A * m, e[5] = T * n + _ * h + I * f + A * b, e[6] = T * a + _ * c + I * d + A * E, e[7] = T * o + _ * u + I * g + A * L, T = r[8], _ = r[9], I = r[10], A = r[11], e[8] = T * s + _ * l + I * p + A * m, e[9] = T * n + _ * h + I * f + A * b, e[10] = T * a + _ * c + I * d + A * E, e[11] = T * o + _ * u + I * g + A * L, T = r[12], _ = r[13], I = r[14], A = r[15], e[12] = T * s + _ * l + I * p + A * m, e[13] = T * n + _ * h + I * f + A * b, e[14] = T * a + _ * c + I * d + A * E, e[15] = T * o + _ * u + I * g + A * L, e;
+  var s = t[0], n = t[1], a = t[2], o = t[3], l = t[4], u = t[5], c = t[6], h = t[7], p = t[8], f = t[9], d = t[10], g = t[11], m = t[12], b = t[13], E = t[14], L = t[15], T = r[0], _ = r[1], I = r[2], A = r[3];
+  return e[0] = T * s + _ * l + I * p + A * m, e[1] = T * n + _ * u + I * f + A * b, e[2] = T * a + _ * c + I * d + A * E, e[3] = T * o + _ * h + I * g + A * L, T = r[4], _ = r[5], I = r[6], A = r[7], e[4] = T * s + _ * l + I * p + A * m, e[5] = T * n + _ * u + I * f + A * b, e[6] = T * a + _ * c + I * d + A * E, e[7] = T * o + _ * h + I * g + A * L, T = r[8], _ = r[9], I = r[10], A = r[11], e[8] = T * s + _ * l + I * p + A * m, e[9] = T * n + _ * u + I * f + A * b, e[10] = T * a + _ * c + I * d + A * E, e[11] = T * o + _ * h + I * g + A * L, T = r[12], _ = r[13], I = r[14], A = r[15], e[12] = T * s + _ * l + I * p + A * m, e[13] = T * n + _ * u + I * f + A * b, e[14] = T * a + _ * c + I * d + A * E, e[15] = T * o + _ * h + I * g + A * L, e;
 }
 function translate(e, t, r) {
-  var s = r[0], n = r[1], a = r[2], o, l, h, c, u, p, f, d, g, m, b, E;
-  return t === e ? (e[12] = t[0] * s + t[4] * n + t[8] * a + t[12], e[13] = t[1] * s + t[5] * n + t[9] * a + t[13], e[14] = t[2] * s + t[6] * n + t[10] * a + t[14], e[15] = t[3] * s + t[7] * n + t[11] * a + t[15]) : (o = t[0], l = t[1], h = t[2], c = t[3], u = t[4], p = t[5], f = t[6], d = t[7], g = t[8], m = t[9], b = t[10], E = t[11], e[0] = o, e[1] = l, e[2] = h, e[3] = c, e[4] = u, e[5] = p, e[6] = f, e[7] = d, e[8] = g, e[9] = m, e[10] = b, e[11] = E, e[12] = o * s + u * n + g * a + t[12], e[13] = l * s + p * n + m * a + t[13], e[14] = h * s + f * n + b * a + t[14], e[15] = c * s + d * n + E * a + t[15]), e;
+  var s = r[0], n = r[1], a = r[2], o, l, u, c, h, p, f, d, g, m, b, E;
+  return t === e ? (e[12] = t[0] * s + t[4] * n + t[8] * a + t[12], e[13] = t[1] * s + t[5] * n + t[9] * a + t[13], e[14] = t[2] * s + t[6] * n + t[10] * a + t[14], e[15] = t[3] * s + t[7] * n + t[11] * a + t[15]) : (o = t[0], l = t[1], u = t[2], c = t[3], h = t[4], p = t[5], f = t[6], d = t[7], g = t[8], m = t[9], b = t[10], E = t[11], e[0] = o, e[1] = l, e[2] = u, e[3] = c, e[4] = h, e[5] = p, e[6] = f, e[7] = d, e[8] = g, e[9] = m, e[10] = b, e[11] = E, e[12] = o * s + h * n + g * a + t[12], e[13] = l * s + p * n + m * a + t[13], e[14] = u * s + f * n + b * a + t[14], e[15] = c * s + d * n + E * a + t[15]), e;
 }
 function scale$4(e, t, r) {
   var s = r[0], n = r[1], a = r[2];
   return e[0] = t[0] * s, e[1] = t[1] * s, e[2] = t[2] * s, e[3] = t[3] * s, e[4] = t[4] * n, e[5] = t[5] * n, e[6] = t[6] * n, e[7] = t[7] * n, e[8] = t[8] * a, e[9] = t[9] * a, e[10] = t[10] * a, e[11] = t[11] * a, e[12] = t[12], e[13] = t[13], e[14] = t[14], e[15] = t[15], e;
 }
 function rotate$1(e, t, r, s) {
-  var n = s[0], a = s[1], o = s[2], l = Math.hypot(n, a, o), h, c, u, p, f, d, g, m, b, E, L, T, _, I, A, M, O, D, P, N, k, B, S, U;
-  return l < EPSILON ? null : (l = 1 / l, n *= l, a *= l, o *= l, h = Math.sin(r), c = Math.cos(r), u = 1 - c, p = t[0], f = t[1], d = t[2], g = t[3], m = t[4], b = t[5], E = t[6], L = t[7], T = t[8], _ = t[9], I = t[10], A = t[11], M = n * n * u + c, O = a * n * u + o * h, D = o * n * u - a * h, P = n * a * u - o * h, N = a * a * u + c, k = o * a * u + n * h, B = n * o * u + a * h, S = a * o * u - n * h, U = o * o * u + c, e[0] = p * M + m * O + T * D, e[1] = f * M + b * O + _ * D, e[2] = d * M + E * O + I * D, e[3] = g * M + L * O + A * D, e[4] = p * P + m * N + T * k, e[5] = f * P + b * N + _ * k, e[6] = d * P + E * N + I * k, e[7] = g * P + L * N + A * k, e[8] = p * B + m * S + T * U, e[9] = f * B + b * S + _ * U, e[10] = d * B + E * S + I * U, e[11] = g * B + L * S + A * U, t !== e && (e[12] = t[12], e[13] = t[13], e[14] = t[14], e[15] = t[15]), e);
+  var n = s[0], a = s[1], o = s[2], l = Math.hypot(n, a, o), u, c, h, p, f, d, g, m, b, E, L, T, _, I, A, M, O, D, P, N, k, B, S, U;
+  return l < EPSILON ? null : (l = 1 / l, n *= l, a *= l, o *= l, u = Math.sin(r), c = Math.cos(r), h = 1 - c, p = t[0], f = t[1], d = t[2], g = t[3], m = t[4], b = t[5], E = t[6], L = t[7], T = t[8], _ = t[9], I = t[10], A = t[11], M = n * n * h + c, O = a * n * h + o * u, D = o * n * h - a * u, P = n * a * h - o * u, N = a * a * h + c, k = o * a * h + n * u, B = n * o * h + a * u, S = a * o * h - n * u, U = o * o * h + c, e[0] = p * M + m * O + T * D, e[1] = f * M + b * O + _ * D, e[2] = d * M + E * O + I * D, e[3] = g * M + L * O + A * D, e[4] = p * P + m * N + T * k, e[5] = f * P + b * N + _ * k, e[6] = d * P + E * N + I * k, e[7] = g * P + L * N + A * k, e[8] = p * B + m * S + T * U, e[9] = f * B + b * S + _ * U, e[10] = d * B + E * S + I * U, e[11] = g * B + L * S + A * U, t !== e && (e[12] = t[12], e[13] = t[13], e[14] = t[14], e[15] = t[15]), e);
 }
 function rotateX$2(e, t, r) {
-  var s = Math.sin(r), n = Math.cos(r), a = t[4], o = t[5], l = t[6], h = t[7], c = t[8], u = t[9], p = t[10], f = t[11];
-  return t !== e && (e[0] = t[0], e[1] = t[1], e[2] = t[2], e[3] = t[3], e[12] = t[12], e[13] = t[13], e[14] = t[14], e[15] = t[15]), e[4] = a * n + c * s, e[5] = o * n + u * s, e[6] = l * n + p * s, e[7] = h * n + f * s, e[8] = c * n - a * s, e[9] = u * n - o * s, e[10] = p * n - l * s, e[11] = f * n - h * s, e;
+  var s = Math.sin(r), n = Math.cos(r), a = t[4], o = t[5], l = t[6], u = t[7], c = t[8], h = t[9], p = t[10], f = t[11];
+  return t !== e && (e[0] = t[0], e[1] = t[1], e[2] = t[2], e[3] = t[3], e[12] = t[12], e[13] = t[13], e[14] = t[14], e[15] = t[15]), e[4] = a * n + c * s, e[5] = o * n + h * s, e[6] = l * n + p * s, e[7] = u * n + f * s, e[8] = c * n - a * s, e[9] = h * n - o * s, e[10] = p * n - l * s, e[11] = f * n - u * s, e;
 }
 function rotateY$2(e, t, r) {
-  var s = Math.sin(r), n = Math.cos(r), a = t[0], o = t[1], l = t[2], h = t[3], c = t[8], u = t[9], p = t[10], f = t[11];
-  return t !== e && (e[4] = t[4], e[5] = t[5], e[6] = t[6], e[7] = t[7], e[12] = t[12], e[13] = t[13], e[14] = t[14], e[15] = t[15]), e[0] = a * n - c * s, e[1] = o * n - u * s, e[2] = l * n - p * s, e[3] = h * n - f * s, e[8] = a * s + c * n, e[9] = o * s + u * n, e[10] = l * s + p * n, e[11] = h * s + f * n, e;
+  var s = Math.sin(r), n = Math.cos(r), a = t[0], o = t[1], l = t[2], u = t[3], c = t[8], h = t[9], p = t[10], f = t[11];
+  return t !== e && (e[4] = t[4], e[5] = t[5], e[6] = t[6], e[7] = t[7], e[12] = t[12], e[13] = t[13], e[14] = t[14], e[15] = t[15]), e[0] = a * n - c * s, e[1] = o * n - h * s, e[2] = l * n - p * s, e[3] = u * n - f * s, e[8] = a * s + c * n, e[9] = o * s + h * n, e[10] = l * s + p * n, e[11] = u * s + f * n, e;
 }
 function rotateZ$2(e, t, r) {
-  var s = Math.sin(r), n = Math.cos(r), a = t[0], o = t[1], l = t[2], h = t[3], c = t[4], u = t[5], p = t[6], f = t[7];
-  return t !== e && (e[8] = t[8], e[9] = t[9], e[10] = t[10], e[11] = t[11], e[12] = t[12], e[13] = t[13], e[14] = t[14], e[15] = t[15]), e[0] = a * n + c * s, e[1] = o * n + u * s, e[2] = l * n + p * s, e[3] = h * n + f * s, e[4] = c * n - a * s, e[5] = u * n - o * s, e[6] = p * n - l * s, e[7] = f * n - h * s, e;
+  var s = Math.sin(r), n = Math.cos(r), a = t[0], o = t[1], l = t[2], u = t[3], c = t[4], h = t[5], p = t[6], f = t[7];
+  return t !== e && (e[8] = t[8], e[9] = t[9], e[10] = t[10], e[11] = t[11], e[12] = t[12], e[13] = t[13], e[14] = t[14], e[15] = t[15]), e[0] = a * n + c * s, e[1] = o * n + h * s, e[2] = l * n + p * s, e[3] = u * n + f * s, e[4] = c * n - a * s, e[5] = h * n - o * s, e[6] = p * n - l * s, e[7] = f * n - u * s, e;
 }
 function fromTranslation(e, t) {
   return e[0] = 1, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = 1, e[6] = 0, e[7] = 0, e[8] = 0, e[9] = 0, e[10] = 1, e[11] = 0, e[12] = t[0], e[13] = t[1], e[14] = t[2], e[15] = 1, e;
@@ -535,8 +535,8 @@ function fromScaling(e, t) {
   return e[0] = t[0], e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = t[1], e[6] = 0, e[7] = 0, e[8] = 0, e[9] = 0, e[10] = t[2], e[11] = 0, e[12] = 0, e[13] = 0, e[14] = 0, e[15] = 1, e;
 }
 function fromRotation(e, t, r) {
-  var s = r[0], n = r[1], a = r[2], o = Math.hypot(s, n, a), l, h, c;
-  return o < EPSILON ? null : (o = 1 / o, s *= o, n *= o, a *= o, l = Math.sin(t), h = Math.cos(t), c = 1 - h, e[0] = s * s * c + h, e[1] = n * s * c + a * l, e[2] = a * s * c - n * l, e[3] = 0, e[4] = s * n * c - a * l, e[5] = n * n * c + h, e[6] = a * n * c + s * l, e[7] = 0, e[8] = s * a * c + n * l, e[9] = n * a * c - s * l, e[10] = a * a * c + h, e[11] = 0, e[12] = 0, e[13] = 0, e[14] = 0, e[15] = 1, e);
+  var s = r[0], n = r[1], a = r[2], o = Math.hypot(s, n, a), l, u, c;
+  return o < EPSILON ? null : (o = 1 / o, s *= o, n *= o, a *= o, l = Math.sin(t), u = Math.cos(t), c = 1 - u, e[0] = s * s * c + u, e[1] = n * s * c + a * l, e[2] = a * s * c - n * l, e[3] = 0, e[4] = s * n * c - a * l, e[5] = n * n * c + u, e[6] = a * n * c + s * l, e[7] = 0, e[8] = s * a * c + n * l, e[9] = n * a * c - s * l, e[10] = a * a * c + u, e[11] = 0, e[12] = 0, e[13] = 0, e[14] = 0, e[15] = 1, e);
 }
 function fromXRotation(e, t) {
   var r = Math.sin(t), s = Math.cos(t);
@@ -551,41 +551,41 @@ function fromZRotation(e, t) {
   return e[0] = s, e[1] = r, e[2] = 0, e[3] = 0, e[4] = -r, e[5] = s, e[6] = 0, e[7] = 0, e[8] = 0, e[9] = 0, e[10] = 1, e[11] = 0, e[12] = 0, e[13] = 0, e[14] = 0, e[15] = 1, e;
 }
 function fromRotationTranslation(e, t, r) {
-  var s = t[0], n = t[1], a = t[2], o = t[3], l = s + s, h = n + n, c = a + a, u = s * l, p = s * h, f = s * c, d = n * h, g = n * c, m = a * c, b = o * l, E = o * h, L = o * c;
-  return e[0] = 1 - (d + m), e[1] = p + L, e[2] = f - E, e[3] = 0, e[4] = p - L, e[5] = 1 - (u + m), e[6] = g + b, e[7] = 0, e[8] = f + E, e[9] = g - b, e[10] = 1 - (u + d), e[11] = 0, e[12] = r[0], e[13] = r[1], e[14] = r[2], e[15] = 1, e;
+  var s = t[0], n = t[1], a = t[2], o = t[3], l = s + s, u = n + n, c = a + a, h = s * l, p = s * u, f = s * c, d = n * u, g = n * c, m = a * c, b = o * l, E = o * u, L = o * c;
+  return e[0] = 1 - (d + m), e[1] = p + L, e[2] = f - E, e[3] = 0, e[4] = p - L, e[5] = 1 - (h + m), e[6] = g + b, e[7] = 0, e[8] = f + E, e[9] = g - b, e[10] = 1 - (h + d), e[11] = 0, e[12] = r[0], e[13] = r[1], e[14] = r[2], e[15] = 1, e;
 }
 function fromQuat2(e, t) {
-  var r = new ARRAY_TYPE(3), s = -t[0], n = -t[1], a = -t[2], o = t[3], l = t[4], h = t[5], c = t[6], u = t[7], p = s * s + n * n + a * a + o * o;
-  return p > 0 ? (r[0] = (l * o + u * s + h * a - c * n) * 2 / p, r[1] = (h * o + u * n + c * s - l * a) * 2 / p, r[2] = (c * o + u * a + l * n - h * s) * 2 / p) : (r[0] = (l * o + u * s + h * a - c * n) * 2, r[1] = (h * o + u * n + c * s - l * a) * 2, r[2] = (c * o + u * a + l * n - h * s) * 2), fromRotationTranslation(e, t, r), e;
+  var r = new ARRAY_TYPE(3), s = -t[0], n = -t[1], a = -t[2], o = t[3], l = t[4], u = t[5], c = t[6], h = t[7], p = s * s + n * n + a * a + o * o;
+  return p > 0 ? (r[0] = (l * o + h * s + u * a - c * n) * 2 / p, r[1] = (u * o + h * n + c * s - l * a) * 2 / p, r[2] = (c * o + h * a + l * n - u * s) * 2 / p) : (r[0] = (l * o + h * s + u * a - c * n) * 2, r[1] = (u * o + h * n + c * s - l * a) * 2, r[2] = (c * o + h * a + l * n - u * s) * 2), fromRotationTranslation(e, t, r), e;
 }
 function getTranslation(e, t) {
   return e[0] = t[12], e[1] = t[13], e[2] = t[14], e;
 }
 function getScaling(e, t) {
-  var r = t[0], s = t[1], n = t[2], a = t[4], o = t[5], l = t[6], h = t[8], c = t[9], u = t[10];
-  return e[0] = Math.hypot(r, s, n), e[1] = Math.hypot(a, o, l), e[2] = Math.hypot(h, c, u), e;
+  var r = t[0], s = t[1], n = t[2], a = t[4], o = t[5], l = t[6], u = t[8], c = t[9], h = t[10];
+  return e[0] = Math.hypot(r, s, n), e[1] = Math.hypot(a, o, l), e[2] = Math.hypot(u, c, h), e;
 }
 function getRotation(e, t) {
   var r = new ARRAY_TYPE(3);
   getScaling(r, t);
-  var s = 1 / r[0], n = 1 / r[1], a = 1 / r[2], o = t[0] * s, l = t[1] * n, h = t[2] * a, c = t[4] * s, u = t[5] * n, p = t[6] * a, f = t[8] * s, d = t[9] * n, g = t[10] * a, m = o + u + g, b = 0;
-  return m > 0 ? (b = Math.sqrt(m + 1) * 2, e[3] = 0.25 * b, e[0] = (p - d) / b, e[1] = (f - h) / b, e[2] = (l - c) / b) : o > u && o > g ? (b = Math.sqrt(1 + o - u - g) * 2, e[3] = (p - d) / b, e[0] = 0.25 * b, e[1] = (l + c) / b, e[2] = (f + h) / b) : u > g ? (b = Math.sqrt(1 + u - o - g) * 2, e[3] = (f - h) / b, e[0] = (l + c) / b, e[1] = 0.25 * b, e[2] = (p + d) / b) : (b = Math.sqrt(1 + g - o - u) * 2, e[3] = (l - c) / b, e[0] = (f + h) / b, e[1] = (p + d) / b, e[2] = 0.25 * b), e;
+  var s = 1 / r[0], n = 1 / r[1], a = 1 / r[2], o = t[0] * s, l = t[1] * n, u = t[2] * a, c = t[4] * s, h = t[5] * n, p = t[6] * a, f = t[8] * s, d = t[9] * n, g = t[10] * a, m = o + h + g, b = 0;
+  return m > 0 ? (b = Math.sqrt(m + 1) * 2, e[3] = 0.25 * b, e[0] = (p - d) / b, e[1] = (f - u) / b, e[2] = (l - c) / b) : o > h && o > g ? (b = Math.sqrt(1 + o - h - g) * 2, e[3] = (p - d) / b, e[0] = 0.25 * b, e[1] = (l + c) / b, e[2] = (f + u) / b) : h > g ? (b = Math.sqrt(1 + h - o - g) * 2, e[3] = (f - u) / b, e[0] = (l + c) / b, e[1] = 0.25 * b, e[2] = (p + d) / b) : (b = Math.sqrt(1 + g - o - h) * 2, e[3] = (l - c) / b, e[0] = (f + u) / b, e[1] = (p + d) / b, e[2] = 0.25 * b), e;
 }
 function fromRotationTranslationScale(e, t, r, s) {
-  var n = t[0], a = t[1], o = t[2], l = t[3], h = n + n, c = a + a, u = o + o, p = n * h, f = n * c, d = n * u, g = a * c, m = a * u, b = o * u, E = l * h, L = l * c, T = l * u, _ = s[0], I = s[1], A = s[2];
+  var n = t[0], a = t[1], o = t[2], l = t[3], u = n + n, c = a + a, h = o + o, p = n * u, f = n * c, d = n * h, g = a * c, m = a * h, b = o * h, E = l * u, L = l * c, T = l * h, _ = s[0], I = s[1], A = s[2];
   return e[0] = (1 - (g + b)) * _, e[1] = (f + T) * _, e[2] = (d - L) * _, e[3] = 0, e[4] = (f - T) * I, e[5] = (1 - (p + b)) * I, e[6] = (m + E) * I, e[7] = 0, e[8] = (d + L) * A, e[9] = (m - E) * A, e[10] = (1 - (p + g)) * A, e[11] = 0, e[12] = r[0], e[13] = r[1], e[14] = r[2], e[15] = 1, e;
 }
 function fromRotationTranslationScaleOrigin(e, t, r, s, n) {
-  var a = t[0], o = t[1], l = t[2], h = t[3], c = a + a, u = o + o, p = l + l, f = a * c, d = a * u, g = a * p, m = o * u, b = o * p, E = l * p, L = h * c, T = h * u, _ = h * p, I = s[0], A = s[1], M = s[2], O = n[0], D = n[1], P = n[2], N = (1 - (m + E)) * I, k = (d + _) * I, B = (g - T) * I, S = (d - _) * A, U = (1 - (f + E)) * A, W = (b + L) * A, z = (g + T) * M, q = (b - L) * M, Y = (1 - (f + m)) * M;
+  var a = t[0], o = t[1], l = t[2], u = t[3], c = a + a, h = o + o, p = l + l, f = a * c, d = a * h, g = a * p, m = o * h, b = o * p, E = l * p, L = u * c, T = u * h, _ = u * p, I = s[0], A = s[1], M = s[2], O = n[0], D = n[1], P = n[2], N = (1 - (m + E)) * I, k = (d + _) * I, B = (g - T) * I, S = (d - _) * A, U = (1 - (f + E)) * A, W = (b + L) * A, z = (g + T) * M, q = (b - L) * M, Y = (1 - (f + m)) * M;
   return e[0] = N, e[1] = k, e[2] = B, e[3] = 0, e[4] = S, e[5] = U, e[6] = W, e[7] = 0, e[8] = z, e[9] = q, e[10] = Y, e[11] = 0, e[12] = r[0] + O - (N * O + S * D + z * P), e[13] = r[1] + D - (k * O + U * D + q * P), e[14] = r[2] + P - (B * O + W * D + Y * P), e[15] = 1, e;
 }
 function fromQuat(e, t) {
-  var r = t[0], s = t[1], n = t[2], a = t[3], o = r + r, l = s + s, h = n + n, c = r * o, u = s * o, p = s * l, f = n * o, d = n * l, g = n * h, m = a * o, b = a * l, E = a * h;
-  return e[0] = 1 - p - g, e[1] = u + E, e[2] = f - b, e[3] = 0, e[4] = u - E, e[5] = 1 - c - g, e[6] = d + m, e[7] = 0, e[8] = f + b, e[9] = d - m, e[10] = 1 - c - p, e[11] = 0, e[12] = 0, e[13] = 0, e[14] = 0, e[15] = 1, e;
+  var r = t[0], s = t[1], n = t[2], a = t[3], o = r + r, l = s + s, u = n + n, c = r * o, h = s * o, p = s * l, f = n * o, d = n * l, g = n * u, m = a * o, b = a * l, E = a * u;
+  return e[0] = 1 - p - g, e[1] = h + E, e[2] = f - b, e[3] = 0, e[4] = h - E, e[5] = 1 - c - g, e[6] = d + m, e[7] = 0, e[8] = f + b, e[9] = d - m, e[10] = 1 - c - p, e[11] = 0, e[12] = 0, e[13] = 0, e[14] = 0, e[15] = 1, e;
 }
 function frustum(e, t, r, s, n, a, o) {
-  var l = 1 / (r - t), h = 1 / (n - s), c = 1 / (a - o);
-  return e[0] = a * 2 * l, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = a * 2 * h, e[6] = 0, e[7] = 0, e[8] = (r + t) * l, e[9] = (n + s) * h, e[10] = (o + a) * c, e[11] = -1, e[12] = 0, e[13] = 0, e[14] = o * a * 2 * c, e[15] = 0, e;
+  var l = 1 / (r - t), u = 1 / (n - s), c = 1 / (a - o);
+  return e[0] = a * 2 * l, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = a * 2 * u, e[6] = 0, e[7] = 0, e[8] = (r + t) * l, e[9] = (n + s) * u, e[10] = (o + a) * c, e[11] = -1, e[12] = 0, e[13] = 0, e[14] = o * a * 2 * c, e[15] = 0, e;
 }
 function perspectiveNO(e, t, r, s, n) {
   var a = 1 / Math.tan(t / 2), o;
@@ -597,27 +597,27 @@ function perspectiveZO(e, t, r, s, n) {
   return e[0] = a / r, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = a, e[6] = 0, e[7] = 0, e[8] = 0, e[9] = 0, e[11] = -1, e[12] = 0, e[13] = 0, e[15] = 0, n != null && n !== 1 / 0 ? (o = 1 / (s - n), e[10] = n * o, e[14] = n * s * o) : (e[10] = -1, e[14] = -s), e;
 }
 function perspectiveFromFieldOfView(e, t, r, s) {
-  var n = Math.tan(t.upDegrees * Math.PI / 180), a = Math.tan(t.downDegrees * Math.PI / 180), o = Math.tan(t.leftDegrees * Math.PI / 180), l = Math.tan(t.rightDegrees * Math.PI / 180), h = 2 / (o + l), c = 2 / (n + a);
-  return e[0] = h, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = c, e[6] = 0, e[7] = 0, e[8] = -((o - l) * h * 0.5), e[9] = (n - a) * c * 0.5, e[10] = s / (r - s), e[11] = -1, e[12] = 0, e[13] = 0, e[14] = s * r / (r - s), e[15] = 0, e;
+  var n = Math.tan(t.upDegrees * Math.PI / 180), a = Math.tan(t.downDegrees * Math.PI / 180), o = Math.tan(t.leftDegrees * Math.PI / 180), l = Math.tan(t.rightDegrees * Math.PI / 180), u = 2 / (o + l), c = 2 / (n + a);
+  return e[0] = u, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = c, e[6] = 0, e[7] = 0, e[8] = -((o - l) * u * 0.5), e[9] = (n - a) * c * 0.5, e[10] = s / (r - s), e[11] = -1, e[12] = 0, e[13] = 0, e[14] = s * r / (r - s), e[15] = 0, e;
 }
 function orthoNO(e, t, r, s, n, a, o) {
-  var l = 1 / (t - r), h = 1 / (s - n), c = 1 / (a - o);
-  return e[0] = -2 * l, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = -2 * h, e[6] = 0, e[7] = 0, e[8] = 0, e[9] = 0, e[10] = 2 * c, e[11] = 0, e[12] = (t + r) * l, e[13] = (n + s) * h, e[14] = (o + a) * c, e[15] = 1, e;
+  var l = 1 / (t - r), u = 1 / (s - n), c = 1 / (a - o);
+  return e[0] = -2 * l, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = -2 * u, e[6] = 0, e[7] = 0, e[8] = 0, e[9] = 0, e[10] = 2 * c, e[11] = 0, e[12] = (t + r) * l, e[13] = (n + s) * u, e[14] = (o + a) * c, e[15] = 1, e;
 }
 var ortho = orthoNO;
 function orthoZO(e, t, r, s, n, a, o) {
-  var l = 1 / (t - r), h = 1 / (s - n), c = 1 / (a - o);
-  return e[0] = -2 * l, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = -2 * h, e[6] = 0, e[7] = 0, e[8] = 0, e[9] = 0, e[10] = c, e[11] = 0, e[12] = (t + r) * l, e[13] = (n + s) * h, e[14] = a * c, e[15] = 1, e;
+  var l = 1 / (t - r), u = 1 / (s - n), c = 1 / (a - o);
+  return e[0] = -2 * l, e[1] = 0, e[2] = 0, e[3] = 0, e[4] = 0, e[5] = -2 * u, e[6] = 0, e[7] = 0, e[8] = 0, e[9] = 0, e[10] = c, e[11] = 0, e[12] = (t + r) * l, e[13] = (n + s) * u, e[14] = a * c, e[15] = 1, e;
 }
 function lookAt(e, t, r, s) {
-  var n, a, o, l, h, c, u, p, f, d, g = t[0], m = t[1], b = t[2], E = s[0], L = s[1], T = s[2], _ = r[0], I = r[1], A = r[2];
-  return Math.abs(g - _) < EPSILON && Math.abs(m - I) < EPSILON && Math.abs(b - A) < EPSILON ? identity$1(e) : (u = g - _, p = m - I, f = b - A, d = 1 / Math.hypot(u, p, f), u *= d, p *= d, f *= d, n = L * f - T * p, a = T * u - E * f, o = E * p - L * u, d = Math.hypot(n, a, o), d ? (d = 1 / d, n *= d, a *= d, o *= d) : (n = 0, a = 0, o = 0), l = p * o - f * a, h = f * n - u * o, c = u * a - p * n, d = Math.hypot(l, h, c), d ? (d = 1 / d, l *= d, h *= d, c *= d) : (l = 0, h = 0, c = 0), e[0] = n, e[1] = l, e[2] = u, e[3] = 0, e[4] = a, e[5] = h, e[6] = p, e[7] = 0, e[8] = o, e[9] = c, e[10] = f, e[11] = 0, e[12] = -(n * g + a * m + o * b), e[13] = -(l * g + h * m + c * b), e[14] = -(u * g + p * m + f * b), e[15] = 1, e);
+  var n, a, o, l, u, c, h, p, f, d, g = t[0], m = t[1], b = t[2], E = s[0], L = s[1], T = s[2], _ = r[0], I = r[1], A = r[2];
+  return Math.abs(g - _) < EPSILON && Math.abs(m - I) < EPSILON && Math.abs(b - A) < EPSILON ? identity$1(e) : (h = g - _, p = m - I, f = b - A, d = 1 / Math.hypot(h, p, f), h *= d, p *= d, f *= d, n = L * f - T * p, a = T * h - E * f, o = E * p - L * h, d = Math.hypot(n, a, o), d ? (d = 1 / d, n *= d, a *= d, o *= d) : (n = 0, a = 0, o = 0), l = p * o - f * a, u = f * n - h * o, c = h * a - p * n, d = Math.hypot(l, u, c), d ? (d = 1 / d, l *= d, u *= d, c *= d) : (l = 0, u = 0, c = 0), e[0] = n, e[1] = l, e[2] = h, e[3] = 0, e[4] = a, e[5] = u, e[6] = p, e[7] = 0, e[8] = o, e[9] = c, e[10] = f, e[11] = 0, e[12] = -(n * g + a * m + o * b), e[13] = -(l * g + u * m + c * b), e[14] = -(h * g + p * m + f * b), e[15] = 1, e);
 }
 function targetTo(e, t, r, s) {
-  var n = t[0], a = t[1], o = t[2], l = s[0], h = s[1], c = s[2], u = n - r[0], p = a - r[1], f = o - r[2], d = u * u + p * p + f * f;
-  d > 0 && (d = 1 / Math.sqrt(d), u *= d, p *= d, f *= d);
-  var g = h * f - c * p, m = c * u - l * f, b = l * p - h * u;
-  return d = g * g + m * m + b * b, d > 0 && (d = 1 / Math.sqrt(d), g *= d, m *= d, b *= d), e[0] = g, e[1] = m, e[2] = b, e[3] = 0, e[4] = p * b - f * m, e[5] = f * g - u * b, e[6] = u * m - p * g, e[7] = 0, e[8] = u, e[9] = p, e[10] = f, e[11] = 0, e[12] = n, e[13] = a, e[14] = o, e[15] = 1, e;
+  var n = t[0], a = t[1], o = t[2], l = s[0], u = s[1], c = s[2], h = n - r[0], p = a - r[1], f = o - r[2], d = h * h + p * p + f * f;
+  d > 0 && (d = 1 / Math.sqrt(d), h *= d, p *= d, f *= d);
+  var g = u * f - c * p, m = c * h - l * f, b = l * p - u * h;
+  return d = g * g + m * m + b * b, d > 0 && (d = 1 / Math.sqrt(d), g *= d, m *= d, b *= d), e[0] = g, e[1] = m, e[2] = b, e[3] = 0, e[4] = p * b - f * m, e[5] = f * g - h * b, e[6] = h * m - p * g, e[7] = 0, e[8] = h, e[9] = p, e[10] = f, e[11] = 0, e[12] = n, e[13] = a, e[14] = o, e[15] = 1, e;
 }
 function str$4(e) {
   return "mat4(" + e[0] + ", " + e[1] + ", " + e[2] + ", " + e[3] + ", " + e[4] + ", " + e[5] + ", " + e[6] + ", " + e[7] + ", " + e[8] + ", " + e[9] + ", " + e[10] + ", " + e[11] + ", " + e[12] + ", " + e[13] + ", " + e[14] + ", " + e[15] + ")";
@@ -641,8 +641,8 @@ function exactEquals$4(e, t) {
   return e[0] === t[0] && e[1] === t[1] && e[2] === t[2] && e[3] === t[3] && e[4] === t[4] && e[5] === t[5] && e[6] === t[6] && e[7] === t[7] && e[8] === t[8] && e[9] === t[9] && e[10] === t[10] && e[11] === t[11] && e[12] === t[12] && e[13] === t[13] && e[14] === t[14] && e[15] === t[15];
 }
 function equals$4(e, t) {
-  var r = e[0], s = e[1], n = e[2], a = e[3], o = e[4], l = e[5], h = e[6], c = e[7], u = e[8], p = e[9], f = e[10], d = e[11], g = e[12], m = e[13], b = e[14], E = e[15], L = t[0], T = t[1], _ = t[2], I = t[3], A = t[4], M = t[5], O = t[6], D = t[7], P = t[8], N = t[9], k = t[10], B = t[11], S = t[12], U = t[13], W = t[14], z = t[15];
-  return Math.abs(r - L) <= EPSILON * Math.max(1, Math.abs(r), Math.abs(L)) && Math.abs(s - T) <= EPSILON * Math.max(1, Math.abs(s), Math.abs(T)) && Math.abs(n - _) <= EPSILON * Math.max(1, Math.abs(n), Math.abs(_)) && Math.abs(a - I) <= EPSILON * Math.max(1, Math.abs(a), Math.abs(I)) && Math.abs(o - A) <= EPSILON * Math.max(1, Math.abs(o), Math.abs(A)) && Math.abs(l - M) <= EPSILON * Math.max(1, Math.abs(l), Math.abs(M)) && Math.abs(h - O) <= EPSILON * Math.max(1, Math.abs(h), Math.abs(O)) && Math.abs(c - D) <= EPSILON * Math.max(1, Math.abs(c), Math.abs(D)) && Math.abs(u - P) <= EPSILON * Math.max(1, Math.abs(u), Math.abs(P)) && Math.abs(p - N) <= EPSILON * Math.max(1, Math.abs(p), Math.abs(N)) && Math.abs(f - k) <= EPSILON * Math.max(1, Math.abs(f), Math.abs(k)) && Math.abs(d - B) <= EPSILON * Math.max(1, Math.abs(d), Math.abs(B)) && Math.abs(g - S) <= EPSILON * Math.max(1, Math.abs(g), Math.abs(S)) && Math.abs(m - U) <= EPSILON * Math.max(1, Math.abs(m), Math.abs(U)) && Math.abs(b - W) <= EPSILON * Math.max(1, Math.abs(b), Math.abs(W)) && Math.abs(E - z) <= EPSILON * Math.max(1, Math.abs(E), Math.abs(z));
+  var r = e[0], s = e[1], n = e[2], a = e[3], o = e[4], l = e[5], u = e[6], c = e[7], h = e[8], p = e[9], f = e[10], d = e[11], g = e[12], m = e[13], b = e[14], E = e[15], L = t[0], T = t[1], _ = t[2], I = t[3], A = t[4], M = t[5], O = t[6], D = t[7], P = t[8], N = t[9], k = t[10], B = t[11], S = t[12], U = t[13], W = t[14], z = t[15];
+  return Math.abs(r - L) <= EPSILON * Math.max(1, Math.abs(r), Math.abs(L)) && Math.abs(s - T) <= EPSILON * Math.max(1, Math.abs(s), Math.abs(T)) && Math.abs(n - _) <= EPSILON * Math.max(1, Math.abs(n), Math.abs(_)) && Math.abs(a - I) <= EPSILON * Math.max(1, Math.abs(a), Math.abs(I)) && Math.abs(o - A) <= EPSILON * Math.max(1, Math.abs(o), Math.abs(A)) && Math.abs(l - M) <= EPSILON * Math.max(1, Math.abs(l), Math.abs(M)) && Math.abs(u - O) <= EPSILON * Math.max(1, Math.abs(u), Math.abs(O)) && Math.abs(c - D) <= EPSILON * Math.max(1, Math.abs(c), Math.abs(D)) && Math.abs(h - P) <= EPSILON * Math.max(1, Math.abs(h), Math.abs(P)) && Math.abs(p - N) <= EPSILON * Math.max(1, Math.abs(p), Math.abs(N)) && Math.abs(f - k) <= EPSILON * Math.max(1, Math.abs(f), Math.abs(k)) && Math.abs(d - B) <= EPSILON * Math.max(1, Math.abs(d), Math.abs(B)) && Math.abs(g - S) <= EPSILON * Math.max(1, Math.abs(g), Math.abs(S)) && Math.abs(m - U) <= EPSILON * Math.max(1, Math.abs(m), Math.abs(U)) && Math.abs(b - W) <= EPSILON * Math.max(1, Math.abs(b), Math.abs(W)) && Math.abs(E - z) <= EPSILON * Math.max(1, Math.abs(E), Math.abs(z));
 }
 var mul$4 = multiply$4, sub$3 = subtract$3;
 const mat4$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -780,20 +780,20 @@ function dot$3(e, t) {
   return e[0] * t[0] + e[1] * t[1] + e[2] * t[2];
 }
 function cross$2(e, t, r) {
-  var s = t[0], n = t[1], a = t[2], o = r[0], l = r[1], h = r[2];
-  return e[0] = n * h - a * l, e[1] = a * o - s * h, e[2] = s * l - n * o, e;
+  var s = t[0], n = t[1], a = t[2], o = r[0], l = r[1], u = r[2];
+  return e[0] = n * u - a * l, e[1] = a * o - s * u, e[2] = s * l - n * o, e;
 }
 function lerp$3(e, t, r, s) {
   var n = t[0], a = t[1], o = t[2];
   return e[0] = n + s * (r[0] - n), e[1] = a + s * (r[1] - a), e[2] = o + s * (r[2] - o), e;
 }
 function hermite(e, t, r, s, n, a) {
-  var o = a * a, l = o * (2 * a - 3) + 1, h = o * (a - 2) + a, c = o * (a - 1), u = o * (3 - 2 * a);
-  return e[0] = t[0] * l + r[0] * h + s[0] * c + n[0] * u, e[1] = t[1] * l + r[1] * h + s[1] * c + n[1] * u, e[2] = t[2] * l + r[2] * h + s[2] * c + n[2] * u, e;
+  var o = a * a, l = o * (2 * a - 3) + 1, u = o * (a - 2) + a, c = o * (a - 1), h = o * (3 - 2 * a);
+  return e[0] = t[0] * l + r[0] * u + s[0] * c + n[0] * h, e[1] = t[1] * l + r[1] * u + s[1] * c + n[1] * h, e[2] = t[2] * l + r[2] * u + s[2] * c + n[2] * h, e;
 }
 function bezier(e, t, r, s, n, a) {
-  var o = 1 - a, l = o * o, h = a * a, c = l * o, u = 3 * a * l, p = 3 * h * o, f = h * a;
-  return e[0] = t[0] * c + r[0] * u + s[0] * p + n[0] * f, e[1] = t[1] * c + r[1] * u + s[1] * p + n[1] * f, e[2] = t[2] * c + r[2] * u + s[2] * p + n[2] * f, e;
+  var o = 1 - a, l = o * o, u = a * a, c = l * o, h = 3 * a * l, p = 3 * u * o, f = u * a;
+  return e[0] = t[0] * c + r[0] * h + s[0] * p + n[0] * f, e[1] = t[1] * c + r[1] * h + s[1] * p + n[1] * f, e[2] = t[2] * c + r[2] * h + s[2] * p + n[2] * f, e;
 }
 function random$3(e, t) {
   t = t || 1;
@@ -809,8 +809,8 @@ function transformMat3$1(e, t, r) {
   return e[0] = s * r[0] + n * r[3] + a * r[6], e[1] = s * r[1] + n * r[4] + a * r[7], e[2] = s * r[2] + n * r[5] + a * r[8], e;
 }
 function transformQuat$1(e, t, r) {
-  var s = r[0], n = r[1], a = r[2], o = r[3], l = t[0], h = t[1], c = t[2], u = n * c - a * h, p = a * l - s * c, f = s * h - n * l, d = n * f - a * p, g = a * u - s * f, m = s * p - n * u, b = o * 2;
-  return u *= b, p *= b, f *= b, d *= 2, g *= 2, m *= 2, e[0] = l + u + d, e[1] = h + p + g, e[2] = c + f + m, e;
+  var s = r[0], n = r[1], a = r[2], o = r[3], l = t[0], u = t[1], c = t[2], h = n * c - a * u, p = a * l - s * c, f = s * u - n * l, d = n * f - a * p, g = a * h - s * f, m = s * p - n * h, b = o * 2;
+  return h *= b, p *= b, f *= b, d *= 2, g *= 2, m *= 2, e[0] = l + h + d, e[1] = u + p + g, e[2] = c + f + m, e;
 }
 function rotateX$1(e, t, r, s) {
   var n = [], a = [];
@@ -825,7 +825,7 @@ function rotateZ$1(e, t, r, s) {
   return n[0] = t[0] - r[0], n[1] = t[1] - r[1], n[2] = t[2] - r[2], a[0] = n[0] * Math.cos(s) - n[1] * Math.sin(s), a[1] = n[0] * Math.sin(s) + n[1] * Math.cos(s), a[2] = n[2], e[0] = a[0] + r[0], e[1] = a[1] + r[1], e[2] = a[2] + r[2], e;
 }
 function angle$1(e, t) {
-  var r = e[0], s = e[1], n = e[2], a = t[0], o = t[1], l = t[2], h = Math.sqrt(r * r + s * s + n * n), c = Math.sqrt(a * a + o * o + l * l), u = h * c, p = u && dot$3(e, t) / u;
+  var r = e[0], s = e[1], n = e[2], a = t[0], o = t[1], l = t[2], u = Math.sqrt(r * r + s * s + n * n), c = Math.sqrt(a * a + o * o + l * l), h = u * c, p = h && dot$3(e, t) / h;
   return Math.acos(Math.min(Math.max(p, -1), 1));
 }
 function zero$2(e) {
@@ -844,8 +844,8 @@ function equals$3(e, t) {
 var sub$2 = subtract$2, mul$3 = multiply$3, div$2 = divide$2, dist$2 = distance$2, sqrDist$2 = squaredDistance$2, len$3 = length$3, sqrLen$3 = squaredLength$3, forEach$2 = function() {
   var e = create$3();
   return function(t, r, s, n, a, o) {
-    var l, h;
-    for (r || (r = 3), s || (s = 0), n ? h = Math.min(n * r + s, t.length) : h = t.length, l = s; l < h; l += r)
+    var l, u;
+    for (r || (r = 3), s || (s = 0), n ? u = Math.min(n * r + s, t.length) : u = t.length, l = s; l < u; l += r)
       e[0] = t[l], e[1] = t[l + 1], e[2] = t[l + 2], a(e, e, o), t[l] = e[0], t[l + 1] = e[1], t[l + 2] = e[2];
     return t;
   };
@@ -982,8 +982,8 @@ function dot$2(e, t) {
   return e[0] * t[0] + e[1] * t[1] + e[2] * t[2] + e[3] * t[3];
 }
 function cross$1(e, t, r, s) {
-  var n = r[0] * s[1] - r[1] * s[0], a = r[0] * s[2] - r[2] * s[0], o = r[0] * s[3] - r[3] * s[0], l = r[1] * s[2] - r[2] * s[1], h = r[1] * s[3] - r[3] * s[1], c = r[2] * s[3] - r[3] * s[2], u = t[0], p = t[1], f = t[2], d = t[3];
-  return e[0] = p * c - f * h + d * l, e[1] = -(u * c) + f * o - d * a, e[2] = u * h - p * o + d * n, e[3] = -(u * l) + p * a - f * n, e;
+  var n = r[0] * s[1] - r[1] * s[0], a = r[0] * s[2] - r[2] * s[0], o = r[0] * s[3] - r[3] * s[0], l = r[1] * s[2] - r[2] * s[1], u = r[1] * s[3] - r[3] * s[1], c = r[2] * s[3] - r[3] * s[2], h = t[0], p = t[1], f = t[2], d = t[3];
+  return e[0] = p * c - f * u + d * l, e[1] = -(h * c) + f * o - d * a, e[2] = h * u - p * o + d * n, e[3] = -(h * l) + p * a - f * n, e;
 }
 function lerp$2(e, t, r, s) {
   var n = t[0], a = t[1], o = t[2], l = t[3];
@@ -998,16 +998,16 @@ function random$2(e, t) {
   do
     n = RANDOM() * 2 - 1, a = RANDOM() * 2 - 1, l = n * n + a * a;
   while (l >= 1);
-  var h = Math.sqrt((1 - o) / l);
-  return e[0] = t * r, e[1] = t * s, e[2] = t * n * h, e[3] = t * a * h, e;
+  var u = Math.sqrt((1 - o) / l);
+  return e[0] = t * r, e[1] = t * s, e[2] = t * n * u, e[3] = t * a * u, e;
 }
 function transformMat4$1(e, t, r) {
   var s = t[0], n = t[1], a = t[2], o = t[3];
   return e[0] = r[0] * s + r[4] * n + r[8] * a + r[12] * o, e[1] = r[1] * s + r[5] * n + r[9] * a + r[13] * o, e[2] = r[2] * s + r[6] * n + r[10] * a + r[14] * o, e[3] = r[3] * s + r[7] * n + r[11] * a + r[15] * o, e;
 }
 function transformQuat(e, t, r) {
-  var s = t[0], n = t[1], a = t[2], o = r[0], l = r[1], h = r[2], c = r[3], u = c * s + l * a - h * n, p = c * n + h * s - o * a, f = c * a + o * n - l * s, d = -o * s - l * n - h * a;
-  return e[0] = u * c + d * -o + p * -h - f * -l, e[1] = p * c + d * -l + f * -o - u * -h, e[2] = f * c + d * -h + u * -l - p * -o, e[3] = t[3], e;
+  var s = t[0], n = t[1], a = t[2], o = r[0], l = r[1], u = r[2], c = r[3], h = c * s + l * a - u * n, p = c * n + u * s - o * a, f = c * a + o * n - l * s, d = -o * s - l * n - u * a;
+  return e[0] = h * c + d * -o + p * -u - f * -l, e[1] = p * c + d * -l + f * -o - h * -u, e[2] = f * c + d * -u + h * -l - p * -o, e[3] = t[3], e;
 }
 function zero$1(e) {
   return e[0] = 0, e[1] = 0, e[2] = 0, e[3] = 0, e;
@@ -1019,14 +1019,14 @@ function exactEquals$2(e, t) {
   return e[0] === t[0] && e[1] === t[1] && e[2] === t[2] && e[3] === t[3];
 }
 function equals$2(e, t) {
-  var r = e[0], s = e[1], n = e[2], a = e[3], o = t[0], l = t[1], h = t[2], c = t[3];
-  return Math.abs(r - o) <= EPSILON * Math.max(1, Math.abs(r), Math.abs(o)) && Math.abs(s - l) <= EPSILON * Math.max(1, Math.abs(s), Math.abs(l)) && Math.abs(n - h) <= EPSILON * Math.max(1, Math.abs(n), Math.abs(h)) && Math.abs(a - c) <= EPSILON * Math.max(1, Math.abs(a), Math.abs(c));
+  var r = e[0], s = e[1], n = e[2], a = e[3], o = t[0], l = t[1], u = t[2], c = t[3];
+  return Math.abs(r - o) <= EPSILON * Math.max(1, Math.abs(r), Math.abs(o)) && Math.abs(s - l) <= EPSILON * Math.max(1, Math.abs(s), Math.abs(l)) && Math.abs(n - u) <= EPSILON * Math.max(1, Math.abs(n), Math.abs(u)) && Math.abs(a - c) <= EPSILON * Math.max(1, Math.abs(a), Math.abs(c));
 }
 var sub$1 = subtract$1, mul$2 = multiply$2, div$1 = divide$1, dist$1 = distance$1, sqrDist$1 = squaredDistance$1, len$2 = length$2, sqrLen$2 = squaredLength$2, forEach$1 = function() {
   var e = create$2();
   return function(t, r, s, n, a, o) {
-    var l, h;
-    for (r || (r = 4), s || (s = 0), n ? h = Math.min(n * r + s, t.length) : h = t.length, l = s; l < h; l += r)
+    var l, u;
+    for (r || (r = 4), s || (s = 0), n ? u = Math.min(n * r + s, t.length) : u = t.length, l = s; l < u; l += r)
       e[0] = t[l], e[1] = t[l + 1], e[2] = t[l + 2], e[3] = t[l + 3], a(e, e, o), t[l] = e[0], t[l + 1] = e[1], t[l + 2] = e[2], t[l + 3] = e[3];
     return t;
   };
@@ -1096,31 +1096,31 @@ function getAngle(e, t) {
   return Math.acos(2 * r * r - 1);
 }
 function multiply$1(e, t, r) {
-  var s = t[0], n = t[1], a = t[2], o = t[3], l = r[0], h = r[1], c = r[2], u = r[3];
-  return e[0] = s * u + o * l + n * c - a * h, e[1] = n * u + o * h + a * l - s * c, e[2] = a * u + o * c + s * h - n * l, e[3] = o * u - s * l - n * h - a * c, e;
+  var s = t[0], n = t[1], a = t[2], o = t[3], l = r[0], u = r[1], c = r[2], h = r[3];
+  return e[0] = s * h + o * l + n * c - a * u, e[1] = n * h + o * u + a * l - s * c, e[2] = a * h + o * c + s * u - n * l, e[3] = o * h - s * l - n * u - a * c, e;
 }
 function rotateX(e, t, r) {
   r *= 0.5;
-  var s = t[0], n = t[1], a = t[2], o = t[3], l = Math.sin(r), h = Math.cos(r);
-  return e[0] = s * h + o * l, e[1] = n * h + a * l, e[2] = a * h - n * l, e[3] = o * h - s * l, e;
+  var s = t[0], n = t[1], a = t[2], o = t[3], l = Math.sin(r), u = Math.cos(r);
+  return e[0] = s * u + o * l, e[1] = n * u + a * l, e[2] = a * u - n * l, e[3] = o * u - s * l, e;
 }
 function rotateY(e, t, r) {
   r *= 0.5;
-  var s = t[0], n = t[1], a = t[2], o = t[3], l = Math.sin(r), h = Math.cos(r);
-  return e[0] = s * h - a * l, e[1] = n * h + o * l, e[2] = a * h + s * l, e[3] = o * h - n * l, e;
+  var s = t[0], n = t[1], a = t[2], o = t[3], l = Math.sin(r), u = Math.cos(r);
+  return e[0] = s * u - a * l, e[1] = n * u + o * l, e[2] = a * u + s * l, e[3] = o * u - n * l, e;
 }
 function rotateZ(e, t, r) {
   r *= 0.5;
-  var s = t[0], n = t[1], a = t[2], o = t[3], l = Math.sin(r), h = Math.cos(r);
-  return e[0] = s * h + n * l, e[1] = n * h - s * l, e[2] = a * h + o * l, e[3] = o * h - a * l, e;
+  var s = t[0], n = t[1], a = t[2], o = t[3], l = Math.sin(r), u = Math.cos(r);
+  return e[0] = s * u + n * l, e[1] = n * u - s * l, e[2] = a * u + o * l, e[3] = o * u - a * l, e;
 }
 function calculateW(e, t) {
   var r = t[0], s = t[1], n = t[2];
   return e[0] = r, e[1] = s, e[2] = n, e[3] = Math.sqrt(Math.abs(1 - r * r - s * s - n * n)), e;
 }
 function exp(e, t) {
-  var r = t[0], s = t[1], n = t[2], a = t[3], o = Math.sqrt(r * r + s * s + n * n), l = Math.exp(a), h = o > 0 ? l * Math.sin(o) / o : 0;
-  return e[0] = r * h, e[1] = s * h, e[2] = n * h, e[3] = l * Math.cos(o), e;
+  var r = t[0], s = t[1], n = t[2], a = t[3], o = Math.sqrt(r * r + s * s + n * n), l = Math.exp(a), u = o > 0 ? l * Math.sin(o) / o : 0;
+  return e[0] = r * u, e[1] = s * u, e[2] = n * u, e[3] = l * Math.cos(o), e;
 }
 function ln(e, t) {
   var r = t[0], s = t[1], n = t[2], a = t[3], o = Math.sqrt(r * r + s * s + n * n), l = o > 0 ? Math.atan2(o, a) / o : 0;
@@ -1130,8 +1130,8 @@ function pow(e, t, r) {
   return ln(e, t), scale$1(e, e, r), exp(e, e), e;
 }
 function slerp(e, t, r, s) {
-  var n = t[0], a = t[1], o = t[2], l = t[3], h = r[0], c = r[1], u = r[2], p = r[3], f, d, g, m, b;
-  return d = n * h + a * c + o * u + l * p, d < 0 && (d = -d, h = -h, c = -c, u = -u, p = -p), 1 - d > EPSILON ? (f = Math.acos(d), g = Math.sin(f), m = Math.sin((1 - s) * f) / g, b = Math.sin(s * f) / g) : (m = 1 - s, b = s), e[0] = m * n + b * h, e[1] = m * a + b * c, e[2] = m * o + b * u, e[3] = m * l + b * p, e;
+  var n = t[0], a = t[1], o = t[2], l = t[3], u = r[0], c = r[1], h = r[2], p = r[3], f, d, g, m, b;
+  return d = n * u + a * c + o * h + l * p, d < 0 && (d = -d, u = -u, c = -c, h = -h, p = -p), 1 - d > EPSILON ? (f = Math.acos(d), g = Math.sin(f), m = Math.sin((1 - s) * f) / g, b = Math.sin(s * f) / g) : (m = 1 - s, b = s), e[0] = m * n + b * u, e[1] = m * a + b * c, e[2] = m * o + b * h, e[3] = m * l + b * p, e;
 }
 function random$1(e) {
   var t = RANDOM(), r = RANDOM(), s = RANDOM(), n = Math.sqrt(1 - t), a = Math.sqrt(t);
@@ -1159,8 +1159,8 @@ function fromMat3(e, t) {
 function fromEuler(e, t, r, s) {
   var n = 0.5 * Math.PI / 180;
   t *= n, r *= n, s *= n;
-  var a = Math.sin(t), o = Math.cos(t), l = Math.sin(r), h = Math.cos(r), c = Math.sin(s), u = Math.cos(s);
-  return e[0] = a * h * u - o * l * c, e[1] = o * l * u + a * h * c, e[2] = o * h * c - a * l * u, e[3] = o * h * u + a * l * c, e;
+  var a = Math.sin(t), o = Math.cos(t), l = Math.sin(r), u = Math.cos(r), c = Math.sin(s), h = Math.cos(s);
+  return e[0] = a * u * h - o * l * c, e[1] = o * l * h + a * u * c, e[2] = o * u * c - a * l * h, e[3] = o * u * h + a * l * c, e;
 }
 function str$1(e) {
   return "quat(" + e[0] + ", " + e[1] + ", " + e[2] + ", " + e[3] + ")";
@@ -1357,8 +1357,8 @@ function equals(e, t) {
 var len = length, sub = subtract, mul = multiply, div = divide, dist = distance, sqrDist = squaredDistance, sqrLen = squaredLength, forEach = function() {
   var e = create();
   return function(t, r, s, n, a, o) {
-    var l, h;
-    for (r || (r = 2), s || (s = 0), n ? h = Math.min(n * r + s, t.length) : h = t.length, l = s; l < h; l += r)
+    var l, u;
+    for (r || (r = 2), s || (s = 0), n ? u = Math.min(n * r + s, t.length) : u = t.length, l = s; l < u; l += r)
       e[0] = t[l], e[1] = t[l + 1], a(e, e, o), t[l] = e[0], t[l + 1] = e[1];
     return t;
   };
@@ -1740,24 +1740,24 @@ global$1.extendClass = GL$1.extendClass = function(t, r) {
 global$1.HttpRequest = GL$1.request = function(t, r, s, n, a) {
   var o = !0;
   if (a = a || {}, a.async !== void 0 && (o = a.async), r) {
-    var l = null, h = [];
-    for (var c in r) h.push(c + "=" + r[c]);
-    l = h.join("&"), t = t + "?" + l;
+    var l = null, u = [];
+    for (var c in r) u.push(c + "=" + r[c]);
+    l = u.join("&"), t = t + "?" + l;
   }
-  var u = new XMLHttpRequest();
-  if (u.open("GET", t, o), u.responseType = a.responseType || "text", u.onload = function(p) {
+  var h = new XMLHttpRequest();
+  if (h.open("GET", t, o), h.responseType = a.responseType || "text", h.onload = function(p) {
     if (this.response, this.getResponseHeader("Content-Type"), this.status != 200) {
-      LEvent.trigger(u, "fail", this.status), n && n(this.status);
+      LEvent.trigger(h, "fail", this.status), n && n(this.status);
       return;
     }
-    LEvent.trigger(u, "done", this.response), s && s(this.response);
-  }, u.onerror = function(p) {
-    LEvent.trigger(u, "fail", p);
+    LEvent.trigger(h, "done", this.response), s && s(this.response);
+  }, h.onerror = function(p) {
+    LEvent.trigger(h, "fail", p);
   }, a) {
-    for (var c in a) u[c] = a[c];
-    a.binary && (u.responseType = "arraybuffer");
+    for (var c in a) h[c] = a[c];
+    a.binary && (h.responseType = "arraybuffer");
   }
-  return u.send(), u;
+  return h.send(), h;
 };
 global$1.XMLHttpRequest && (Object.prototype.hasOwnProperty.call(XMLHttpRequest.prototype, "done") || Object.defineProperty(XMLHttpRequest.prototype, "done", {
   enumerable: !1,
@@ -1800,14 +1800,14 @@ global$1.loadFileAtlas = GL$1.loadFileAtlas = function(t, r, s) {
 global$1.processFileAtlas = GL$1.processFileAtlas = function(e, t) {
   for (var r = e.split(`
 `), s = {}, n = [], a = "", o = 0, l = r.length; o < l; o++) {
-    var h = t ? r[o] : r[o].trim();
-    if (h.length) {
-      if (h[0] != "\\") {
-        n.push(h);
+    var u = t ? r[o] : r[o].trim();
+    if (u.length) {
+      if (u[0] != "\\") {
+        n.push(u);
         continue;
       }
       n.length && (s[a] = n.join(`
-`)), n.length = 0, a = h.substr(1);
+`)), n.length = 0, a = u.substr(1);
     }
   }
   return n.length && (s[a] = n.join(`
@@ -1830,8 +1830,8 @@ global$1.HSLToRGB = function(e, t, r, s) {
   if (s = s || vec3.create(), t == 0)
     n = a = o = r;
   else {
-    var l = r < 0.5 ? r * (1 + t) : r + t - r * t, h = 2 * r - l;
-    n = global$1.HUEToRGB(h, l, e + 1 / 3), a = global$1.HUEToRGB(h, l, e), o = global$1.HUEToRGB(h, l, e - 1 / 3);
+    var l = r < 0.5 ? r * (1 + t) : r + t - r * t, u = 2 * r - l;
+    n = global$1.HUEToRGB(u, l, e + 1 / 3), a = global$1.HUEToRGB(u, l, e), o = global$1.HUEToRGB(u, l, e - 1 / 3);
   }
   return s[0] = n, s[1] = a, s[2] = o, s;
 };
@@ -1892,11 +1892,11 @@ global$1.hexColorToRGBA = /* @__PURE__ */ function() {
       ), r;
     }
     var l = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    t = t.replace(l, function(c, u, p, f) {
-      return u + u + p + p + f + f;
+    t = t.replace(l, function(c, h, p, f) {
+      return h + h + p + p + f + f;
     });
-    var h = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(t);
-    return h && (r[0] = parseInt(h[1], 16) / 255, r[1] = parseInt(h[2], 16) / 255, r[2] = parseInt(h[3], 16) / 255), r;
+    var u = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(t);
+    return u && (r[0] = parseInt(u[1], 16) / 255, r[1] = parseInt(u[2], 16) / 255, r[2] = parseInt(u[3], 16) / 255), r;
   };
 }();
 global$1.toHalfFloat = function() {
@@ -1923,11 +1923,11 @@ var DDS = function() {
       N >> 24 & 255
     );
   }
-  var o = n("DXT1"), l = n("DXT3"), h = n("DXT5"), c = 31, u = 0, p = 1, f = 2, d = 3, g = 4, m = 7, b = 20, E = 21, L = 27;
+  var o = n("DXT1"), l = n("DXT3"), u = n("DXT5"), c = 31, h = 0, p = 1, f = 2, d = 3, g = 4, m = 7, b = 20, E = 21, L = 27;
   function T(N, k, B, S) {
-    for (var U = new Uint16Array(4), W = new Uint16Array(B * S), z = 0, q = 0, Y = 0, H = 0, Z = 0, oe = 0, ue = 0, he = 0, se = 0, fe = B / 4, pe = S / 4, _e = 0; _e < pe; _e++)
+    for (var U = new Uint16Array(4), W = new Uint16Array(B * S), z = 0, q = 0, Y = 0, H = 0, Z = 0, oe = 0, he = 0, ue = 0, se = 0, fe = B / 4, pe = S / 4, _e = 0; _e < pe; _e++)
       for (var Ie = 0; Ie < fe; Ie++)
-        Y = k + 4 * (_e * fe + Ie), U[0] = N[Y], U[1] = N[Y + 1], H = U[0] & 31, Z = U[0] & 2016, oe = U[0] & 63488, ue = U[1] & 31, he = U[1] & 2016, se = U[1] & 63488, U[2] = 5 * H + 3 * ue >> 3 | 5 * Z + 3 * he >> 3 & 2016 | 5 * oe + 3 * se >> 3 & 63488, U[3] = 5 * ue + 3 * H >> 3 | 5 * he + 3 * Z >> 3 & 2016 | 5 * se + 3 * oe >> 3 & 63488, z = N[Y + 2], q = _e * 4 * B + Ie * 4, W[q] = U[z & 3], W[q + 1] = U[z >> 2 & 3], W[q + 2] = U[z >> 4 & 3], W[q + 3] = U[z >> 6 & 3], q += B, W[q] = U[z >> 8 & 3], W[q + 1] = U[z >> 10 & 3], W[q + 2] = U[z >> 12 & 3], W[q + 3] = U[z >> 14], z = N[Y + 3], q += B, W[q] = U[z & 3], W[q + 1] = U[z >> 2 & 3], W[q + 2] = U[z >> 4 & 3], W[q + 3] = U[z >> 6 & 3], q += B, W[q] = U[z >> 8 & 3], W[q + 1] = U[z >> 10 & 3], W[q + 2] = U[z >> 12 & 3], W[q + 3] = U[z >> 14];
+        Y = k + 4 * (_e * fe + Ie), U[0] = N[Y], U[1] = N[Y + 1], H = U[0] & 31, Z = U[0] & 2016, oe = U[0] & 63488, he = U[1] & 31, ue = U[1] & 2016, se = U[1] & 63488, U[2] = 5 * H + 3 * he >> 3 | 5 * Z + 3 * ue >> 3 & 2016 | 5 * oe + 3 * se >> 3 & 63488, U[3] = 5 * he + 3 * H >> 3 | 5 * ue + 3 * Z >> 3 & 2016 | 5 * se + 3 * oe >> 3 & 63488, z = N[Y + 2], q = _e * 4 * B + Ie * 4, W[q] = U[z & 3], W[q + 1] = U[z >> 2 & 3], W[q + 2] = U[z >> 4 & 3], W[q + 3] = U[z >> 6 & 3], q += B, W[q] = U[z >> 8 & 3], W[q + 1] = U[z >> 10 & 3], W[q + 2] = U[z >> 12 & 3], W[q + 3] = U[z >> 14], z = N[Y + 3], q += B, W[q] = U[z & 3], W[q + 1] = U[z >> 2 & 3], W[q + 2] = U[z >> 4 & 3], W[q + 3] = U[z >> 6 & 3], q += B, W[q] = U[z >> 8 & 3], W[q + 1] = U[z >> 10 & 3], W[q + 2] = U[z >> 12 & 3], W[q + 3] = U[z >> 14];
     return W;
   }
   function _(N) {
@@ -1935,8 +1935,8 @@ var DDS = function() {
       S = N[k], N[k] = N[k + 2], N[k + 2] = S;
   }
   function I(N, k, B, S) {
-    var U = new Int32Array(B, 0, c), W, z, q, Y, H, Z, oe, ue, he, se, fe, pe, _e;
-    if (U[u] != e)
+    var U = new Int32Array(B, 0, c), W, z, q, Y, H, Z, oe, he, ue, se, fe, pe, _e;
+    if (U[h] != e)
       return console.error("Invalid magic number in DDS header"), 0;
     if (!U[b] & s)
       return console.error("Unsupported format, must contain a FourCC code"), 0;
@@ -1953,13 +1953,13 @@ var DDS = function() {
       case l:
         z = 16, q = k ? k.COMPRESSED_RGBA_S3TC_DXT3_EXT : null;
         break;
-      case h:
+      case u:
         z = 16, q = k ? k.COMPRESSED_RGBA_S3TC_DXT5_EXT : null;
         break;
       default:
         z = 4, W = null, q = N.RGBA;
     }
-    if (fe = 1, U[f] & t && S !== !1 && (fe = Math.max(1, U[m])), Y = U[g], H = U[d], oe = U[p] + 4, ue = !!(U[L + 1] & r), ue)
+    if (fe = 1, U[f] & t && S !== !1 && (fe = Math.max(1, U[m])), Y = U[g], H = U[d], oe = U[p] + 4, he = !!(U[L + 1] & r), he)
       for (_e = 0; _e < 6; ++_e) {
         Y = U[g], H = U[d];
         for (var pe = 0; pe < fe; ++pe)
@@ -2022,7 +2022,7 @@ var DDS = function() {
           se
         )), oe += Z, Y *= 0.5, H *= 0.5;
     } else if (W == o)
-      Z = Math.max(4, Y) / 4 * Math.max(4, H) / 4 * z, se = new Uint16Array(B), he = T(
+      Z = Math.max(4, Y) / 4 * Math.max(4, H) / 4 * z, se = new Uint16Array(B), ue = T(
         se,
         oe / 2,
         Y,
@@ -2036,7 +2036,7 @@ var DDS = function() {
         0,
         N.RGB,
         N.UNSIGNED_SHORT_5_6_5,
-        he
+        ue
       ), S && N.generateMipmap(N.TEXTURE_2D);
     else
       return console.error(
@@ -2047,8 +2047,8 @@ var DDS = function() {
     return fe;
   }
   function A(N, k, B) {
-    var S = new Int32Array(N, 0, c), U, W, z, q, Y, H, Z, oe, ue, he, se, fe;
-    if (S[u] != e)
+    var S = new Int32Array(N, 0, c), U, W, z, q, Y, H, Z, oe, he, ue, se, fe;
+    if (S[h] != e)
       return console.error("Invalid magic number in DDS header"), 0;
     if (!S[b] & s)
       return console.error("Unsupported format, must contain a FourCC code"), 0;
@@ -2059,19 +2059,19 @@ var DDS = function() {
       case l:
         W = 16, z = "COMPRESSED_RGBA_S3TC_DXT3_EXT";
         break;
-      case h:
+      case u:
         W = 16, z = "COMPRESSED_RGBA_S3TC_DXT5_EXT";
         break;
       default:
         W = 4, z = "RGBA";
     }
-    he = 1, S[f] & t && B !== !1 && (he = Math.max(1, S[m])), q = S[g], Y = S[d], Z = S[p] + 4, oe = !!(S[L + 1] & r);
+    ue = 1, S[f] & t && B !== !1 && (ue = Math.max(1, S[m])), q = S[g], Y = S[d], Z = S[p] + 4, oe = !!(S[L + 1] & r);
     var pe = [];
     if (oe)
       for (var fe = 0; fe < 6; ++fe) {
         q = S[g], Y = S[d];
-        for (var se = 0; se < he; ++se)
-          U ? (H = Math.max(4, q) / 4 * Math.max(4, Y) / 4 * W, ue = new Uint8Array(
+        for (var se = 0; se < ue; ++se)
+          U ? (H = Math.max(4, q) / 4 * Math.max(4, Y) / 4 * W, he = new Uint8Array(
             N,
             Z,
             H
@@ -2085,11 +2085,11 @@ var DDS = function() {
             offset: 0,
             dataOffset: Z,
             dataLength: H
-          })) : (H = q * Y * W, ue = new Uint8Array(
+          })) : (H = q * Y * W, he = new Uint8Array(
             N,
             Z,
             H
-          ), _(ue), pe.push({
+          ), _(he), pe.push({
             tex: "TEXTURE_CUBE_MAP",
             face: fe,
             mipmap: se,
@@ -2103,8 +2103,8 @@ var DDS = function() {
           })), Z += H, q *= 0.5, Y *= 0.5;
       }
     else
-      for (var se = 0; se < he; ++se)
-        H = Math.max(4, q) / 4 * Math.max(4, Y) / 4 * W, ue = new Uint8Array(
+      for (var se = 0; se < ue; ++se)
+        H = Math.max(4, q) / 4 * Math.max(4, Y) / 4 * W, he = new Uint8Array(
           N,
           Z,
           H
@@ -2313,12 +2313,12 @@ mat4.multiplyVec3 = function(e, t, r) {
   return e[0] = t[0] * s + t[4] * n + t[8] * a + t[12], e[1] = t[1] * s + t[5] * n + t[9] * a + t[13], e[2] = t[2] * s + t[6] * n + t[10] * a + t[14], e;
 };
 mat4.projectVec3 = function(e, t, r) {
-  var s = r[0], n = r[1], a = r[2], o = t[0] * s + t[4] * n + t[8] * a + t[12], l = t[1] * s + t[5] * n + t[9] * a + t[13], h = t[2] * s + t[6] * n + t[10] * a + t[14], c = t[3] * s + t[7] * n + t[11] * a + t[15];
-  return e[0] = (o / c + 1) / 2, e[1] = (l / c + 1) / 2, e[2] = (h / c + 1) / 2, e;
+  var s = r[0], n = r[1], a = r[2], o = t[0] * s + t[4] * n + t[8] * a + t[12], l = t[1] * s + t[5] * n + t[9] * a + t[13], u = t[2] * s + t[6] * n + t[10] * a + t[14], c = t[3] * s + t[7] * n + t[11] * a + t[15];
+  return e[0] = (o / c + 1) / 2, e[1] = (l / c + 1) / 2, e[2] = (u / c + 1) / 2, e;
 };
 vec3.project = function(e, t, r, s) {
   s = s || gl.viewport_data;
-  var n = r, a = t[0], o = t[1], l = t[2], h = n[0] * a + n[4] * o + n[8] * l + n[12], c = n[1] * a + n[5] * o + n[9] * l + n[13], u = n[2] * a + n[6] * o + n[10] * l + n[14], p = n[3] * a + n[7] * o + n[11] * l + n[15], f = (h / p + 1) / 2, d = 1 - (c / p + 1) / 2, g = (u / p + 1) / 2;
+  var n = r, a = t[0], o = t[1], l = t[2], u = n[0] * a + n[4] * o + n[8] * l + n[12], c = n[1] * a + n[5] * o + n[9] * l + n[13], h = n[2] * a + n[6] * o + n[10] * l + n[14], p = n[3] * a + n[7] * o + n[11] * l + n[15], f = (u / p + 1) / 2, d = 1 - (c / p + 1) / 2, g = (h / p + 1) / 2;
   return e[0] = f * s[2] + s[0], e[1] = d * s[3] + s[1], e[2] = g, e;
 };
 var unprojectMat = mat4.create(), unprojectVec = vec4.create();
@@ -2365,21 +2365,21 @@ quat.lookRotation = function() {
   var e = vec3.create(), t = vec3.create(), r = vec3.create();
   return function(s, n, a) {
     vec3.normalize(e, n), vec3.cross(t, a, e), vec3.normalize(t, t), vec3.cross(r, e, t);
-    var o = t[0], l = t[1], h = t[2], c = r[0], u = r[1], p = r[2], f = e[0], d = e[1], g = e[2], m = o + u + g;
+    var o = t[0], l = t[1], u = t[2], c = r[0], h = r[1], p = r[2], f = e[0], d = e[1], g = e[2], m = o + h + g;
     if (m > 0) {
       var b = Math.sqrt(m + 1);
-      return s[3] = b * 0.5, b = 0.5 / b, s[0] = (p - d) * b, s[1] = (f - h) * b, s[2] = (l - c) * b, s;
+      return s[3] = b * 0.5, b = 0.5 / b, s[0] = (p - d) * b, s[1] = (f - u) * b, s[2] = (l - c) * b, s;
     }
-    if (o >= u && o >= g) {
-      var E = Math.sqrt(1 + o - u - g), L = 0.5 / E;
-      return s[0] = 0.5 * E, s[1] = (l + c) * L, s[2] = (h + f) * L, s[3] = (p - d) * L, s;
+    if (o >= h && o >= g) {
+      var E = Math.sqrt(1 + o - h - g), L = 0.5 / E;
+      return s[0] = 0.5 * E, s[1] = (l + c) * L, s[2] = (u + f) * L, s[3] = (p - d) * L, s;
     }
-    if (u > g) {
-      var T = Math.sqrt(1 + u - o - g), _ = 0.5 / T;
-      return s[0] = (c + l) * _, s[1] = 0.5 * T, s[2] = (d + p) * _, s[3] = (f - h) * _, s;
+    if (h > g) {
+      var T = Math.sqrt(1 + h - o - g), _ = 0.5 / T;
+      return s[0] = (c + l) * _, s[1] = 0.5 * T, s[2] = (d + p) * _, s[3] = (f - u) * _, s;
     }
-    var I = Math.sqrt(1 + g - o - u), A = 0.5 / I;
-    return s[0] = (f + h) * A, s[1] = (d + p) * A, s[2] = 0.5 * I, s[3] = (l - c) * A, s;
+    var I = Math.sqrt(1 + g - o - h), A = 0.5 / I;
+    return s[0] = (f + u) * A, s[1] = (d + p) * A, s[2] = 0.5 * I, s[3] = (l - c) * A, s;
   };
 }();
 quat.toEuler = function(e, t) {
@@ -2393,9 +2393,9 @@ quat.toEuler = function(e, t) {
   return e || (e = vec3.create()), vec3.set(e, r, s, n), e;
 };
 quat.fromEuler = function(e, t) {
-  var r = t[0], s = t[1], n = t[2], a = Math.cos(r), o = Math.cos(s), l = Math.cos(n), h = Math.sin(r), c = Math.sin(s), u = Math.sin(n), p = Math.sqrt(1 + a * o + a * l - h * c * u + o * l) * 0.5;
+  var r = t[0], s = t[1], n = t[2], a = Math.cos(r), o = Math.cos(s), l = Math.cos(n), u = Math.sin(r), c = Math.sin(s), h = Math.sin(n), p = Math.sqrt(1 + a * o + a * l - u * c * h + o * l) * 0.5;
   p == 0 && (p = 1e-6);
-  var f = (o * u + a * u + h * c * l) / (4 * p), d = (h * o + h * l + a * c * u) / (4 * p), g = (-h * u + a * c * l + c) / (4 * p);
+  var f = (o * h + a * h + u * c * l) / (4 * p), d = (u * o + u * l + a * c * h) / (4 * p), g = (-u * h + a * c * l + c) / (4 * p);
   return quat.set(e, f, d, g, p), quat.normalize(e, e), e;
 };
 quat.fromMat4 = function(e, t) {
@@ -2422,12 +2422,12 @@ mat3.setColumn = function(e, t, r) {
   return e[r * 3] = t[0], e[r * 3 + 1] = t[1], e[r * 3 + 2] = t[2], e;
 };
 quat.fromMat3AndQuat = function() {
-  var e = mat3.create(), t = quat.create(), r = vec3.create(), s = vec3.create(), n = vec3.create(), a = vec3.create(), o = vec3.create(), l = vec3.create(), h = vec3.create(), c = vec3.create(), u = vec3.create(), p = vec3.create();
+  var e = mat3.create(), t = quat.create(), r = vec3.create(), s = vec3.create(), n = vec3.create(), a = vec3.create(), o = vec3.create(), l = vec3.create(), u = vec3.create(), c = vec3.create(), h = vec3.create(), p = vec3.create();
   return mat3.create(), function(f, d, g) {
     g = g || 25;
     for (var m = 0; m < g; ++m) {
       var b = mat3.fromQuat(e, f);
-      vec3.getMat3Column(r, b, 0), vec3.getMat3Column(s, b, 1), vec3.getMat3Column(n, b, 2), vec3.getMat3Column(a, d, 0), vec3.getMat3Column(o, d, 1), vec3.getMat3Column(l, d, 2), vec3.cross(h, r, a), vec3.cross(c, s, o), vec3.cross(u, n, l), vec3.add(p, h, c), vec3.add(p, p, u);
+      vec3.getMat3Column(r, b, 0), vec3.getMat3Column(s, b, 1), vec3.getMat3Column(n, b, 2), vec3.getMat3Column(a, d, 0), vec3.getMat3Column(o, d, 1), vec3.getMat3Column(l, d, 2), vec3.cross(u, r, a), vec3.cross(c, s, o), vec3.cross(h, n, l), vec3.add(p, u, c), vec3.add(p, p, h);
       var E = 1 / Math.abs(
         vec3.dot(r, a) + vec3.dot(s, o) + vec3.dot(n, l)
       ) + 1e-9;
@@ -2649,17 +2649,17 @@ Mesh.prototype.addBuffers = function(e, t, r) {
       if (a.constructor == GL$1.Buffer || a.data)
         a = a.data;
       else if (typeof a[0] != "number") {
-        for (var o = [], l = 0, h = 1e4; l < a.length; l += h)
+        for (var o = [], l = 0, u = 1e4; l < a.length; l += u)
           o = Array.prototype.concat.apply(
             o,
-            a.slice(l, l + h)
+            a.slice(l, l + u)
           );
         a = o;
       }
       var c = GL$1.Mesh.common_buffers[n];
       if (a.constructor === Array) {
-        var u = GL$1.Mesh.default_datatype;
-        c && c.type && (u = c.type), a = new u(a);
+        var h = GL$1.Mesh.default_datatype;
+        c && c.type && (h = c.type), a = new h(a);
       }
       n == "vertices" && (s = a.length / 3);
       var p = a.length / s;
@@ -2674,16 +2674,16 @@ Mesh.prototype.addBuffers = function(e, t, r) {
       if (a) {
         if ((a.constructor == GL$1.Buffer || a.data) && (a = a.data), typeof a[0] != "number") {
           o = [];
-          for (var n = 0, h = 1e4; n < a.length; n += h)
+          for (var n = 0, u = 1e4; n < a.length; n += u)
             o = Array.prototype.concat.apply(
               o,
-              a.slice(n, n + h)
+              a.slice(n, n + u)
             );
           a = o;
         }
         if (a.constructor === Array) {
-          var u = Uint16Array;
-          s > 256 * 256 && (u = Uint32Array), a = new u(a);
+          var h = Uint16Array;
+          s > 256 * 256 && (h = Uint32Array), a = new h(a);
         }
         this.createIndexBuffer(n, a);
       }
@@ -2868,9 +2868,9 @@ Mesh.prototype.computeWireframe = function() {
   var e = this.indexBuffers.triangles, t = this.vertexBuffers.vertices.data, r = t.length / 3;
   if (e) {
     for (var o = e.data, l = new GL$1.Indexer(), a = 0; a < o.length; a += 3)
-      for (var h = o.subarray(a, a + 3), c = 0; c < h.length; c++) {
-        var u = h[c], p = h[(c + 1) % h.length];
-        l.add([Math.min(u, p), Math.max(u, p)]);
+      for (var u = o.subarray(a, a + 3), c = 0; c < u.length; c++) {
+        var h = u[c], p = u[(c + 1) % u.length];
+        l.add([Math.min(h, p), Math.max(h, p)]);
       }
     for (var f = l.unique, n = r > 256 * 256 ? new Uint32Array(f.length * 2) : new Uint16Array(f.length * 2), a = 0, d = f.length; a < d; ++a)
       n.set(f[a], a * 2);
@@ -2892,12 +2892,12 @@ Mesh.prototype.flipNormals = function(e) {
   }
 };
 Mesh.prototype.computeIndices = function() {
-  var e = [], t = [], r = [], s = [], n = this.vertexBuffers.vertices, a = this.vertexBuffers.normals, o = this.vertexBuffers.coords, l = n.data, h = null;
-  a && (h = a.data);
+  var e = [], t = [], r = [], s = [], n = this.vertexBuffers.vertices, a = this.vertexBuffers.normals, o = this.vertexBuffers.coords, l = n.data, u = null;
+  a && (u = a.data);
   var c = null;
   o && (c = o.data);
-  for (var u = {}, p = l.length / 3, f = 0; f < p; ++f) {
-    var d = l.subarray(f * 3, (f + 1) * 3), g = d[0] * 1e3 | 0, m = 0, b = u[g];
+  for (var h = {}, p = l.length / 3, f = 0; f < p; ++f) {
+    var d = l.subarray(f * 3, (f + 1) * 3), g = d[0] * 1e3 | 0, m = 0, b = h[g];
     if (b)
       for (var E = b.length; m < E; m++) {
         var L = e[b[m]];
@@ -2908,7 +2908,7 @@ Mesh.prototype.computeIndices = function() {
       }
     if (!(b && m != E)) {
       var T = m;
-      e.push(d), u[g] ? u[g].push(T) : u[g] = [T], h && t.push(h.subarray(f * 3, (f + 1) * 3)), c && r.push(c.subarray(f * 2, (f + 1) * 2)), s.push(T);
+      e.push(d), h[g] ? h[g].push(T) : h[g] = [T], u && t.push(u.subarray(f * 3, (f + 1) * 3)), c && r.push(c.subarray(f * 2, (f + 1) * 2)), s.push(T);
     }
   }
   this.vertexBuffers = {}, this.createVertexBuffer(
@@ -2916,7 +2916,7 @@ Mesh.prototype.computeIndices = function() {
     GL$1.Mesh.common_buffers.vertices.attribute,
     3,
     linearizeArray(e)
-  ), h && this.createVertexBuffer(
+  ), u && this.createVertexBuffer(
     "normals",
     GL$1.Mesh.common_buffers.normals.attribute,
     3,
@@ -2941,14 +2941,14 @@ Mesh.prototype.explodeIndices = function(e) {
     }
     for (var n = 0, o = r.length; n < o; ++n) {
       var l = r[n];
-      for (var h in this.vertexBuffers) {
-        var c = this.vertexBuffers[h], a = GL$1.Mesh.common_buffers[h], u = c.spacing || a.spacing, p = s[h];
+      for (var u in this.vertexBuffers) {
+        var c = this.vertexBuffers[u], a = GL$1.Mesh.common_buffers[u], h = c.spacing || a.spacing, p = s[u];
         p.set(
           c.data.subarray(
-            l * u,
-            l * u + u
+            l * h,
+            l * h + h
           ),
-          n * u
+          n * h
         );
       }
     }
@@ -2969,8 +2969,8 @@ Mesh.prototype.computeNormals = function(e) {
   r.length / 3;
   var s = new Float32Array(r.length), n = null;
   this.indexBuffers.triangles && (n = this.indexBuffers.triangles.data);
-  for (var a = GL$1.temp_vec3, o = GL$1.temp2_vec3, l, h, c, u, p, f, d, g, m, b = n ? n.length : r.length, E = 0; E < b; E += 3)
-    n ? (l = n[E], h = n[E + 1], c = n[E + 2], u = r.subarray(l * 3, l * 3 + 3), p = r.subarray(h * 3, h * 3 + 3), f = r.subarray(c * 3, c * 3 + 3), d = s.subarray(l * 3, l * 3 + 3), g = s.subarray(h * 3, h * 3 + 3), m = s.subarray(c * 3, c * 3 + 3)) : (u = r.subarray(E * 3, E * 3 + 3), p = r.subarray(E * 3 + 3, E * 3 + 6), f = r.subarray(E * 3 + 6, E * 3 + 9), d = s.subarray(E * 3, E * 3 + 3), g = s.subarray(E * 3 + 3, E * 3 + 6), m = s.subarray(E * 3 + 6, E * 3 + 9)), vec3.sub(a, p, u), vec3.sub(o, f, u), vec3.cross(a, a, o), vec3.normalize(a, a), vec3.add(d, d, a), vec3.add(g, g, a), vec3.add(m, m, a);
+  for (var a = GL$1.temp_vec3, o = GL$1.temp2_vec3, l, u, c, h, p, f, d, g, m, b = n ? n.length : r.length, E = 0; E < b; E += 3)
+    n ? (l = n[E], u = n[E + 1], c = n[E + 2], h = r.subarray(l * 3, l * 3 + 3), p = r.subarray(u * 3, u * 3 + 3), f = r.subarray(c * 3, c * 3 + 3), d = s.subarray(l * 3, l * 3 + 3), g = s.subarray(u * 3, u * 3 + 3), m = s.subarray(c * 3, c * 3 + 3)) : (h = r.subarray(E * 3, E * 3 + 3), p = r.subarray(E * 3 + 3, E * 3 + 6), f = r.subarray(E * 3 + 6, E * 3 + 9), d = s.subarray(E * 3, E * 3 + 3), g = s.subarray(E * 3 + 3, E * 3 + 6), m = s.subarray(E * 3 + 6, E * 3 + 9)), vec3.sub(a, p, h), vec3.sub(o, f, h), vec3.cross(a, a, o), vec3.normalize(a, a), vec3.add(d, d, a), vec3.add(g, g, a), vec3.add(m, m, a);
   if (n)
     for (var E = 0, b = s.length; E < b; E += 3) {
       var L = s.subarray(E, E + 3);
@@ -3009,7 +3009,7 @@ Mesh.prototype.computeTangents = function() {
     );
   var n = e.data, a = t.data, o = r.data, l = s.data;
   if (!(!n || !a || !o)) {
-    var h = n.length / 3, c = new Float32Array(h * 4), u = new Float32Array(h * 3 * 2), p = u.subarray(h * 3), f, d, g = vec3.create(), m = vec3.create(), b = vec3.create(), E = vec3.create();
+    var u = n.length / 3, c = new Float32Array(u * 4), h = new Float32Array(u * 3 * 2), p = h.subarray(u * 3), f, d, g = vec3.create(), m = vec3.create(), b = vec3.create(), E = vec3.create();
     for (f = 0, d = l.length; f < d; f += 3) {
       var L = l[f], T = l[f + 1], _ = l[f + 2], I = n.subarray(L * 3, L * 3 + 3), A = n.subarray(T * 3, T * 3 + 3), M = n.subarray(_ * 3, _ * 3 + 3), O = o.subarray(L * 2, L * 2 + 2), D = o.subarray(T * 2, T * 2 + 2), P = o.subarray(_ * 2, _ * 2 + 2), N = A[0] - I[0], k = M[0] - I[0], B = A[1] - I[1], S = M[1] - I[1], U = A[2] - I[2], W = M[2] - I[2], z = D[0] - O[0], q = P[0] - O[0], Y = D[1] - O[1], H = P[1] - O[1], Z, oe = z * H - q * Y;
       Math.abs(oe) < 1e-9 ? Z = 0 : Z = 1 / oe, vec3.copy(g, [
@@ -3021,16 +3021,16 @@ Mesh.prototype.computeTangents = function() {
         (z * S - q * B) * Z,
         (z * W - q * U) * Z
       ]), vec3.add(
-        u.subarray(L * 3, L * 3 + 3),
-        u.subarray(L * 3, L * 3 + 3),
+        h.subarray(L * 3, L * 3 + 3),
+        h.subarray(L * 3, L * 3 + 3),
         g
       ), vec3.add(
-        u.subarray(T * 3, T * 3 + 3),
-        u.subarray(T * 3, T * 3 + 3),
+        h.subarray(T * 3, T * 3 + 3),
+        h.subarray(T * 3, T * 3 + 3),
         g
       ), vec3.add(
-        u.subarray(_ * 3, _ * 3 + 3),
-        u.subarray(_ * 3, _ * 3 + 3),
+        h.subarray(_ * 3, _ * 3 + 3),
+        h.subarray(_ * 3, _ * 3 + 3),
         g
       ), vec3.add(
         p.subarray(L * 3, L * 3 + 3),
@@ -3047,9 +3047,9 @@ Mesh.prototype.computeTangents = function() {
       );
     }
     for (f = 0, d = n.length; f < d; f += 3) {
-      var ue = a.subarray(f, f + 3), he = u.subarray(f, f + 3);
-      vec3.subtract(b, he, vec3.scale(b, ue, vec3.dot(ue, he))), vec3.normalize(b, b);
-      var se = vec3.dot(vec3.cross(E, ue, he), p.subarray(f, f + 3)) < 0 ? -1 : 1;
+      var he = a.subarray(f, f + 3), ue = h.subarray(f, f + 3);
+      vec3.subtract(b, ue, vec3.scale(b, he, vec3.dot(he, ue))), vec3.normalize(b, b);
+      var se = vec3.dot(vec3.cross(E, he, ue), p.subarray(f, f + 3)) < 0 ? -1 : 1;
       c.set([b[0], b[1], b[2], se], f / 3 * 4);
     }
     this.createVertexBuffer(
@@ -3067,14 +3067,14 @@ Mesh.prototype.computeTextureCoordinates = function(e) {
   this.explodeIndices("triangles");
   var r = t.data, s = r.length / 3, n = this.vertexBuffers.coords, a = new Float32Array(s * 2), o = this.indexBuffers.triangles, l = null;
   o && (l = o.data);
-  var h = vec3.create(), c = vec3.create(), u = vec3.create(), p = this.getBoundingBox(), f = global$1.BBox.getCenter(p), d = vec3.create();
+  var u = vec3.create(), c = vec3.create(), h = vec3.create(), p = this.getBoundingBox(), f = global$1.BBox.getCenter(p), d = vec3.create();
   d.set(global$1.BBox.getHalfsize(p)), vec3.scale(d, d, 2);
   for (var g = l ? l.length : r.length / 3, m = 0; m < g; m += 3) {
     if (l)
       var b = l[m], E = l[m + 1], L = l[m + 2], T = r.subarray(b * 3, b * 3 + 3), _ = r.subarray(E * 3, E * 3 + 3), I = r.subarray(L * 3, L * 3 + 3), A = a.subarray(b * 2, b * 2 + 2), M = a.subarray(E * 2, E * 2 + 2), O = a.subarray(L * 2, L * 2 + 2);
     else
       var T = r.subarray(m * 3, m * 3 + 3), _ = r.subarray((m + 1) * 3, (m + 1) * 3 + 3), I = r.subarray((m + 2) * 3, (m + 2) * 3 + 3), A = a.subarray(m * 2, m * 2 + 2), M = a.subarray((m + 1) * 2, (m + 1) * 2 + 2), O = a.subarray((m + 2) * 2, (m + 2) * 2 + 2);
-    vec3.sub(c, T, _), vec3.sub(u, T, I), vec3.cross(h, c, u), h[0] = Math.abs(h[0]), h[1] = Math.abs(h[1]), h[2] = Math.abs(h[2]), h[0] > h[1] && h[0] > h[2] ? (A[0] = (T[2] - f[2]) / d[2], A[1] = (T[1] - f[1]) / d[1], M[0] = (_[2] - f[2]) / d[2], M[1] = (_[1] - f[1]) / d[1], O[0] = (I[2] - f[2]) / d[2], O[1] = (I[1] - f[1]) / d[1]) : h[1] > h[2] ? (A[0] = (T[0] - f[0]) / d[0], A[1] = (T[2] - f[2]) / d[2], M[0] = (_[0] - f[0]) / d[0], M[1] = (_[2] - f[2]) / d[2], O[0] = (I[0] - f[0]) / d[0], O[1] = (I[2] - f[2]) / d[2]) : (A[0] = (T[0] - f[0]) / d[0], A[1] = (T[1] - f[1]) / d[1], M[0] = (_[0] - f[0]) / d[0], M[1] = (_[1] - f[1]) / d[1], O[0] = (I[0] - f[0]) / d[0], O[1] = (I[1] - f[1]) / d[1]);
+    vec3.sub(c, T, _), vec3.sub(h, T, I), vec3.cross(u, c, h), u[0] = Math.abs(u[0]), u[1] = Math.abs(u[1]), u[2] = Math.abs(u[2]), u[0] > u[1] && u[0] > u[2] ? (A[0] = (T[2] - f[2]) / d[2], A[1] = (T[1] - f[1]) / d[1], M[0] = (_[2] - f[2]) / d[2], M[1] = (_[1] - f[1]) / d[1], O[0] = (I[2] - f[2]) / d[2], O[1] = (I[1] - f[1]) / d[1]) : u[1] > u[2] ? (A[0] = (T[0] - f[0]) / d[0], A[1] = (T[2] - f[2]) / d[2], M[0] = (_[0] - f[0]) / d[0], M[1] = (_[2] - f[2]) / d[2], O[0] = (I[0] - f[0]) / d[0], O[1] = (I[2] - f[2]) / d[2]) : (A[0] = (T[0] - f[0]) / d[0], A[1] = (T[1] - f[1]) / d[1], M[0] = (_[0] - f[0]) / d[0], M[1] = (_[1] - f[1]) / d[1], O[0] = (I[0] - f[0]) / d[0], O[1] = (I[1] - f[1]) / d[1]);
   }
   n ? (n.data = a, n.upload(e)) : this.createVertexBuffer(
     "coords",
@@ -3108,12 +3108,12 @@ Mesh.computeBoundingBox = function(e, t, r) {
     for (var a = vec3.clone(e.subarray(s * 3, s * 3 + 3)), o = vec3.clone(e.subarray(s * 3, s * 3 + 3)), l, n = s * 3; n < e.length; n += 3)
       r && !r[n / 3] || (l = e.subarray(n, n + 3), vec3.min(a, l, a), vec3.max(o, l, o));
     (isNaN(a[0]) || isNaN(a[1]) || isNaN(a[2]) || isNaN(o[0]) || isNaN(o[1]) || isNaN(o[2])) && (a[0] = a[1] = a[2] = 0, o[0] = o[1] = o[2] = 0, console.warn("Warning: GL.Mesh has NaN values in vertices"));
-    var h = vec3.add(vec3.create(), a, o);
-    vec3.scale(h, h, 0.5);
-    var c = vec3.subtract(vec3.create(), o, h);
+    var u = vec3.add(vec3.create(), a, o);
+    vec3.scale(u, u, 0.5);
+    var c = vec3.subtract(vec3.create(), o, u);
     return global$1.BBox.setCenterHalfsize(
       t || global$1.BBox.create(),
-      h,
+      u,
       c
     );
   }
@@ -3139,9 +3139,9 @@ Mesh.prototype.computeGroupsBoundingBoxes = function() {
       o.bounding = o.bounding || global$1.BBox.create();
       var l = null;
       if (e) {
-        for (var h = new Uint8Array(s.length / 3), c = o.start, u = 0, p = o.length; u < p; u += 3)
-          h[e[c + u]] = 1, h[e[c + u + 1]] = 1, h[e[c + u + 2]] = 1;
-        GL$1.Mesh.computeBoundingBox(s, o.bounding, h);
+        for (var u = new Uint8Array(s.length / 3), c = o.start, h = 0, p = o.length; h < p; h += 3)
+          u[e[c + h]] = 1, u[e[c + h + 1]] = 1, u[e[c + h + 2]] = 1;
+        GL$1.Mesh.computeBoundingBox(s, o.bounding, u);
       } else
         l = s.subarray(
           o.start * 3,
@@ -3195,19 +3195,19 @@ Mesh.prototype.slice = function(e, t) {
   o.fill(-1);
   var l = e + t;
   l >= n.length && (l = n.length);
-  for (var h = 0, c = e; c < l; ++c) {
-    var u = n[c];
-    if (o[u] != -1) {
-      a.push(o[u]);
+  for (var u = 0, c = e; c < l; ++c) {
+    var h = n[c];
+    if (o[h] != -1) {
+      a.push(o[h]);
       continue;
     }
-    var p = h++;
-    o[u] = p, a.push(p);
+    var p = u++;
+    o[h] = p, a.push(p);
     for (var f in this.vertexBuffers) {
       var d = this.vertexBuffers[f], g = d.data, m = d.spacing;
       r[f] || (r[f] = []);
       for (var b = r[f], E = 0; E < m; ++E)
-        b.push(g[E + u * m]);
+        b.push(g[E + h * m]);
     }
   }
   var L = new GL$1.Mesh(
@@ -3221,11 +3221,11 @@ Mesh.prototype.slice = function(e, t) {
 Mesh.prototype.simplify = function() {
   var e = this.getBoundingBox(), t = global$1.BBox.getMin(e), r = global$1.BBox.getHalfsize(e), s = vec3.scale(vec3.create(), r, 2), n = new GL$1.Mesh(), a = vec3.create();
   for (var o in this.vertexBuffers) {
-    var l = this.vertexBuffers[o], h = l.data, c = new Float32Array(h.length);
+    var l = this.vertexBuffers[o], u = l.data, c = new Float32Array(u.length);
     if (o == "vertices")
-      for (var u = 0, p = h.length; u < p; u += 3) {
-        var f = h.subarray(u, u + 3);
-        vec3.sub(a, f, t), vec3.div(a, a, s), a[0] = Math.round(a[0] * 256) / 256, a[1] = Math.round(a[1] * 256) / 256, a[2] = Math.round(a[2] * 256) / 256, vec3.mul(a, a, s), vec3.add(a, a, t), c.set(a, u);
+      for (var h = 0, p = u.length; h < p; h += 3) {
+        var f = u.subarray(h, h + 3);
+        vec3.sub(a, f, t), vec3.div(a, a, s), a[0] = Math.round(a[0] * 256) / 256, a[1] = Math.round(a[1] * 256) / 256, a[2] = Math.round(a[2] * 256) / 256, vec3.mul(a, a, s), vec3.add(a, a, t), c.set(a, h);
       }
     n.addBuffer();
   }
@@ -3237,7 +3237,7 @@ Mesh.load = function(e, t, r, s) {
 };
 Mesh.mergeMeshes = function(e, t) {
   t = t || {};
-  for (var r = {}, s = {}, n = {}, a = [], o = 0, l = 0, h = [], c = [], u = {}, p = 0, f = null, d = 0; d < e.length; ++d) {
+  for (var r = {}, s = {}, n = {}, a = [], o = 0, l = 0, u = [], c = [], h = {}, p = 0, f = null, d = 0; d < e.length; ++d) {
     var g = e[d], m = g.mesh, b = o;
     a.push(b);
     var E = m.vertexBuffers.vertices.data.length / 3;
@@ -3255,13 +3255,13 @@ Mesh.mergeMeshes = function(e, t) {
     if (m.bones) {
       for (var _ = {}, L = 0; L < m.bones.length; ++L) {
         var I = m.bones[L];
-        u[I[0]] || (u[I[0]] = c.length, c.push(I)), _[L] = u[I[0]];
+        h[I[0]] || (h[I[0]] = c.length, c.push(I)), _[L] = h[I[0]];
       }
       for (var A = m.vertexBuffers.bone_indices.data, L = 0; L < A.length; L += 1)
         A[L] = _[A[L]];
     } else if (c.length)
       throw "cannot merge meshes, one contains bones, the other doesnt";
-    if (h.push(T), m.morphs) {
+    if (u.push(T), m.morphs) {
       var M = Object.values(m.morphs).length;
       if (p == 0) p = M;
       else if (p !== M)
@@ -3335,22 +3335,22 @@ Mesh.mergeMeshes = function(e, t) {
       }
   }
   function U(Y, H, Z, oe) {
-    for (var ue = H + Z, he = H; he < ue; he += 3) {
-      var se = Y.subarray(he, he + 3);
+    for (var he = H + Z, ue = H; ue < he; ue += 3) {
+      var se = Y.subarray(ue, ue + 3);
       vec3.transformMat4(se, se, oe);
     }
   }
   function W(Y, H, Z, oe) {
-    for (var ue = H + Z, he = H; he < ue; he += 2) {
-      var se = Y.subarray(he, he + 2);
+    for (var he = H + Z, ue = H; ue < he; ue += 2) {
+      var se = Y.subarray(ue, ue + 2);
       vec2.transformMat3(se, se, oe);
     }
   }
   function z(Y, H, Z, oe) {
     if (oe)
-      for (var ue = H + Z, he = H; he < ue; ++he) Y[he] += oe;
+      for (var he = H + Z, ue = H; ue < he; ++ue) Y[ue] += oe;
   }
-  var q = { info: { groups: h } };
+  var q = { info: { groups: u } };
   if (c.length && (q.bones = c), !t.only_data) {
     var m = new GL$1.Mesh(r, s, q);
     return m.updateBoundingBox(), f && (m.morphs = f), m;
@@ -3358,7 +3358,7 @@ Mesh.mergeMeshes = function(e, t) {
   return {
     vertexBuffers: r,
     indexBuffers: s,
-    info: { groups: h },
+    info: { groups: u },
     morphs: f
   };
 };
@@ -3381,10 +3381,10 @@ Mesh.fromURL = function(e, t, r, s) {
   return l.ready = !1, s.binary = Mesh.binary_file_formats[a], global$1.HttpRequest(
     e,
     null,
-    function(h) {
-      l.parse(h, a, s), delete l.ready, t && t.call(l, l, e, s);
+    function(u) {
+      l.parse(u, a, s), delete l.ready, t && t.call(l, l, e, s);
     },
-    function(h) {
+    function(u) {
       t && t(null);
     },
     s
@@ -3475,12 +3475,12 @@ Mesh.plane = function(e, t) {
   e = e || {}, e.triangles = [];
   var r = e.detailX || e.detail || 1, s = e.detailY || e.detail || 1, n = e.width || e.size || 1, a = e.height || e.size || 1, o = e.xz;
   n *= 0.5, a *= 0.5;
-  var l = [], h = [], c = [], u = [], p = vec3.fromValues(0, 0, 1);
+  var l = [], u = [], c = [], h = [], p = vec3.fromValues(0, 0, 1);
   o && p.set([0, 1, 0]);
   for (var f = 0; f <= s; f++)
     for (var d = f / s, g = 0; g <= r; g++) {
       var m = g / r;
-      if (o ? h.push((2 * m - 1) * n, 0, -(2 * d - 1) * a) : h.push((2 * m - 1) * n, (2 * d - 1) * a, 0), c.push(m, d), u.push(p[0], p[1], p[2]), g < r && f < s) {
+      if (o ? u.push((2 * m - 1) * n, 0, -(2 * d - 1) * a) : u.push((2 * m - 1) * n, (2 * d - 1) * a, 0), c.push(m, d), h.push(p[0], p[1], p[2]), g < r && f < s) {
         var b = g + f * (r + 1);
         o ? (l.push(b + 1, b + r + 1, b), l.push(b + 1, b + r + 2, b + r + 1)) : (l.push(b, b + 1, b + r + 1), l.push(b + r + 1, b + 1, b + r + 2));
       }
@@ -3489,8 +3489,8 @@ Mesh.plane = function(e, t) {
     [0, 0, 0],
     o ? [n, 0, a] : [n, a, 0]
   ), L = {
-    vertices: h,
-    normals: u,
+    vertices: u,
+    normals: h,
     coords: c,
     triangles: l
   };
@@ -4165,12 +4165,12 @@ Mesh.circle = function(e, t) {
   e = e || {};
   var r = e.size || e.radius || 1, s = Math.ceil(e.slices || 24), n = e.xz || !1, a = e.empty || !1;
   s < 3 && (s = 3);
-  var o = 2 * Math.PI / s, l = vec3.create(), h = vec3.create(), c = vec3.fromValues(0, 0, 1), u = vec2.fromValues(0.5, 0.5), p = vec2.create();
+  var o = 2 * Math.PI / s, l = vec3.create(), u = vec3.create(), c = vec3.fromValues(0, 0, 1), h = vec2.fromValues(0.5, 0.5), p = vec2.create();
   n && c.set([0, 1, 0]);
   var f = n ? 2 : 1, d = new Float32Array(3 * (s + 1)), g = new Float32Array(3 * (s + 1)), m = new Float32Array(2 * (s + 1)), b = null;
-  d.set(l, 0), g.set(c, 0), m.set(u, 0);
+  d.set(l, 0), g.set(c, 0), m.set(h, 0);
   for (var E = 0, L = 0, T = 0; T < s; ++T)
-    E = Math.sin(o * T), L = Math.cos(o * T), h[0] = E * r, h[f] = L * r, p[0] = E * 0.5 + 0.5, p[1] = L * 0.5 + 0.5, d.set(h, T * 3 + 3), g.set(c, T * 3 + 3), m.set(p, T * 2 + 2);
+    E = Math.sin(o * T), L = Math.cos(o * T), u[0] = E * r, u[f] = L * r, p[0] = E * 0.5 + 0.5, p[1] = L * 0.5 + 0.5, d.set(u, T * 3 + 3), g.set(c, T * 3 + 3), m.set(p, T * 2 + 2);
   if (a)
     d = d.subarray(3), g = d.subarray(3), m = d.subarray(2), b = null;
   else {
@@ -4203,12 +4203,12 @@ Mesh.ring = function(e, t) {
   n < 3 && (n = 3);
   var l = 2 * Math.PI / n;
   vec3.create();
-  var h = vec3.create(), c = vec3.create(), u = vec3.fromValues(0, 0, 1);
+  var u = vec3.create(), c = vec3.create(), h = vec3.fromValues(0, 0, 1);
   vec2.fromValues(0.5, 0.5);
   var p = vec2.create();
-  a && u.set([0, 1, 0]);
+  a && h.set([0, 1, 0]);
   for (var f = a ? 2 : 1, d = new Float32Array(3 * (n * 2 + 2)), g = new Float32Array(3 * (n * 2 + 2)), m = new Float32Array(2 * (n * 2 + 2)), b = null, E = 0, L = 0, T = 0; T <= n; ++T)
-    E = Math.sin(l * T), L = Math.cos(l * T), h[0] = E * (r - s), h[f] = L * (r - s), p[0] = T / n, p[1] = 0, d.set(h, T * 6), g.set(u, T * 6), m.set(p, T * 4), c[0] = E * (r + s), c[f] = L * (r + s), p[1] = 1, d.set(c, T * 6 + 3), g.set(u, T * 6 + 3), m.set(p, T * 4 + 2);
+    E = Math.sin(l * T), L = Math.cos(l * T), u[0] = E * (r - s), u[f] = L * (r - s), p[0] = T / n, p[1] = 0, d.set(u, T * 6), g.set(h, T * 6), m.set(p, T * 4), c[0] = E * (r + s), c[f] = L * (r + s), p[1] = 1, d.set(c, T * 6 + 3), g.set(h, T * 6 + 3), m.set(p, T * 4 + 2);
   if (o)
     d = d.subarray(3), g = d.subarray(3), m = d.subarray(2), b = null;
   else {
@@ -4236,63 +4236,63 @@ Mesh.ring = function(e, t) {
 };
 Mesh.cylinder = function(e, t) {
   e = e || {};
-  for (var r = e.radius || e.size || 1, s = e.height || e.size || 2, n = e.subdivisions || 64, a = new Float32Array(n * 6 * 3 * 2), o = new Float32Array(n * 6 * 3 * 2), l = new Float32Array(n * 6 * 2 * 2), h = 2 * Math.PI / n, c = null, u = 0; u < n; ++u) {
-    var p = u * h;
+  for (var r = e.radius || e.size || 1, s = e.height || e.size || 2, n = e.subdivisions || 64, a = new Float32Array(n * 6 * 3 * 2), o = new Float32Array(n * 6 * 3 * 2), l = new Float32Array(n * 6 * 2 * 2), u = 2 * Math.PI / n, c = null, h = 0; h < n; ++h) {
+    var p = h * u;
     c = [Math.sin(p), 0, Math.cos(p)], a.set(
       [c[0] * r, s * 0.5, c[2] * r],
-      u * 6 * 3
-    ), o.set(c, u * 6 * 3), l.set([u / n, 1], u * 6 * 2), c = [Math.sin(p), 0, Math.cos(p)], a.set(
+      h * 6 * 3
+    ), o.set(c, h * 6 * 3), l.set([h / n, 1], h * 6 * 2), c = [Math.sin(p), 0, Math.cos(p)], a.set(
       [c[0] * r, s * -0.5, c[2] * r],
-      u * 6 * 3 + 3
-    ), o.set(c, u * 6 * 3 + 3), l.set([u / n, 0], u * 6 * 2 + 2), c = [Math.sin(p + h), 0, Math.cos(p + h)], a.set(
+      h * 6 * 3 + 3
+    ), o.set(c, h * 6 * 3 + 3), l.set([h / n, 0], h * 6 * 2 + 2), c = [Math.sin(p + u), 0, Math.cos(p + u)], a.set(
       [c[0] * r, s * -0.5, c[2] * r],
-      u * 6 * 3 + 6
-    ), o.set(c, u * 6 * 3 + 6), l.set([(u + 1) / n, 0], u * 6 * 2 + 4), c = [Math.sin(p + h), 0, Math.cos(p + h)], a.set(
+      h * 6 * 3 + 6
+    ), o.set(c, h * 6 * 3 + 6), l.set([(h + 1) / n, 0], h * 6 * 2 + 4), c = [Math.sin(p + u), 0, Math.cos(p + u)], a.set(
       [c[0] * r, s * 0.5, c[2] * r],
-      u * 6 * 3 + 9
-    ), o.set(c, u * 6 * 3 + 9), l.set([(u + 1) / n, 1], u * 6 * 2 + 6), c = [Math.sin(p), 0, Math.cos(p)], a.set(
+      h * 6 * 3 + 9
+    ), o.set(c, h * 6 * 3 + 9), l.set([(h + 1) / n, 1], h * 6 * 2 + 6), c = [Math.sin(p), 0, Math.cos(p)], a.set(
       [c[0] * r, s * 0.5, c[2] * r],
-      u * 6 * 3 + 12
-    ), o.set(c, u * 6 * 3 + 12), l.set([u / n, 1], u * 6 * 2 + 8), c = [Math.sin(p + h), 0, Math.cos(p + h)], a.set(
+      h * 6 * 3 + 12
+    ), o.set(c, h * 6 * 3 + 12), l.set([h / n, 1], h * 6 * 2 + 8), c = [Math.sin(p + u), 0, Math.cos(p + u)], a.set(
       [c[0] * r, s * -0.5, c[2] * r],
-      u * 6 * 3 + 15
-    ), o.set(c, u * 6 * 3 + 15), l.set([(u + 1) / n, 0], u * 6 * 2 + 10);
+      h * 6 * 3 + 15
+    ), o.set(c, h * 6 * 3 + 15), l.set([(h + 1) / n, 0], h * 6 * 2 + 10);
   }
-  var f = u * 6 * 3, d = u * 6 * 2, g = f;
+  var f = h * 6 * 3, d = h * 6 * 2, g = f;
   if (e.caps === !1)
     a = a.subarray(0, f), o = o.subarray(0, f), l = l.subarray(0, d);
   else
-    for (var m = vec3.fromValues(0, s * 0.5, 0), b = vec3.fromValues(0, s * -0.5, 0), E = vec3.fromValues(0, 1, 0), L = vec3.fromValues(0, -1, 0), u = 0; u < n; ++u) {
-      var p = u * h, T = vec3.fromValues(Math.sin(p), 0, Math.cos(p)), _ = vec3.fromValues(
-        Math.sin(p + h),
+    for (var m = vec3.fromValues(0, s * 0.5, 0), b = vec3.fromValues(0, s * -0.5, 0), E = vec3.fromValues(0, 1, 0), L = vec3.fromValues(0, -1, 0), h = 0; h < n; ++h) {
+      var p = h * u, T = vec3.fromValues(Math.sin(p), 0, Math.cos(p)), _ = vec3.fromValues(
+        Math.sin(p + u),
         0,
-        Math.cos(p + h)
+        Math.cos(p + u)
       );
       a.set(
         [T[0] * r, s * 0.5, T[2] * r],
-        f + u * 6 * 3
-      ), o.set(E, f + u * 6 * 3), l.set(
+        f + h * 6 * 3
+      ), o.set(E, f + h * 6 * 3), l.set(
         [-T[0] * 0.5 + 0.5, T[2] * 0.5 + 0.5],
-        d + u * 6 * 2
+        d + h * 6 * 2
       ), a.set(
         [_[0] * r, s * 0.5, _[2] * r],
-        f + u * 6 * 3 + 3
-      ), o.set(E, f + u * 6 * 3 + 3), l.set(
+        f + h * 6 * 3 + 3
+      ), o.set(E, f + h * 6 * 3 + 3), l.set(
         [-_[0] * 0.5 + 0.5, _[2] * 0.5 + 0.5],
-        d + u * 6 * 2 + 2
-      ), a.set(m, f + u * 6 * 3 + 6), o.set(E, f + u * 6 * 3 + 6), l.set([0.5, 0.5], d + u * 6 * 2 + 4), a.set(
+        d + h * 6 * 2 + 2
+      ), a.set(m, f + h * 6 * 3 + 6), o.set(E, f + h * 6 * 3 + 6), l.set([0.5, 0.5], d + h * 6 * 2 + 4), a.set(
         [_[0] * r, s * -0.5, _[2] * r],
-        f + u * 6 * 3 + 9
-      ), o.set(L, f + u * 6 * 3 + 9), l.set(
+        f + h * 6 * 3 + 9
+      ), o.set(L, f + h * 6 * 3 + 9), l.set(
         [_[0] * 0.5 + 0.5, _[2] * 0.5 + 0.5],
-        d + u * 6 * 2 + 6
+        d + h * 6 * 2 + 6
       ), a.set(
         [T[0] * r, s * -0.5, T[2] * r],
-        f + u * 6 * 3 + 12
-      ), o.set(L, f + u * 6 * 3 + 12), l.set(
+        f + h * 6 * 3 + 12
+      ), o.set(L, f + h * 6 * 3 + 12), l.set(
         [T[0] * 0.5 + 0.5, T[2] * 0.5 + 0.5],
-        d + u * 6 * 2 + 8
-      ), a.set(b, f + u * 6 * 3 + 15), o.set(L, f + u * 6 * 3 + 15), l.set([0.5, 0.5], d + u * 6 * 2 + 10);
+        d + h * 6 * 2 + 8
+      ), a.set(b, f + h * 6 * 3 + 15), o.set(L, f + h * 6 * 3 + 15), l.set([0.5, 0.5], d + h * 6 * 2 + 10);
     }
   var I = {
     vertices: a,
@@ -4314,25 +4314,25 @@ Mesh.cylinder = function(e, t) {
 };
 Mesh.cone = function(e, t) {
   e = e || {};
-  for (var r = e.radius || e.size || 1, s = e.height || e.size || 2, n = e.subdivisions || 64, a = new Float32Array(n * 3 * 3 * 2), o = new Float32Array(n * 3 * 3 * 2), l = new Float32Array(n * 2 * 3 * 2), h = 2 * Math.PI / n, c = null, u = r / s, p = 0; p < n; ++p) {
-    var f = p * h;
+  for (var r = e.radius || e.size || 1, s = e.height || e.size || 2, n = e.subdivisions || 64, a = new Float32Array(n * 3 * 3 * 2), o = new Float32Array(n * 3 * 3 * 2), l = new Float32Array(n * 2 * 3 * 2), u = 2 * Math.PI / n, c = null, h = r / s, p = 0; p < n; ++p) {
+    var f = p * u;
     c = [
-      Math.sin(f + h * 0.5),
-      u,
-      Math.cos(f + h * 0.5)
-    ], vec3.normalize(c, c), a.set([0, s, 0], p * 6 * 3), o.set(c, p * 6 * 3), l.set([p / n, 1], p * 6 * 2), c = [Math.sin(f), u, Math.cos(f)], a.set(
+      Math.sin(f + u * 0.5),
+      h,
+      Math.cos(f + u * 0.5)
+    ], vec3.normalize(c, c), a.set([0, s, 0], p * 6 * 3), o.set(c, p * 6 * 3), l.set([p / n, 1], p * 6 * 2), c = [Math.sin(f), h, Math.cos(f)], a.set(
       [c[0] * r, 0, c[2] * r],
       p * 6 * 3 + 3
-    ), vec3.normalize(c, c), o.set(c, p * 6 * 3 + 3), l.set([p / n, 0], p * 6 * 2 + 2), c = [Math.sin(f + h), u, Math.cos(f + h)], a.set(
+    ), vec3.normalize(c, c), o.set(c, p * 6 * 3 + 3), l.set([p / n, 0], p * 6 * 2 + 2), c = [Math.sin(f + u), h, Math.cos(f + u)], a.set(
       [c[0] * r, 0, c[2] * r],
       p * 6 * 3 + 6
     ), vec3.normalize(c, c), o.set(c, p * 6 * 3 + 6), l.set([(p + 1) / n, 0], p * 6 * 2 + 4);
   }
   for (var d = 0, g = 0, m = vec3.fromValues(0, 0, 0), b = vec3.fromValues(0, -1, 0), p = 0; p < n; ++p) {
-    var f = p * h, E = vec3.fromValues(Math.sin(f), 0, Math.cos(f)), L = vec3.fromValues(
-      Math.sin(f + h),
+    var f = p * u, E = vec3.fromValues(Math.sin(f), 0, Math.cos(f)), L = vec3.fromValues(
+      Math.sin(f + u),
       0,
-      Math.cos(f + h)
+      Math.cos(f + u)
     );
     a.set(
       [L[0] * r, 0, L[2] * r],
@@ -4357,21 +4357,21 @@ Mesh.cone = function(e, t) {
 };
 Mesh.torus = function(e, t) {
   e = e || {};
-  var r = e.outerradius || e.radius || 1, s = Math.ceil(e.outerslices || e.slices || 24), n = e.innerradius || r * 0.1, a = Math.ceil(e.innerslices || s), o = e.angle || Math.PI * 2, l = Math.PI * 2 / a, h = o / s, c = 1;
+  var r = e.outerradius || e.radius || 1, s = Math.ceil(e.outerslices || e.slices || 24), n = e.innerradius || r * 0.1, a = Math.ceil(e.innerslices || s), o = e.angle || Math.PI * 2, l = Math.PI * 2 / a, u = o / s, c = 1;
   vec3.create();
-  var u = vec3.create(), p = vec3.fromValues(0, 0, 1);
+  var h = vec3.create(), p = vec3.fromValues(0, 0, 1);
   vec2.fromValues(0.5, 0.5);
   for (var f = vec2.create(), d = o == Math.PI * 2, g = new Float32Array(3 * a), m = new Float32Array(3 * a), _ = 0, I = 0, b = 0; b < a; ++b)
-    _ = Math.sin(l * b), I = Math.cos(l * b), u[0] = _ * n, u[c] = I * n, f[0] = _ * 0.5 + 0.5, f[1] = I * 0.5 + 0.5, g.set(u, b * 3), vec3.normalize(p, u), m.set(p, b * 3);
+    _ = Math.sin(l * b), I = Math.cos(l * b), h[0] = _ * n, h[c] = I * n, f[0] = _ * 0.5 + 0.5, f[1] = I * 0.5 + 0.5, g.set(h, b * 3), vec3.normalize(p, h), m.set(p, b * 3);
   var E = new Float32Array(3 * s * a), L = new Float32Array(3 * s * a), T = new Float32Array(2 * s * a), D = null, _ = 0, I = 0, A = mat4.create(), M = vec3.fromValues(-r, 0, 0), O = vec3.fromValues(0, 1, 0);
   vec3.create();
   for (var D = [], P = a, b = 0; b < s; ++b) {
-    mat4.identity(A), mat4.rotate(A, A, b * h, O), mat4.translate(A, A, M);
+    mat4.identity(A), mat4.rotate(A, A, b * u, O), mat4.translate(A, A, M);
     var N = b * a, P = a;
     b >= s - 1 && (P = (s - 1) * -a, d || (P = 0));
     for (var k = 0; k < a; ++k) {
       var B = g.subarray(k * 3, k * 3 + 3), S = m.subarray(k * 3, k * 3 + 3);
-      mat4.multiplyVec3(u, A, B), mat4.rotateVec3(p, A, S), E.set(u, k * 3 + b * 3 * a), L.set(p, k * 3 + b * 3 * a), T.set(
+      mat4.multiplyVec3(h, A, B), mat4.rotateVec3(p, A, S), E.set(h, k * 3 + b * 3 * a), L.set(p, k * 3 + b * 3 * a), T.set(
         [b / s, k / a],
         k * 2 + b * 2 * a
       );
@@ -4400,32 +4400,32 @@ Mesh.sphere = function(e, t) {
     (s + 1) * (n + 1) * 3
   ), l = new Float32Array(
     (s + 1) * (n + 1) * 2
-  ), h = new Uint16Array(s * n * 6), c = e.hemi ? Math.PI * 0.5 : Math.PI, u = 0, p = 0, f = 0; f <= s; f++)
+  ), u = new Uint16Array(s * n * 6), c = e.hemi ? Math.PI * 0.5 : Math.PI, h = 0, p = 0, f = 0; f <= s; f++)
     for (var d = f * c / s, g = Math.sin(d), m = Math.cos(d), b = 0; b <= n; b++) {
       var E = b * 2 * Math.PI / n, L = Math.sin(E), T = Math.cos(E), _ = T * g, I = m, A = L * g, M = 1 - b / n, O = 1 - f / s;
-      a.set([r * _, r * I, r * A], u), o.set([_, I, A], u), l.set([M, O], p), u += 3, p += 2;
+      a.set([r * _, r * I, r * A], h), o.set([_, I, A], h), l.set([M, O], p), h += 3, p += 2;
     }
-  u = 0;
+  h = 0;
   for (var f = 0; f < s; f++)
     for (var b = 0; b < n; b++) {
       var D = f * (n + 1) + b, P = D + n + 1;
-      h.set([P, D, D + 1], u), h.set([P + 1, P, D + 1], u + 3), u += 6;
+      u.set([P, D, D + 1], h), u.set([P + 1, P, D + 1], h + 3), h += 6;
     }
   var N = {
     vertices: a,
     normals: o,
     coords: l,
-    triangles: h
+    triangles: u
   };
   if (e.wireframe) {
-    for (var k = new Uint16Array(n * s * 4), B = 0, u = 0; u < s; u++) {
+    for (var k = new Uint16Array(n * s * 4), B = 0, h = 0; h < s; h++) {
       for (var S = 0; S < n; S++)
-        k[B] = u * (n + 1) + S, k[B + 1] = u * (n + 1) + S + 1, B += 2;
-      k[B - n * 2] = u * (n + 1) + S;
+        k[B] = h * (n + 1) + S, k[B + 1] = h * (n + 1) + S + 1, B += 2;
+      k[B - n * 2] = h * (n + 1) + S;
     }
-    for (var u = 0; u < n; u++)
+    for (var h = 0; h < n; h++)
       for (var S = 0; S < s; S++)
-        k[B] = S * (n + 1) + u, k[B + 1] = (S + 1) * (n + 1) + u, B += 2;
+        k[B] = S * (n + 1) + h, k[B + 1] = (S + 1) * (n + 1) + h, B += 2;
     N.wireframe = k;
   }
   return e.hemi ? e.bounding = global$1.BBox.fromCenterHalfsize(
@@ -4442,8 +4442,8 @@ Mesh.grid = function(e, t) {
   e = e || {};
   var r = e.lines || 11;
   r < 0 && (r = 1);
-  for (var s = e.size || 10, n = new Float32Array(r * 2 * 2 * 3), a = s * 0.5, o = 0, l = -a, h = s / (r - 1), c = 0; c < r; c++)
-    n[o] = l, n[o + 2] = -a, n[o + 3] = l, n[o + 5] = a, n[o + 6] = a, n[o + 8] = l, n[o + 9] = -a, n[o + 11] = l, l += h, o += 12;
+  for (var s = e.size || 10, n = new Float32Array(r * 2 * 2 * 3), a = s * 0.5, o = 0, l = -a, u = s / (r - 1), c = 0; c < r; c++)
+    n[o] = l, n[o + 2] = -a, n[o + 3] = l, n[o + 5] = a, n[o + 6] = a, n[o + 8] = l, n[o + 9] = -a, n[o + 11] = l, l += u, o += 12;
   return new GL$1.Mesh({ vertices: n }, e, t);
 };
 Mesh.icosahedron = function(e, t) {
@@ -4487,7 +4487,7 @@ Mesh.icosahedron = function(e, t) {
     -n,
     0,
     1
-  ], o = [], l = [], h = [
+  ], o = [], l = [], u = [
     0,
     11,
     5,
@@ -4548,21 +4548,21 @@ Mesh.icosahedron = function(e, t) {
     9,
     8,
     1
-  ], c = a.length, u = 0; u < c; u += 3) {
+  ], c = a.length, h = 0; h < c; h += 3) {
     var p = Math.sqrt(
-      a[u] * a[u] + a[u + 1] * a[u + 1] + a[u + 2] * a[u + 2]
-    ), f = a[u] / p, d = a[u + 1] / p, g = a[u + 2] / p;
-    o.push(f, d, g), l.push(Math.atan2(f, g), Math.acos(d)), a[u] *= r / p, a[u + 1] *= r / p, a[u + 2] *= r / p;
+      a[h] * a[h] + a[h + 1] * a[h + 1] + a[h + 2] * a[h + 2]
+    ), f = a[h] / p, d = a[h + 1] / p, g = a[h + 2] / p;
+    o.push(f, d, g), l.push(Math.atan2(f, g), Math.acos(d)), a[h] *= r / p, a[h + 1] *= r / p, a[h + 2] *= r / p;
   }
   var m = {};
   function b(A, M) {
-    var O = h[A] < h[M] ? h[A] + ":" + h[M] : h[M] + ":" + h[A], D = m[O];
+    var O = u[A] < u[M] ? u[A] + ":" + u[M] : u[M] + ":" + u[A], D = m[O];
     if (D) return D;
     var P = a.length / 3;
     a.push(
-      (a[h[A] * 3] + a[h[M] * 3]) * 0.5,
-      (a[h[A] * 3 + 1] + a[h[M] * 3 + 1]) * 0.5,
-      (a[h[A] * 3 + 2] + a[h[M] * 3 + 2]) * 0.5
+      (a[u[A] * 3] + a[u[M] * 3]) * 0.5,
+      (a[u[A] * 3 + 1] + a[u[M] * 3 + 1]) * 0.5,
+      (a[u[A] * 3 + 2] + a[u[M] * 3 + 2]) * 0.5
     );
     var N = Math.sqrt(
       a[P * 3] * a[P * 3] + a[P * 3 + 1] * a[P * 3 + 1] + a[P * 3 + 2] * a[P * 3 + 2]
@@ -4573,11 +4573,11 @@ Mesh.icosahedron = function(e, t) {
     ), a[P * 3] *= r / N, a[P * 3 + 1] *= r / N, a[P * 3 + 2] *= r / N, m[O] = P, P;
   }
   for (var E = 0; E < s; ++E) {
-    for (var L = [], c = h.length, u = 0; u < c; u += 3) {
-      var T = b(u, u + 1), _ = b(u + 1, u + 2), I = b(u + 2, u);
-      L.push(h[u], T, I), L.push(h[u + 1], _, T), L.push(h[u + 2], I, _), L.push(T, _, I);
+    for (var L = [], c = u.length, h = 0; h < c; h += 3) {
+      var T = b(h, h + 1), _ = b(h + 1, h + 2), I = b(h + 2, h);
+      L.push(u[h], T, I), L.push(u[h + 1], _, T), L.push(u[h + 2], I, _), L.push(T, _, I);
     }
-    h = L;
+    u = L;
   }
   return e.bounding = global$1.BBox.fromCenterHalfsize(
     [0, 0, 0],
@@ -4588,7 +4588,7 @@ Mesh.icosahedron = function(e, t) {
       vertices: a,
       coords: l,
       normals: o,
-      triangles: h
+      triangles: u
     },
     e,
     t
@@ -4603,13 +4603,13 @@ Mesh.shape = function(e, t, r) {
   e[0].constructor === Array && (e = earcut.flatten(e));
   var n = earcut(e).reverse();
   console.log(n);
-  for (var a = [], o = [], l = [], h = [e[0], e[1]], c = [e[0], e[1]], u = 0; u < e.length; u += 2)
-    h[0] = Math.min(h[0], e[u]), h[1] = Math.max(h[1], e[u]), c[0] = Math.min(c[0], e[u + 1]), c[1] = Math.max(c[1], e[u + 1]);
-  var p = h[1] - h[0], f = c[1] - c[0], d = [], g = null;
+  for (var a = [], o = [], l = [], u = [e[0], e[1]], c = [e[0], e[1]], h = 0; h < e.length; h += 2)
+    u[0] = Math.min(u[0], e[h]), u[1] = Math.max(u[1], e[h]), c[0] = Math.min(c[0], e[h + 1]), c[1] = Math.max(c[1], e[h + 1]);
+  var p = u[1] - u[0], f = c[1] - c[0], d = [], g = null;
   if (s) {
     g = [];
-    for (var m = vec3.create(), b = e.length, u = 0; u < e.length; u += 2) {
-      var E = e[u], L = e[u + 1], T = e[(u + 2) % b], _ = e[(u + 3) % b], I = a.length / 3;
+    for (var m = vec3.create(), b = e.length, h = 0; h < e.length; h += 2) {
+      var E = e[h], L = e[h + 1], T = e[(h + 2) % b], _ = e[(h + 3) % b], I = a.length / 3;
       a.push(E, s * 0.5, L), a.push(E, s * -0.5, L), a.push(T, s * 0.5, _), a.push(T, s * -0.5, _), vec3.normalize(m, vec3.cross(m, [0, 1, 0], [T - E, 0, _ - L])), o.push(
         m[0],
         m[1],
@@ -4624,27 +4624,27 @@ Mesh.shape = function(e, t, r) {
         m[1],
         m[2]
       );
-      var A = (E - h[0]) / p, M = (L - c[0]) / f, O = (T - h[0]) / p, D = (_ - c[0]) / f;
+      var A = (E - u[0]) / p, M = (L - c[0]) / f, O = (T - u[0]) / p, D = (_ - c[0]) / f;
       l.push(A, M, A, M, O, D, O, D), g.push(I, I + 2, I + 1, I + 2, I + 3, I + 1);
     }
     d.push({ name: "side", start: 0, length: g.length });
-    for (var P = a.length / 3, N = g.length, u = 0; u < e.length; u += 2) {
-      var E = e[u], L = e[u + 1], A = (E - h[0]) / p, M = (L - c[0]) / f;
+    for (var P = a.length / 3, N = g.length, h = 0; h < e.length; h += 2) {
+      var E = e[h], L = e[h + 1], A = (E - u[0]) / p, M = (L - c[0]) / f;
       a.push(E, s * 0.5, L), a.push(E, s * -0.5, L), o.push(0, 1, 0, 0, -1, 0), l.push(A, M, A, M);
     }
-    for (var u = 0; u < n.length; u += 3)
+    for (var h = 0; h < n.length; h += 3)
       g.push(
-        P + n[u] * 2,
-        P + n[u + 1] * 2,
-        P + n[u + 2] * 2
+        P + n[h] * 2,
+        P + n[h + 1] * 2,
+        P + n[h + 2] * 2
       ), g.push(
-        P + n[u] * 2 + 1,
-        P + n[u + 2] * 2 + 1,
-        P + n[u + 1] * 2 + 1
+        P + n[h] * 2 + 1,
+        P + n[h + 2] * 2 + 1,
+        P + n[h + 1] * 2 + 1
       );
     d.push({ name: "caps", start: N, length: g.length }), t.bounding = global$1.BBox.fromCenterHalfsize(
       [
-        (h[0] + h[1]) * 0.5,
+        (u[0] + u[1]) * 0.5,
         0,
         (c[0] + c[1]) * 0.5
       ],
@@ -4652,14 +4652,14 @@ Mesh.shape = function(e, t, r) {
       vec2.len([p * 0.5, s * 0.5, f * 0.5])
     );
   } else {
-    for (var u = 0; u < e.length; u += 2)
-      a.push(e[u], 0, e[u + 1]), o.push(0, 1, 0), l.push(
-        (e[u] - h[0]) / p,
-        (e[u + 1] - c[0]) / f
+    for (var h = 0; h < e.length; h += 2)
+      a.push(e[h], 0, e[h + 1]), o.push(0, 1, 0), l.push(
+        (e[h] - u[0]) / p,
+        (e[h + 1] - c[0]) / f
       );
     g = n, d.push({ name: "side", start: 0, length: g.length }), t.bounding = global$1.BBox.fromCenterHalfsize(
       [
-        (h[0] + h[1]) * 0.5,
+        (u[0] + u[1]) * 0.5,
         0,
         (c[0] + c[1]) * 0.5
       ],
@@ -4668,11 +4668,11 @@ Mesh.shape = function(e, t, r) {
     );
   }
   if (t.xy) {
-    for (var u = 0; u < a.length; u += 3)
-      k(a, u), k(o, u);
+    for (var h = 0; h < a.length; h += 3)
+      k(a, h), k(o, h);
     s ? t.bounding = global$1.BBox.fromCenterHalfsize(
       [
-        (h[0] + h[1]) * 0.5,
+        (u[0] + u[1]) * 0.5,
         (c[0] + c[1]) * 0.5,
         0
       ],
@@ -4680,7 +4680,7 @@ Mesh.shape = function(e, t, r) {
       vec2.len([p * 0.5, f * 0.5, s * 0.5])
     ) : t.bounding = global$1.BBox.fromCenterHalfsize(
       [
-        (h[0] + h[1]) * 0.5,
+        (u[0] + u[1]) * 0.5,
         (c[0] + c[1]) * 0.5,
         0
       ],
@@ -4734,7 +4734,7 @@ global$1.Texture = GL$1.Texture = function e(t, r, s, n) {
   if (o && !o.buffer) {
     if (this.texture_type == GL$1.TEXTURE_CUBE_MAP)
       if (o[0].constructor === Number)
-        o = h(o), o = [
+        o = u(o), o = [
           o,
           o,
           o,
@@ -4744,11 +4744,11 @@ global$1.Texture = GL$1.Texture = function e(t, r, s, n) {
         ];
       else
         for (var l = 0; l < o.length; ++l)
-          o[l] = h(o[l]);
-    else o = h(o);
+          o[l] = u(o[l]);
+    else o = u(o);
     this.data = o;
   }
-  function h(p) {
+  function u(p) {
     return p.constructor !== Array ? p : a == GL$1.FLOAT ? new Float32Array(p) : a == GL$1.HALF_FLOAT_OES ? new Uint16Array(p) : new Uint8Array(p);
   }
   if (e.setUploadOptions(s), this.texture_type == GL$1.TEXTURE_2D)
@@ -4765,8 +4765,8 @@ global$1.Texture = GL$1.Texture = function e(t, r, s, n) {
     ), GL$1.isPowerOfTwo(t) && GL$1.isPowerOfTwo(r) && s.minFilter && s.minFilter != n.NEAREST && s.minFilter != n.LINEAR && (n.generateMipmap(this.texture_type), this.has_mipmaps = !0);
   else if (this.texture_type == GL$1.TEXTURE_CUBE_MAP)
     for (var c = t * t * (this.format == GL$1.RGBA ? 4 : 3), l = 0; l < 6; ++l) {
-      var u = o;
-      u && (u.constructor === Array ? u = u[l] : u.subarray(c * l, c * (l + 1))), n.texImage2D(
+      var h = o;
+      h && (h.constructor === Array ? h = h[l] : h.subarray(c * l, c * (l + 1))), n.texImage2D(
         n.TEXTURE_CUBE_MAP_POSITIVE_X + l,
         0,
         this.internalFormat,
@@ -4775,7 +4775,7 @@ global$1.Texture = GL$1.Texture = function e(t, r, s, n) {
         0,
         this.format,
         this.type,
-        u || null
+        h || null
       );
     }
   else if (this.texture_type == GL$1.TEXTURE_3D) {
@@ -4902,9 +4902,9 @@ GL$1.Texture.setUploadOptions = function(e, t) {
   ), t.pixelStorei(t.UNPACK_FLIP_Y_WEBGL, !e.no_flip)) : (t.pixelStorei(t.UNPACK_PREMULTIPLY_ALPHA_WEBGL, !1), t.pixelStorei(t.UNPACK_FLIP_Y_WEBGL, !0))), t.pixelStorei(t.UNPACK_ALIGNMENT, 1);
 };
 GL$1.Texture.flipYData = function(e, t, r, s) {
-  for (var n = new e.constructor(t * s), a = 0, o = t * (r - 1) * s, l = Math.floor(r * 0.5), h = 0; h < l; ++h) {
-    var c = e.subarray(a, a + t * s), u = e.subarray(o, o + t * s);
-    if (n.set(c), c.set(u), u.set(n), a += t * s, o -= t * s, a > o) break;
+  for (var n = new e.constructor(t * s), a = 0, o = t * (r - 1) * s, l = Math.floor(r * 0.5), u = 0; u < l; ++u) {
+    var c = e.subarray(a, a + t * s), h = e.subarray(o, o + t * s);
+    if (n.set(c), c.set(h), h.set(n), a += t * s, o -= t * s, a > o) break;
   }
 };
 GL$1.Texture.prototype.uploadImage = function(e, t) {
@@ -5072,8 +5072,8 @@ GL$1.Texture.prototype.drawTo = function(e, t) {
   var l = null;
   if (GL$1.Texture.use_renderbuffer_pool) {
     r._renderbuffers_pool || (r._renderbuffers_pool = {});
-    var h = this.width + ":" + this.height;
-    r._renderbuffers_pool[h] ? (l = r._renderbuffers_pool[h], l.time = n, r.bindRenderbuffer(r.RENDERBUFFER, l)) : (r._renderbuffers_pool[h] = l = r.createRenderbuffer(), l.time = n, l.width = this.width, l.height = this.height, r.bindRenderbuffer(r.RENDERBUFFER, l), setTimeout(c.bind(l), 1e3 * 60));
+    var u = this.width + ":" + this.height;
+    r._renderbuffers_pool[u] ? (l = r._renderbuffers_pool[u], l.time = n, r.bindRenderbuffer(r.RENDERBUFFER, l)) : (r._renderbuffers_pool[u] = l = r.createRenderbuffer(), l.time = n, l.width = this.width, l.height = this.height, r.bindRenderbuffer(r.RENDERBUFFER, l), setTimeout(c.bind(l), 1e3 * 60));
   } else
     l = r._renderbuffer = r._renderbuffer || r.createRenderbuffer(), l.width = this.width, l.height = this.height, r.bindRenderbuffer(r.RENDERBUFFER, l);
   this.format === r.DEPTH_COMPONENT ? r.renderbufferStorage(
@@ -5088,7 +5088,7 @@ GL$1.Texture.prototype.drawTo = function(e, t) {
     this.height
   );
   function c() {
-    GL$1.getTime() - this.time >= 1e3 * 60 ? (r.deleteRenderbuffer(r._renderbuffers_pool[h]), delete r._renderbuffers_pool[h]) : setTimeout(c.bind(this), 1e3 * 60);
+    GL$1.getTime() - this.time >= 1e3 * 60 ? (r.deleteRenderbuffer(r._renderbuffers_pool[u]), delete r._renderbuffers_pool[u]) : setTimeout(c.bind(this), 1e3 * 60);
   }
   if (r.viewport(0, 0, this.width, this.height), r._current_texture_drawto = this, r._current_fbo_color = o, r._current_fbo_depth = l, this.texture_type == r.TEXTURE_2D)
     this.format !== r.DEPTH_COMPONENT ? (r.framebufferTexture2D(
@@ -5126,20 +5126,20 @@ GL$1.Texture.prototype.drawTo = function(e, t) {
       r.RENDERBUFFER,
       l
     );
-    for (var u = 0; u < 6; u++)
+    for (var h = 0; h < 6; h++)
       this.format !== r.DEPTH_COMPONENT ? r.framebufferTexture2D(
         r.FRAMEBUFFER,
         r.COLOR_ATTACHMENT0,
-        r.TEXTURE_CUBE_MAP_POSITIVE_X + u,
+        r.TEXTURE_CUBE_MAP_POSITIVE_X + h,
         this.handler,
         0
       ) : r.framebufferTexture2D(
         r.FRAMEBUFFER,
         r.DEPTH_ATTACHMENT,
-        r.TEXTURE_CUBE_MAP_POSITIVE_X + u,
+        r.TEXTURE_CUBE_MAP_POSITIVE_X + h,
         this.handler,
         0
-      ), e(this, u, t);
+      ), e(this, h, t);
   }
   return this.data = null, r._current_texture_drawto = null, r._current_fbo_color = null, r._current_fbo_depth = null, r.bindFramebuffer(r.FRAMEBUFFER, a), r.bindRenderbuffer(r.RENDERBUFFER, null), r.viewport(s[0], s[1], s[2], s[3]), this;
 };
@@ -5159,17 +5159,17 @@ GL$1.Texture.prototype.copyTo = function(e, t, r) {
         0
       ), this.toViewport(t);
     else {
-      var l = s._color_renderbuffer = s._color_renderbuffer || s.createRenderbuffer(), h = l.width = e.width, c = l.height = e.height;
-      s.bindRenderbuffer(s.RENDERBUFFER, l), s.renderbufferStorage(s.RENDERBUFFER, s.RGBA4, h, c), s.framebufferRenderbuffer(
+      var l = s._color_renderbuffer = s._color_renderbuffer || s.createRenderbuffer(), u = l.width = e.width, c = l.height = e.height;
+      s.bindRenderbuffer(s.RENDERBUFFER, l), s.renderbufferStorage(s.RENDERBUFFER, s.RGBA4, u, c), s.framebufferRenderbuffer(
         s.FRAMEBUFFER,
         s.COLOR_ATTACHMENT0,
         s.RENDERBUFFER,
         l
       );
-      var u = e.format == s.DEPTH_STENCIL ? s.DEPTH_STENCIL_ATTACHMENT : s.DEPTH_ATTACHMENT;
+      var h = e.format == s.DEPTH_STENCIL ? s.DEPTH_STENCIL_ATTACHMENT : s.DEPTH_ATTACHMENT;
       s.framebufferTexture2D(
         s.FRAMEBUFFER,
-        u,
+        h,
         s.TEXTURE_2D,
         e.handler,
         0
@@ -5184,7 +5184,7 @@ GL$1.Texture.prototype.copyTo = function(e, t, r) {
         null
       ), s.framebufferTexture2D(
         s.FRAMEBUFFER,
-        u,
+        h,
         s.TEXTURE_2D,
         null,
         0
@@ -5245,17 +5245,17 @@ GL$1.Texture.prototype.fill = function(e, t) {
 };
 GL$1.Texture.prototype.renderQuad = function() {
   var e = mat3.create(), t = vec2.create(), r = vec2.create(), s = vec4.fromValues(1, 1, 1, 1);
-  return function(n, a, o, l, h, c) {
-    t[0] = n, t[1] = a, r[0] = o, r[1] = l, h = h || Shader.getQuadShader(this.gl);
-    var u = Mesh.getScreenQuad(this.gl);
-    this.bind(0), h.uniforms({
+  return function(n, a, o, l, u, c) {
+    t[0] = n, t[1] = a, r[0] = o, r[1] = l, u = u || Shader.getQuadShader(this.gl);
+    var h = Mesh.getScreenQuad(this.gl);
+    this.bind(0), u.uniforms({
       u_texture: 0,
       u_position: t,
       u_color: s,
       u_size: r,
       u_viewport: gl.viewport_data.subarray(2, 4),
       u_transform: e
-    }), c && h.uniforms(c), h.draw(u, gl.TRIANGLES);
+    }), c && u.uniforms(c), u.draw(h, gl.TRIANGLES);
   };
 }();
 GL$1.Texture.prototype.applyBlur = function(e, t, r, s, n) {
@@ -5266,9 +5266,9 @@ GL$1.Texture.prototype.applyBlur = function(e, t, r, s, n) {
     throw "cannot use applyBlur in a texture using as temporary itself";
   if (s && this.texture_type !== s.texture_type)
     throw "cannot use applyBlur with textures of different texture_type";
-  var l = a.getParameter(a.FRAMEBUFFER_BINDING), h = a.getViewport(), c = a.__copy_fbo;
+  var l = a.getParameter(a.FRAMEBUFFER_BINDING), u = a.getViewport(), c = a.__copy_fbo;
   if (c || (c = a.__copy_fbo = a.createFramebuffer()), a.bindFramebuffer(a.FRAMEBUFFER, c), a.viewport(0, 0, this.width, this.height), this.texture_type === a.TEXTURE_2D) {
-    var u = GL$1.Shader.getBlurShader();
+    var h = GL$1.Shader.getBlurShader();
     n || (n = GL$1.Texture.getTemporary(
       this.width,
       this.height,
@@ -5279,7 +5279,7 @@ GL$1.Texture.prototype.applyBlur = function(e, t, r, s, n) {
       a.TEXTURE_2D,
       n.handler,
       0
-    ), this.toViewport(u, {
+    ), this.toViewport(h, {
       u_texture: 0,
       u_intensity: r,
       u_offset: [0, t / this.height]
@@ -5289,19 +5289,19 @@ GL$1.Texture.prototype.applyBlur = function(e, t, r, s, n) {
       a.TEXTURE_2D,
       s.handler,
       0
-    ), a.viewport(0, 0, s.width, s.height), n.toViewport(u, {
+    ), a.viewport(0, 0, s.width, s.height), n.toViewport(h, {
       u_intensity: r,
       u_offset: [e / n.width, 0]
     }), o && GL$1.Texture.releaseTemporary(n);
   } else if (this.texture_type === a.TEXTURE_CUBE_MAP) {
-    var u = GL$1.Shader.getCubemapBlurShader();
-    u.uniforms({
+    var h = GL$1.Shader.getCubemapBlurShader();
+    h.uniforms({
       u_texture: 0,
       u_intensity: r,
       u_offset: [e / this.width, t / this.height]
     }), this.bind(0);
     var p = Mesh.getScreenQuad();
-    p.bindBuffers(u), u.bind();
+    p.bindBuffers(h), h.bind();
     var f = null;
     !n && s == this ? f = n = GL$1.Texture.getTemporary(
       s.width,
@@ -5317,11 +5317,11 @@ GL$1.Texture.prototype.applyBlur = function(e, t, r, s, n) {
         0
       );
       var m = GL$1.Texture.cubemap_camera_parameters[g];
-      mat3.identity(d), d.set(m.right, 0), d.set(m.up, 3), d.set(m.dir, 6), u._setUniform("u_rotation", d), a.drawArrays(a.TRIANGLES, 0, 6);
+      mat3.identity(d), d.set(m.right, 0), d.set(m.up, 3), d.set(m.dir, 6), h._setUniform("u_rotation", d), a.drawArrays(a.TRIANGLES, 0, 6);
     }
-    p.unbindBuffers(u), n && n.copyTo(s), n && o && GL$1.Texture.releaseTemporary(n);
+    p.unbindBuffers(h), n && n.copyTo(s), n && o && GL$1.Texture.releaseTemporary(n);
   }
-  a.setViewport(h), a.bindFramebuffer(a.FRAMEBUFFER, l), s.data = null, s.minFilter && s.minFilter != a.NEAREST && s.minFilter != a.LINEAR && (s.bind(), a.generateMipmap(s.texture_type), s.has_mipmaps = !0), a.bindTexture(s.texture_type, null);
+  a.setViewport(u), a.bindFramebuffer(a.FRAMEBUFFER, l), s.data = null, s.minFilter && s.minFilter != a.NEAREST && s.minFilter != a.LINEAR && (s.bind(), a.generateMipmap(s.texture_type), s.has_mipmaps = !0), a.bindTexture(s.texture_type, null);
 };
 GL$1.Texture.fromURL = function(e, t, r, s) {
   s = s || global$1.gl, t = t || {}, t = Object.create(t);
@@ -5343,16 +5343,16 @@ GL$1.Texture.fromURL = function(e, t, r, s) {
   ), s.bindTexture(n.texture_type, null), n.ready = !1;
   var l = null;
   if (t.extension && (l = t.extension), !l && e.length < 512) {
-    var h = e, c = e.indexOf("?");
-    c != -1 && (h = e.substr(0, c)), c = h.lastIndexOf("."), c != -1 && (l = h.substr(c + 1).toLowerCase());
+    var u = e, c = e.indexOf("?");
+    c != -1 && (u = e.substr(0, c)), c = u.lastIndexOf("."), c != -1 && (l = u.substr(c + 1).toLowerCase());
   }
   if (l == "dds") {
-    var l = s.getExtension("WEBKIT_WEBGL_compressed_texture_s3tc") || s.getExtension("WEBGL_compressed_texture_s3tc"), u = new GL$1.Texture(0, 0, t, s);
+    var l = s.getExtension("WEBKIT_WEBGL_compressed_texture_s3tc") || s.getExtension("WEBGL_compressed_texture_s3tc"), h = new GL$1.Texture(0, 0, t, s);
     DDS.loadDDSTextureEx(
       s,
       l,
       e,
-      u.handler,
+      h.handler,
       !0,
       function(d) {
         n.texture_type = d.texture_type, n.handler = d, delete n.ready, r && r(n, e);
@@ -5526,12 +5526,12 @@ GL$1.Texture.cubemapFromImage = function(e, t) {
       for (var l in a) o[l] = a[l];
       a = o;
     }
-    var h = mat3.create(), c = { u_texture: 0, u_rotation: h };
+    var u = mat3.create(), c = { u_texture: 0, u_rotation: u };
     gl.disable(gl.DEPTH_TEST), gl.disable(gl.BLEND);
-    var u = GL$1.Shader.getPolarToCubemapShader();
+    var h = GL$1.Shader.getPolarToCubemapShader();
     return a.drawTo(function(E, L) {
       var T = GL$1.Texture.cubemap_camera_parameters[L];
-      mat3.identity(h), h.set(T.right, 0), h.set(T.up, 3), h.set(T.dir, 6), n.toViewport(u, c);
+      mat3.identity(u), u.set(T.right, 0), u.set(T.up, 3), u.set(T.dir, 6), n.toViewport(h, c);
     }), t.keep_image && (a.img = e), a;
   } else t.is_cross !== void 0 ? (t.faces = GL$1.Texture.generateCubemapCrossFacesInfo(
     e.width,
@@ -5618,8 +5618,8 @@ GL$1.Texture.prototype.getPixels = function(e, t) {
   r.disable(r.DEPTH_TEST);
   var a = r.__copy_fbo;
   a || (a = r.__copy_fbo = r.createFramebuffer()), r.bindFramebuffer(r.FRAMEBUFFER, a);
-  var o = null, l = this.width >> t, h = this.height >> t;
-  r.viewport(0, 0, l, h), this.texture_type == r.TEXTURE_2D ? r.framebufferTexture2D(
+  var o = null, l = this.width >> t, u = this.height >> t;
+  r.viewport(0, 0, l, u), this.texture_type == r.TEXTURE_2D ? r.framebufferTexture2D(
     r.FRAMEBUFFER,
     r.COLOR_ATTACHMENT0,
     r.TEXTURE_2D,
@@ -5634,14 +5634,14 @@ GL$1.Texture.prototype.getPixels = function(e, t) {
   );
   var c = this.format == r.RGB ? 3 : 4;
   c = 4;
-  var u = this.type;
-  return u == r.UNSIGNED_BYTE ? o = new Uint8Array(l * h * c) : u == GL$1.HALF_FLOAT || u == GL$1.HALF_FLOAT_OES ? o = new Uint16Array(l * h * c) : o = new Float32Array(l * h * c), r.readPixels(
+  var h = this.type;
+  return h == r.UNSIGNED_BYTE ? o = new Uint8Array(l * u * c) : h == GL$1.HALF_FLOAT || h == GL$1.HALF_FLOAT_OES ? o = new Uint16Array(l * u * c) : o = new Float32Array(l * u * c), r.readPixels(
     0,
     0,
     l,
-    h,
-    c == 3 ? r.RGB : r.RGBA,
     u,
+    c == 3 ? r.RGB : r.RGBA,
+    h,
     o
   ), r.bindFramebuffer(r.FRAMEBUFFER, n), r.viewport(s[0], s[1], s[2], s[3]), o;
 };
@@ -5680,14 +5680,14 @@ GL$1.Texture.prototype.toCanvas = function(e, t, r) {
       });
       this.copyTo(l), o = l.getPixels();
     } else o = this.getPixels();
-    var h = e.getContext("2d"), c = h.getImageData(0, 0, n, a);
-    if (c.data.set(o), h.putImageData(c, 0, 0), t) {
-      var l = createCanvas(n, a), u = l.getContext("2d");
-      u.translate(0, l.height), u.scale(1, -1), u.drawImage(e, 0, 0, l.width, l.height), h.clearRect(0, 0, h.canvas.width, h.canvas.height), h.drawImage(l, 0, 0);
+    var u = e.getContext("2d"), c = u.getImageData(0, 0, n, a);
+    if (c.data.set(o), u.putImageData(c, 0, 0), t) {
+      var l = createCanvas(n, a), h = l.getContext("2d");
+      h.translate(0, l.height), h.scale(1, -1), h.drawImage(e, 0, 0, l.width, l.height), u.clearRect(0, 0, u.canvas.width, u.canvas.height), u.drawImage(l, 0, 0);
     }
   } else if (this.texture_type == s.TEXTURE_CUBE_MAP) {
-    var p = createCanvas(this.width, this.height), u = p.getContext("2d"), f = GL$1.Texture.generateCubemapCrossFacesInfo(e.width, 1), h = e.getContext("2d");
-    h.fillStyle = "black", h.fillRect(0, 0, e.width, e.height);
+    var p = createCanvas(this.width, this.height), h = p.getContext("2d"), f = GL$1.Texture.generateCubemapCrossFacesInfo(e.width, 1), u = e.getContext("2d");
+    u.fillStyle = "black", u.fillRect(0, 0, e.width, e.height);
     var d = this;
     this.type != s.UNSIGNED_BYTE && (d = new GL$1.Texture(this.width, this.height, {
       format: s.RGBA,
@@ -5696,13 +5696,13 @@ GL$1.Texture.prototype.toCanvas = function(e, t, r) {
       type: s.UNSIGNED_BYTE
     }), this.copyTo(d));
     for (var g = 0; g < 6; g++) {
-      var c = u.getImageData(
+      var c = h.getImageData(
         0,
         0,
         p.width,
         p.height
       );
-      o = d.getPixels(g), c.data.set(o), u.putImageData(c, 0, 0), h.drawImage(
+      o = d.getPixels(g), c.data.set(o), h.putImageData(c, 0, 0), u.drawImage(
         p,
         f[g].x,
         f[g].y,
@@ -5715,9 +5715,9 @@ GL$1.Texture.prototype.toCanvas = function(e, t, r) {
 };
 GL$1.Texture.binary_extension = "png";
 GL$1.Texture.prototype.toBinary = function(e, t) {
-  for (var r = this.toCanvas(null, e), s = r.toDataURL(t), n = s.indexOf(","), a = s.substr(n + 1), o = atob(a), l = o.length, h = new Uint8Array(l), c = 0; c < l; ++c)
-    h[c] = o.charCodeAt(c);
-  return h;
+  for (var r = this.toCanvas(null, e), s = r.toDataURL(t), n = s.indexOf(","), a = s.substr(n + 1), o = atob(a), l = o.length, u = new Uint8Array(l), c = 0; c < l; ++c)
+    u[c] = o.charCodeAt(c);
+  return u;
 };
 GL$1.Texture.prototype.toBlob = function(e, t) {
   var r = this.toBinary(e), s = new Blob([r], { type: t || "image/png" });
@@ -5735,8 +5735,8 @@ GL$1.Texture.prototype.toBlobAsync = function(e, t, r) {
 GL$1.Texture.prototype.toBase64 = function(e) {
   var t = this.width, r = this.height, s = this.getPixels(), n = createCanvas(t, r), a = n.getContext("2d"), o = a.getImageData(0, 0, t, r);
   if (o.data.set(s), a.putImageData(o, 0, 0), e) {
-    var l = createCanvas(t, r), h = l.getContext("2d");
-    h.translate(0, r), h.scale(1, -1), h.drawImage(n, 0, 0), n = l;
+    var l = createCanvas(t, r), u = l.getContext("2d");
+    u.translate(0, r), u.scale(1, -1), u.drawImage(n, 0, 0), n = l;
   }
   var c = n.toDataURL("image/png");
   return c;
@@ -5804,18 +5804,18 @@ GL$1.Texture.getTemporary = function(e, t, r, s) {
   s = s || global$1.gl, s._texture_pool || (s._texture_pool = []);
   var n = GL$1.TEXTURE_2D, a = GL$1.Texture.DEFAULT_TYPE, o = GL$1.Texture.DEFAULT_FORMAT;
   r && (r.texture_type && (n = r.texture_type), r.type && (a = r.type), r.format && (o = r.format));
-  for (var l = n + ":" + a + ":" + e + "x" + t + ":" + o, h = s._texture_pool, c = 0; c < h.length; ++c) {
-    var u = h[c];
-    if (u._key == l)
-      return h.splice(c, 1), u._pool = 0, u;
+  for (var l = n + ":" + a + ":" + e + "x" + t + ":" + o, u = s._texture_pool, c = 0; c < u.length; ++c) {
+    var h = u[c];
+    if (h._key == l)
+      return u.splice(c, 1), h._pool = 0, h;
   }
-  var u = new GL$1.Texture(e, t, {
+  var h = new GL$1.Texture(e, t, {
     type: a,
     texture_type: n,
     format: o,
     filter: s.LINEAR
   });
-  return u._key = l, u._pool = 0, u;
+  return h._key = l, h._pool = 0, h;
 };
 GL$1.Texture.releaseTemporary = function(e, t) {
   t = t || global$1.gl, t._texture_pool || (t._texture_pool = []), e._pool > 0 && console.warn("this texture is already in the textures pool");
@@ -5868,20 +5868,20 @@ FBO.prototype.update = function(e) {
   var t = -1, r = -1, s = null, n = null, a = this.color_textures, o = this.depth_texture;
   if (a && a.length)
     for (var l = 0; l < a.length; l++) {
-      var h = a[l];
-      if (h.constructor !== GL$1.Texture)
+      var u = a[l];
+      if (u.constructor !== GL$1.Texture)
         throw "FBO can only bind instances of GL.Texture";
-      if (t == -1) t = h.width;
-      else if (t != h.width)
+      if (t == -1) t = u.width;
+      else if (t != u.width)
         throw "Cannot bind textures with different dimensions";
-      if (r == -1) r = h.height;
-      else if (r != h.height)
+      if (r == -1) r = u.height;
+      else if (r != u.height)
         throw "Cannot bind textures with different dimensions";
       if (s == null)
-        s = h.type, n = h.format;
-      else if (s != h.type)
+        s = u.type, n = u.format;
+      else if (s != u.type)
         throw "Cannot bind textures to a FBO with different pixel formats";
-      if (h.texture_type != gl.TEXTURE_2D)
+      if (u.texture_type != gl.TEXTURE_2D)
         throw "Cannot bind a Cubemap to a FBO";
     }
   else
@@ -5890,14 +5890,14 @@ FBO.prototype.update = function(e) {
   var c = gl.extensions.WEBGL_draw_buffers;
   if (gl.webgl_version == 1 && !c && a && a.length > 1)
     throw "Rendering to several textures not supported by your browser";
-  var u = gl.webgl_version == 1 ? gl.FRAMEBUFFER : gl.DRAW_FRAMEBUFFER;
+  var h = gl.webgl_version == 1 ? gl.FRAMEBUFFER : gl.DRAW_FRAMEBUFFER;
   if (gl.framebufferRenderbuffer(
-    u,
+    h,
     gl.DEPTH_ATTACHMENT,
     gl.RENDERBUFFER,
     null
   ), gl.framebufferRenderbuffer(
-    u,
+    h,
     gl.DEPTH_STENCIL_ATTACHMENT,
     gl.RENDERBUFFER,
     null
@@ -5907,13 +5907,13 @@ FBO.prototype.update = function(e) {
     this.stencil && o.format !== gl.DEPTH_STENCIL && console.warn(
       "Stencil cannot be enabled if there is a depth texture with a DEPTH_STENCIL format"
     ), o.format == gl.DEPTH_STENCIL ? gl.framebufferTexture2D(
-      u,
+      h,
       gl.DEPTH_STENCIL_ATTACHMENT,
       gl.TEXTURE_2D,
       o.handler,
       0
     ) : gl.framebufferTexture2D(
-      u,
+      h,
       gl.DEPTH_ATTACHMENT,
       gl.TEXTURE_2D,
       o.handler,
@@ -5922,12 +5922,12 @@ FBO.prototype.update = function(e) {
   } else {
     var p = null;
     o && o.constructor === WebGLRenderbuffer && o.width == t && o.height == r ? p = this._depth_renderbuffer = o : (p = this._depth_renderbuffer = this._depth_renderbuffer || gl.createRenderbuffer(), p.width = t, p.height = r), gl.bindRenderbuffer(gl.RENDERBUFFER, p), this.stencil ? (gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_STENCIL, t, r), gl.framebufferRenderbuffer(
-      u,
+      h,
       gl.DEPTH_STENCIL_ATTACHMENT,
       gl.RENDERBUFFER,
       p
     )) : (gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, t, r), gl.framebufferRenderbuffer(
-      u,
+      h,
       gl.DEPTH_ATTACHMENT,
       gl.RENDERBUFFER,
       p
@@ -5936,19 +5936,19 @@ FBO.prototype.update = function(e) {
   if (a && a.length) {
     this.order = [];
     for (var l = 0; l < a.length; l++) {
-      var h = a[l];
+      var u = a[l];
       gl.framebufferTexture2D(
-        u,
+        h,
         gl.COLOR_ATTACHMENT0 + l,
         gl.TEXTURE_2D,
-        h.handler,
+        u.handler,
         0
       ), this.order.push(gl.COLOR_ATTACHMENT0 + l);
     }
   } else {
     var f = this._color_renderbuffer = this._color_renderbuffer || gl.createRenderbuffer();
     f.width = t, f.height = r, gl.bindRenderbuffer(gl.RENDERBUFFER, f), gl.renderbufferStorage(gl.RENDERBUFFER, gl.RGBA4, t, r), gl.framebufferRenderbuffer(
-      u,
+      h,
       gl.COLOR_ATTACHMENT0,
       gl.RENDERBUFFER,
       f
@@ -5956,19 +5956,19 @@ FBO.prototype.update = function(e) {
   }
   for (var d = a ? a.length : 0, l = d; l < this._num_binded_textures; ++l)
     gl.framebufferTexture2D(
-      u,
+      h,
       gl.COLOR_ATTACHMENT0 + l,
       gl.TEXTURE_2D,
       null,
       0
     );
   this._num_binded_textures = d, this._stencil_enabled = this.stencil, a && a.length > 1 && (c ? c.drawBuffersWEBGL(this.order) : gl.drawBuffers(this.order));
-  var g = gl.checkFramebufferStatus(u);
+  var g = gl.checkFramebufferStatus(h);
   if (g !== gl.FRAMEBUFFER_COMPLETE)
     throw n == GL$1.RGB && (s == GL$1.FLOAT || s == GL$1.HALF_FLOAT_OES) && console.error(
       "Tip: Firefox does not support RGB channel float/half_float textures, you must use RGBA"
     ), "FBO not complete: " + g;
-  gl.bindTexture(gl.TEXTURE_2D, null), gl.bindRenderbuffer(gl.RENDERBUFFER, null), e || gl.bindFramebuffer(u, this._old_fbo_handler);
+  gl.bindTexture(gl.TEXTURE_2D, null), gl.bindRenderbuffer(gl.RENDERBUFFER, null), e || gl.bindFramebuffer(h, this._old_fbo_handler);
 };
 FBO.prototype.bind = function(e) {
   if (this.multi_sample) {
@@ -6092,8 +6092,8 @@ global$1.Shader = GL$1.Shader = function e(t, r, s) {
   this._context_id = global$1.gl.context_id;
   var n = this.gl = global$1.gl, a = e.expandMacros(s), o = t.constructor === String ? e.injectCode(a, t, n) : t, l = r.constructor === String ? e.injectCode(a, r, n) : r;
   this.program = n.createProgram();
-  var h = t.constructor === String ? GL$1.Shader.compileSource(n.VERTEX_SHADER, o) : t, c = r.constructor === String ? GL$1.Shader.compileSource(n.FRAGMENT_SHADER, l) : r;
-  n.attachShader(this.program, h, n), n.attachShader(this.program, c, n), n.linkProgram(this.program), this.vs_shader = h, this.fs_shader = c, this.attributes = {}, this.uniformInfo = {}, this.samplers = {}, e.use_async ? this._first_use = !0 : this.checkLink();
+  var u = t.constructor === String ? GL$1.Shader.compileSource(n.VERTEX_SHADER, o) : t, c = r.constructor === String ? GL$1.Shader.compileSource(n.FRAGMENT_SHADER, l) : r;
+  n.attachShader(this.program, u, n), n.attachShader(this.program, c, n), n.linkProgram(this.program), this.vs_shader = u, this.fs_shader = c, this.attributes = {}, this.uniformInfo = {}, this.samplers = {}, e.use_async ? this._first_use = !0 : this.checkLink();
 };
 Shader.use_async = !0;
 Shader.expandMacros = function(e) {
@@ -6132,8 +6132,8 @@ Shader.prototype.delete = function() {
 Shader.prototype.updateShader = function(e, t, r) {
   var s = this.gl || global$1.gl, n = Shader.expandMacros(r);
   this.program ? (s.detachShader(this.program, this.vs_shader), s.detachShader(this.program, this.fs_shader)) : this.program = s.createProgram();
-  var n = Shader.expandMacros(r), a = e.constructor === String ? Shader.injectCode(n, e, s) : e, o = t.constructor === String ? Shader.injectCode(n, t, s) : t, l = e.constructor === String ? GL$1.Shader.compileSource(s.VERTEX_SHADER, a) : e, h = t.constructor === String ? GL$1.Shader.compileSource(s.FRAGMENT_SHADER, o) : t;
-  s.attachShader(this.program, l, s), s.attachShader(this.program, h, s), s.linkProgram(this.program), this.vs_shader = l, this.fs_shader = h, this.attributes = {}, this.uniformInfo = {}, this.samplers = {}, Shader.use_async ? this._first_use = !0 : this.checkLink();
+  var n = Shader.expandMacros(r), a = e.constructor === String ? Shader.injectCode(n, e, s) : e, o = t.constructor === String ? Shader.injectCode(n, t, s) : t, l = e.constructor === String ? GL$1.Shader.compileSource(s.VERTEX_SHADER, a) : e, u = t.constructor === String ? GL$1.Shader.compileSource(s.FRAGMENT_SHADER, o) : t;
+  s.attachShader(this.program, l, s), s.attachShader(this.program, u, s), s.linkProgram(this.program), this.vs_shader = l, this.fs_shader = u, this.attributes = {}, this.uniformInfo = {}, this.samplers = {}, Shader.use_async ? this._first_use = !0 : this.checkLink();
 };
 Shader.prototype.extractShaderInfo = function() {
   for (var e = this.gl, t = e.getProgramParameter(this.program, e.ACTIVE_UNIFORMS), r = 0; r < t; ++r) {
@@ -6145,15 +6145,15 @@ Shader.prototype.extractShaderInfo = function() {
       o == -1 && (n = n.substr(0, a));
     }
     (s.type == GL$1.SAMPLER_2D || s.type == GL$1.SAMPLER_CUBE || s.type == GL$1.SAMPLER_3D || s.type == GL$1.INT_SAMPLER_2D || s.type == GL$1.INT_SAMPLER_CUBE || s.type == GL$1.INT_SAMPLER_3D || s.type == GL$1.UNSIGNED_INT_SAMPLER_2D || s.type == GL$1.UNSIGNED_INT_SAMPLER_CUBE || s.type == GL$1.UNSIGNED_INT_SAMPLER_3D) && (this.samplers[n] = s.type);
-    var l = Shader.getUniformFunc(s), h = !1;
-    (s.type == e.FLOAT_MAT2 || s.type == e.FLOAT_MAT3 || s.type == e.FLOAT_MAT4) && (h = !0);
+    var l = Shader.getUniformFunc(s), u = !1;
+    (s.type == e.FLOAT_MAT2 || s.type == e.FLOAT_MAT3 || s.type == e.FLOAT_MAT4) && (u = !0);
     var c = GL$1.TYPE_LENGTH[s.type] || 1;
     this.uniformInfo[n] = {
       type: s.type,
       func: l,
       size: s.size,
       type_length: c,
-      is_matrix: h,
+      is_matrix: u,
       loc: e.getUniformLocation(this.program, n),
       data: new Float32Array(c * s.size)
       //prealloc space to assign uniforms that are not typed
@@ -6252,13 +6252,13 @@ Shader.fromURL = function(e, t, r) {
   a.ready = !1;
   var o = null, l = null;
   global$1.HttpRequest(e, null, function(c) {
-    o = c, l && h();
+    o = c, l && u();
   }), global$1.HttpRequest(t, null, function(c) {
-    l = c, o && h();
+    l = c, o && u();
   });
-  function h() {
+  function u() {
     var c = new GL$1.Shader(o, l);
-    for (var u in c) a[u] = c[u];
+    for (var h in c) a[h] = c[h];
     a.ready = !0;
   }
   return a;
@@ -6336,8 +6336,8 @@ Shader.prototype.drawBuffers = function(e, t, r, s, n) {
     this._first_use && this.checkLink(), a.useProgram(this.program);
     var o = 0, l = temp_attribs_array;
     l.set(temp_attribs_array_zero);
-    for (var h in e) {
-      var c = e[h], u = c.attribute || h, p = this.attributes[u];
+    for (var u in e) {
+      var c = e[u], h = c.attribute || u, p = this.attributes[h];
       p == null || !c.buffer || (l[p] = 1, a.bindBuffer(a.ARRAY_BUFFER, c.buffer), a.enableVertexAttribArray(p), a.vertexAttribPointer(
         p,
         c.buffer.spacing,
@@ -6351,9 +6351,9 @@ Shader.prototype.drawBuffers = function(e, t, r, s, n) {
     s > 0 && (f = s), t && (o = t.buffer.length - f), n > 0 && n < o && (o = n);
     var d = t && t.data ? t.data.constructor.BYTES_PER_ELEMENT : 1;
     f *= d;
-    for (var u in this.attributes) {
-      var p = this.attributes[u];
-      l[p] || a.disableVertexAttribArray(this.attributes[u]);
+    for (var h in this.attributes) {
+      var p = this.attributes[h];
+      l[p] || a.disableVertexAttribArray(this.attributes[h]);
     }
     return o && (!t || t.buffer) && (t ? (a.bindBuffer(a.ELEMENT_ARRAY_BUFFER, t.buffer), a.drawElements(r, o, t.buffer.gl_type, f), a.bindBuffer(a.ELEMENT_ARRAY_BUFFER, null)) : a.drawArrays(r, f, o), a.draw_calls++), this;
   }
@@ -6365,11 +6365,11 @@ Shader.prototype.drawInstanced = function(e, t, r, s, n, a, o) {
     if (l.webgl_version == 1 && !l.extensions.ANGLE_instanced_arrays)
       throw "instancing not supported";
     this._first_use && this.checkLink(), l.useProgram(this.program);
-    var h = 0, c = temp_attribs_array;
+    var u = 0, c = temp_attribs_array;
     c.set(temp_attribs_array_zero);
-    var u = e.vertexBuffers;
-    for (var p in u) {
-      var f = u[p], d = f.attribute || p, g = this.attributes[d];
+    var h = e.vertexBuffers;
+    for (var p in h) {
+      var f = h[p], d = f.attribute || p, g = this.attributes[d];
       g == null || !f.buffer || (c[g] = 1, l.bindBuffer(l.ARRAY_BUFFER, f.buffer), l.enableVertexAttribArray(g), l.vertexAttribPointer(
         g,
         f.buffer.spacing,
@@ -6377,12 +6377,12 @@ Shader.prototype.drawInstanced = function(e, t, r, s, n, a, o) {
         f.normalize,
         0,
         0
-      ), h = f.buffer.length / f.buffer.spacing);
+      ), u = f.buffer.length / f.buffer.spacing);
     }
     var m = null;
     r && (r.constructor === String ? m = e.getIndexBuffer(r) : r.constructor === GL$1.Buffer && (m = r));
     var b = 0;
-    n > 0 && (b = n), m && (h = m.buffer.length - b), a > 0 && a < h && (h = a);
+    n > 0 && (b = n), m && (u = m.buffer.length - b), a > 0 && a < u && (u = a);
     var E = m && m.data ? m.data.constructor.BYTES_PER_ELEMENT : 1;
     b *= E;
     for (var d in this.attributes) {
@@ -6428,22 +6428,22 @@ Shader.prototype.drawInstanced = function(e, t, r, s, n, a, o) {
     }
     o && (T = o), L ? m ? (l.bindBuffer(l.ELEMENT_ARRAY_BUFFER, m.buffer), L.drawElementsInstancedANGLE(
       t,
-      h,
+      u,
       m.buffer.gl_type,
       b,
       T
     ), l.bindBuffer(l.ELEMENT_ARRAY_BUFFER, null)) : L.drawArraysInstancedANGLE(
       t,
       b,
-      h,
+      u,
       T
     ) : m ? (l.bindBuffer(l.ELEMENT_ARRAY_BUFFER, m.buffer), l.drawElementsInstanced(
       t,
-      h,
+      u,
       m.buffer.gl_type,
       b,
       T
-    ), l.bindBuffer(l.ELEMENT_ARRAY_BUFFER, null)) : l.drawArraysInstanced(t, b, h, T);
+    ), l.bindBuffer(l.ELEMENT_ARRAY_BUFFER, null)) : l.drawArraysInstanced(t, b, u, T);
     for (var B = 0; B < _; ++B) {
       var S = Shader._instancing_arrays[B], M = this.attributes[S.uniform], O = S.element_size;
       if (O == 16)
@@ -6693,8 +6693,8 @@ Shader.removeComments = function(s, t) {
   if (!s) return "";
   for (var r = /(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g, s = s.replace(r, ""), n = s.split(`
 `), a = [], o = 0; o < n.length; ++o) {
-    var l = n[o], h = l.indexOf("//");
-    h != -1 && (l = n[o].substr(0, h)), l = l.trim(), l.length && a.push(l);
+    var l = n[o], u = l.indexOf("//");
+    u != -1 && (l = n[o].substr(0, u)), l = l.trim(), l.length && a.push(l);
   }
   return a.join(t ? "" : `
 `);
@@ -7025,9 +7025,9 @@ GL$1.create = function(e) {
   if (!n)
     throw t.getContext("webgl") ? "WebGL supported but not with those parameters" : "WebGL not supported";
   n.webgl_version = n.constructor.name === "WebGL2RenderingContext" ? 2 : 1, global$1.gl = n, t.is_webgl = !0, t.gl = n, n.context_id = this.last_context_id++, n.extensions = {};
-  for (var h = n.getSupportedExtensions(), l = 0; l < h.length; ++l)
-    n.extensions[h[l]] = n.getExtension(
-      h[l]
+  for (var u = n.getSupportedExtensions(), l = 0; l < u.length; ++l)
+    n.extensions[u[l]] = n.getExtension(
+      u[l]
     );
   if (n.webgl_version == 1 ? n.HIGH_PRECISION_FORMAT = n.extensions.OES_texture_half_float ? GL$1.HALF_FLOAT_OES : n.extensions.OES_texture_float ? GL$1.FLOAT : GL$1.UNSIGNED_BYTE : n.HIGH_PRECISION_FORMAT = GL$1.HALF_FLOAT_OES, n.max_texture_units = n.getParameter(n.MAX_TEXTURE_IMAGE_UNITS), n._viewport_func ? console.warn("Creating LiteGL context over the same canvas twice") : (n._viewport_func = n.viewport, n.viewport_data = new Float32Array([
     0,
@@ -7084,7 +7084,7 @@ GL$1.create = function(e) {
       this.textures[_].delete(), this.textures[_] = null;
     this.textures = {}, this.canvas.parentNode && this.canvas.parentNode.removeChild(this.canvas), this.destroyed = !0, global$1.gl == this && (global$1.gl = null);
   };
-  var u = n.mouse = {
+  var h = n.mouse = {
     buttons: 0,
     //this should always be up-to-date with mouse state
     last_buttons: 0,
@@ -7133,7 +7133,7 @@ GL$1.create = function(e) {
       var I = n.mouse.buttons;
       GL$1.augmentEvent(_, t), _.eventType = _.eventType || _.type;
       var A = global$1.getTime();
-      if (u.dragging = _.dragging, u.position[0] = _.canvasx, u.position[1] = _.canvasy, u.x = _.canvasx, u.y = _.canvasy, u.mousex = _.mousex, u.mousey = _.mousey, u.canvasx = _.canvasx, u.canvasy = _.canvasy, u.clientx = _.mousex, u.clienty = _.mousey, u.buttons = _.buttons, u.left_button = !!(u.buttons & GL$1.LEFT_MOUSE_BUTTON_MASK), u.middle_button = !!(u.buttons & GL$1.MIDDLE_MOUSE_BUTTON_MASK), u.right_button = !!(u.buttons & GL$1.RIGHT_MOUSE_BUTTON_MASK), _.eventType == "mousedown") {
+      if (h.dragging = _.dragging, h.position[0] = _.canvasx, h.position[1] = _.canvasy, h.x = _.canvasx, h.y = _.canvasy, h.mousex = _.mousex, h.mousey = _.mousey, h.canvasx = _.canvasx, h.canvasy = _.canvasy, h.clientx = _.mousex, h.clienty = _.mousey, h.buttons = _.buttons, h.left_button = !!(h.buttons & GL$1.LEFT_MOUSE_BUTTON_MASK), h.middle_button = !!(h.buttons & GL$1.MIDDLE_MOUSE_BUTTON_MASK), h.right_button = !!(h.buttons & GL$1.RIGHT_MOUSE_BUTTON_MASK), _.eventType == "mousedown") {
         if (I == 0) {
           t.removeEventListener("mousemove", p);
           var M = t.ownerDocument;
@@ -7570,20 +7570,20 @@ var LEvent = global$1.LEvent = GL$1.LEvent = {
     var o = a[t];
     if (s)
       for (var l = o.length - 1; l >= 0; --l) {
-        var h = o[l];
+        var u = o[l];
         if (n) {
-          if (h && h[0].apply(h[1], r) === !0)
+          if (u && u[0].apply(u[1], r) === !0)
             return !0;
-        } else if (h && h[0].call(h[1], t, r) === !0)
+        } else if (u && u[0].call(u[1], t, r) === !0)
           return !0;
       }
     else
       for (var l = 0, c = o.length; l < c; ++l) {
-        var h = o[l];
+        var u = o[l];
         if (n) {
-          if (h && h[0].apply(h[1], r) === !0)
+          if (u && u[0].apply(u[1], r) === !0)
             return !0;
-        } else if (h && h[0].call(h[1], t, r) === !0)
+        } else if (u && u[0].call(u[1], t, r) === !0)
           return !0;
       }
     return !1;
@@ -7601,18 +7601,18 @@ var LEvent = global$1.LEvent = GL$1.LEvent = {
    **/
   triggerArray: function(e, t, r, s, n) {
     for (var a = !1, o = 0, l = e.length; o < l; ++o) {
-      var h = e[o];
-      if (!h) throw "cannot trigger event from null";
-      if (h.constructor === String)
+      var u = e[o];
+      if (!u) throw "cannot trigger event from null";
+      if (u.constructor === String)
         throw "cannot bind event to a string";
-      var c = h.__levents;
+      var c = u.__levents;
       if (!(!c || !Object.prototype.hasOwnProperty.call(
         c,
         t
       )))
         if (s)
-          for (var u = c[t].length - 1; u >= 0; --u) {
-            var p = c[t][u];
+          for (var h = c[t].length - 1; h >= 0; --h) {
+            var p = c[t][h];
             if (n) {
               if (p[0].apply(p[1], r) === !0) {
                 a = !0;
@@ -7624,8 +7624,8 @@ var LEvent = global$1.LEvent = GL$1.LEvent = {
             }
           }
         else
-          for (var u = 0, f = c[t].length; u < f; ++u) {
-            var p = c[t][u];
+          for (var h = 0, f = c[t].length; h < f; ++h) {
+            var p = c[t][h];
             if (n) {
               if (p[0].apply(p[1], r) === !0) {
                 a = !0;
@@ -7807,8 +7807,8 @@ global$1.geo = {
    */
   isPointInsideTriangle: function() {
     var e = vec3.create(), t = vec3.create(), r = vec3.create(), s = vec3.create(), n = vec3.create(), a = vec3.create();
-    return function(o, l, h, c) {
-      return vec3.sub(e, l, o), vec3.sub(t, h, o), vec3.sub(r, c, o), vec3.cross(s, t, r), vec3.cross(n, r, e), vec3.cross(a, e, t), !(vec3.dot(s, n) < 0 || vec3.dot(s, a) < 0);
+    return function(o, l, u, c) {
+      return vec3.sub(e, l, o), vec3.sub(t, u, o), vec3.sub(r, c, o), vec3.cross(s, t, r), vec3.cross(n, r, e), vec3.cross(a, e, t), !(vec3.dot(s, n) < 0 || vec3.dot(s, a) < 0);
     };
   }(),
   /**
@@ -7840,8 +7840,8 @@ global$1.geo = {
   testRayPlane: function(e, t, r, s, n) {
     var a = vec3.dot(r, s), o = a - vec3.dot(s, e), l = vec3.dot(s, t);
     if (Math.abs(l) < global$1.EPSILON) return !1;
-    var h = this.last_t = o / l;
-    return h < 0 ? !1 : (n && vec3.add(n, e, vec3.scale(n, t, h)), !0);
+    var u = this.last_t = o / l;
+    return u < 0 ? !1 : (n && vec3.add(n, e, vec3.scale(n, t, u)), !0);
   },
   /**
    * test collision between segment and plane and retrieves the collision point
@@ -7856,10 +7856,10 @@ global$1.geo = {
   testSegmentPlane: function() {
     var e = vec3.create();
     return function(t, r, s, n, a) {
-      var o = vec3.dot(s, n), l = o - vec3.dot(n, t), h = vec3.sub(e, r, t), c = vec3.dot(n, h);
+      var o = vec3.dot(s, n), l = o - vec3.dot(n, t), u = vec3.sub(e, r, t), c = vec3.dot(n, u);
       if (Math.abs(c) < global$1.EPSILON) return !1;
-      var u = this.last_t = l / c;
-      return u < 0 || u > 1 ? !1 : (a && vec3.add(a, t, vec3.scale(a, h, u)), !0);
+      var h = this.last_t = l / c;
+      return h < 0 || h > 1 ? !1 : (a && vec3.add(a, t, vec3.scale(a, u, h)), !0);
     };
   }(),
   /**
@@ -7876,10 +7876,10 @@ global$1.geo = {
   testRaySphere: function() {
     var e = vec3.create();
     return function(t, r, s, n, a, o) {
-      var l = vec3.subtract(e, t, s), h = r[0] * r[0] + r[1] * r[1] + r[2] * r[2], c = 2 * l[0] * r[0] + 2 * l[1] * r[1] + 2 * l[2] * r[2], u = l[0] * l[0] + l[1] * l[1] + l[2] * l[2] - n * n, p = c * c - 4 * h * u;
+      var l = vec3.subtract(e, t, s), u = r[0] * r[0] + r[1] * r[1] + r[2] * r[2], c = 2 * l[0] * r[0] + 2 * l[1] * r[1] + 2 * l[2] * r[2], h = l[0] * l[0] + l[1] * l[1] + l[2] * l[2] - n * n, p = c * c - 4 * u * h;
       if (p < 0) return !1;
       if (a) {
-        var f = Math.sqrt(p), d = 1 / (2 * h), g = (-c + f) * d, m = (-c - f) * d, b = g < m ? g : m;
+        var f = Math.sqrt(p), d = 1 / (2 * u), g = (-c + f) * d, m = (-c - f) * d, b = g < m ? g : m;
         if (o !== void 0 && b > o) return !1;
         this.last_t = b, vec3.add(a, t, vec3.scale(a, r, b));
       }
@@ -7889,15 +7889,15 @@ global$1.geo = {
   //NOT TESTED!
   hitTestTriangle: function() {
     var e = vec3.create(), t = vec3.create(), r = vec3.create(), s = vec3.create(), n = vec3.create();
-    return function(a, o, l, h, c, u) {
-      vec3.subtract(e, h, l), vec3.subtract(t, c, l), vec3.cross(r, e, t), vec3.normalize(r, r);
+    return function(a, o, l, u, c, h) {
+      vec3.subtract(e, u, l), vec3.subtract(t, c, l), vec3.cross(r, e, t), vec3.normalize(r, r);
       var p = vec3.dot(r, vec3.subtract(s, l, a)) / vec3.dot(r, o);
       if (p > 0) {
         vec3.add(n, a, vec3.scale(s, o, p));
         var f = vec3.subtract(s, s, l), d = vec3.dot(t, t), g = vec3.dot(t, e), m = vec3.dot(t, f), b = vec3.dot(e, e), E = vec3.dot(e, f), L = d * b - g * g, T = (b * m - g * E) / L, _ = (d * E - g * m) / L;
         if (T >= 0 && _ >= 0 && T + _ <= 1)
-          return this.last_t = p, u && vec3.add(
-            u,
+          return this.last_t = p, h && vec3.add(
+            h,
             a,
             vec3.scale(s, o, p)
           ), !0;
@@ -7921,13 +7921,13 @@ global$1.geo = {
       vec3.create(),
       e,
       vec3.scale(vec3.create(), t, 1e5)
-    ), h = 0, c = vec3.subtract(vec3.create(), s, r), u = vec3.subtract(vec3.create(), o, r), p = vec3.subtract(vec3.create(), l, o), f = vec3.dot(u, c), d = vec3.dot(p, c), g = vec3.dot(c, c);
+    ), u = 0, c = vec3.subtract(vec3.create(), s, r), h = vec3.subtract(vec3.create(), o, r), p = vec3.subtract(vec3.create(), l, o), f = vec3.dot(h, c), d = vec3.dot(p, c), g = vec3.dot(c, c);
     if (f < 0 && f + d < 0 || f > g && f + d > g) return !1;
-    var m = vec3.dot(p, p), b = vec3.dot(u, p), E = g * m - d * d, L = vec3.dot(u, u) - n * n, T = g * L - f * f;
+    var m = vec3.dot(p, p), b = vec3.dot(h, p), E = g * m - d * d, L = vec3.dot(h, h) - n * n, T = g * L - f * f;
     if (Math.abs(E) < global$1.EPSILON)
-      return T > 0 ? !1 : (f < 0 ? h = -b / m : f > g ? h = (d - b) / m : h = 0, a && vec3.add(a, o, vec3.scale(a, p, h)), !0);
+      return T > 0 ? !1 : (f < 0 ? u = -b / m : f > g ? u = (d - b) / m : u = 0, a && vec3.add(a, o, vec3.scale(a, p, u)), !0);
     var _ = g * b - d * f, I = _ * _ - E * T;
-    return I < 0 || (h = (-_ - Math.sqrt(I)) / E, h < 0 || h > 1) ? !1 : f + h * d < 0 ? d <= 0 ? !1 : (h = -f / d, a && vec3.add(a, o, vec3.scale(a, p, h)), L + 2 * h * (b + h * m) <= 0) : f + h * d > g ? d >= 0 ? !1 : (h = (g - f) / d, a && vec3.add(a, o, vec3.scale(a, p, h)), L + g - 2 * f + h * (2 * (b - d) + h * m) <= 0) : (this.last_t = h, a && vec3.add(a, o, vec3.scale(a, p, h)), !0);
+    return I < 0 || (u = (-_ - Math.sqrt(I)) / E, u < 0 || u > 1) ? !1 : f + u * d < 0 ? d <= 0 ? !1 : (u = -f / d, a && vec3.add(a, o, vec3.scale(a, p, u)), L + 2 * u * (b + u * m) <= 0) : f + u * d > g ? d >= 0 ? !1 : (u = (g - f) / d, a && vec3.add(a, o, vec3.scale(a, p, u)), L + g - 2 * f + u * (2 * (b - d) + u * m) <= 0) : (this.last_t = u, a && vec3.add(a, o, vec3.scale(a, p, u)), !0);
   },
   /**
    * test a ray bounding-box collision and retrieves the collision point, the BB must be Axis Aligned
@@ -7941,25 +7941,25 @@ global$1.geo = {
    */
   testRayBox: function() {
     var e = new Float32Array(3), t = new Float32Array(3), r = new Float32Array(3);
-    return function(s, n, a, o, l, h) {
-      h = h || Number.MAX_VALUE;
-      var c = !0, u = 0, p;
-      for (e.fill(0), r.fill(0), t.fill(0), u = 0; u < 3; ++u)
-        s[u] < a[u] ? (e[u] = 1, t[u] = a[u], c = !1) : s[u] > o[u] ? (e[u] = 0, t[u] = o[u], c = !1) : e[u] = 2;
+    return function(s, n, a, o, l, u) {
+      u = u || Number.MAX_VALUE;
+      var c = !0, h = 0, p;
+      for (e.fill(0), r.fill(0), t.fill(0), h = 0; h < 3; ++h)
+        s[h] < a[h] ? (e[h] = 1, t[h] = a[h], c = !1) : s[h] > o[h] ? (e[h] = 0, t[h] = o[h], c = !1) : e[h] = 2;
       if (c)
         return this.last_t = 0, l && vec3.copy(l, s), !0;
-      for (u = 0; u < 3; ++u)
-        e[u] != 2 && n[u] != 0 ? r[u] = (t[u] - s[u]) / n[u] : r[u] = -1;
-      for (p = 0, u = 1; u < 3; u++)
-        r[p] < r[u] && (p = u);
-      if (r[p] < 0 || r[p] > h) return !1;
-      for (this.last_t = r[p], u = 0; u < 3; ++u)
-        if (p != u) {
-          var f = s[u] + r[p] * n[u];
-          if (f < a[u] || f > o[u]) return !1;
-          l && (l[u] = f);
+      for (h = 0; h < 3; ++h)
+        e[h] != 2 && n[h] != 0 ? r[h] = (t[h] - s[h]) / n[h] : r[h] = -1;
+      for (p = 0, h = 1; h < 3; h++)
+        r[p] < r[h] && (p = h);
+      if (r[p] < 0 || r[p] > u) return !1;
+      for (this.last_t = r[p], h = 0; h < 3; ++h)
+        if (p != h) {
+          var f = s[h] + r[p] * n[h];
+          if (f < a[h] || f > o[h]) return !1;
+          l && (l[h] = f);
         } else
-          l && (l[u] = t[u]);
+          l && (l[h] = t[h]);
       return !0;
     };
   }(),
@@ -7975,18 +7975,18 @@ global$1.geo = {
    */
   testRayBBox: function() {
     var e = mat4.create(), t = vec3.create(), r = vec3.create();
-    return function(s, n, a, o, l, h, c) {
+    return function(s, n, a, o, l, u, c) {
       if (!s || !n || !a) throw "parameters missing";
       o && (mat4.invert(e, o), vec3.add(t, s, n), s = vec3.transformMat4(r, s, e), vec3.transformMat4(t, t, e), vec3.sub(t, t, s), n = vec3.normalize(t, t));
-      var u = this.testRayBox(
+      var h = this.testRayBox(
         s,
         n,
         a.subarray(6, 9),
         a.subarray(9, 12),
         l,
-        h
+        u
       );
-      return !c && o && l && vec3.transformMat4(l, l, o), u;
+      return !c && o && l && vec3.transformMat4(l, l, o), h;
     };
   }(),
   /**
@@ -8032,15 +8032,15 @@ global$1.geo = {
   testSphereBBox: function(e, t, r) {
     for (var s, n = 0, a = global$1.BBox.getMin(r), o = global$1.BBox.getMax(r), l = 0; l < 3; ++l)
       e[l] < a[l] ? (s = e[l] - a[l], n += s * s) : e[l] > o[l] && (s = e[l] - o[l], n += s * s);
-    var h = t * t;
-    return n <= h;
+    var u = t * t;
+    return n <= u;
   },
   closestPointBetweenLines: function(e, t, r, s, n, a) {
-    var o = vec3.subtract(vec3.create(), t, e), l = vec3.subtract(vec3.create(), s, r), h = vec3.subtract(vec3.create(), e, r), c = vec3.dot(o, o), u = vec3.dot(o, l), p = vec3.dot(l, l), f = vec3.dot(o, h), d = vec3.dot(l, h), g = c * p - u * u, m, b;
-    g < global$1.EPSILON ? (m = 0, b = u > p ? f / u : d / p) : (m = (u * d - p * f) / g, b = (c * d - u * f) / g), n && vec3.add(n, e, vec3.scale(vec3.create(), o, m)), a && vec3.add(a, r, vec3.scale(vec3.create(), l, b));
+    var o = vec3.subtract(vec3.create(), t, e), l = vec3.subtract(vec3.create(), s, r), u = vec3.subtract(vec3.create(), e, r), c = vec3.dot(o, o), h = vec3.dot(o, l), p = vec3.dot(l, l), f = vec3.dot(o, u), d = vec3.dot(l, u), g = c * p - h * h, m, b;
+    g < global$1.EPSILON ? (m = 0, b = h > p ? f / h : d / p) : (m = (h * d - p * f) / g, b = (c * d - h * f) / g), n && vec3.add(n, e, vec3.scale(vec3.create(), o, m)), a && vec3.add(a, r, vec3.scale(vec3.create(), l, b));
     var E = vec3.add(
       vec3.create(),
-      h,
+      u,
       vec3.subtract(
         vec3.create(),
         vec3.scale(vec3.create(), o, m),
@@ -8213,8 +8213,8 @@ global$1.BBox = GL$1.BBox = {
     var r = e.subarray(6, 9), s = e.subarray(9, 12);
     r[0] = t[0], r[1] = t[1], r[2] = t[2], s.set(r);
     for (var n = 3, a = t.length; n < a; n += 3) {
-      var o = t[n], l = t[n + 1], h = t[n + 2];
-      o < r[0] ? r[0] = o : o > s[0] && (s[0] = o), l < r[1] ? r[1] = l : l > s[1] && (s[1] = l), h < r[2] ? r[2] = h : h > s[2] && (s[2] = h);
+      var o = t[n], l = t[n + 1], u = t[n + 2];
+      o < r[0] ? r[0] = o : o > s[0] && (s[0] = o), l < r[1] ? r[1] = l : l > s[1] && (s[1] = l), u < r[2] ? r[2] = u : u > s[2] && (s[2] = u);
     }
     return e[0] = (r[0] + s[0]) * 0.5, e[1] = (r[1] + s[1]) * 0.5, e[2] = (r[2] + s[2]) * 0.5, e[3] = s[0] - e[0], e[4] = s[1] - e[1], e[5] = s[2] - e[2], e[12] = Math.sqrt(e[3] * e[3] + e[4] * e[4] + e[5] * e[5]), e;
   },
@@ -8254,12 +8254,12 @@ global$1.BBox = GL$1.BBox = {
   transformMat4: function() {
     for (var e = 0, t = 0, r = 0, s = new Float32Array(8 * 3), n = [], a = 0; a < 24; a += 3)
       n.push(s.subarray(a, a + 3));
-    return function(o, l, h) {
-      var c = l[0], u = l[1], p = l[2];
+    return function(o, l, u) {
+      var c = l[0], h = l[1], p = l[2];
       e = l[3], t = l[4], r = l[5];
       for (var f = this.corners, d = 0; d < 8; ++d) {
         var g = f[d], m = n[d];
-        m[0] = e * g[0] + c, m[1] = t * g[1] + u, m[2] = r * g[2] + p, mat4.multiplyVec3(m, h, m);
+        m[0] = e * g[0] + c, m[1] = t * g[1] + h, m[2] = r * g[2] + p, mat4.multiplyVec3(m, u, m);
       }
       return this.setFromPoints(o, s);
     };
@@ -8316,8 +8316,8 @@ global$1.distanceToPlane = GL$1.distanceToPlane = function(t, r) {
   return vec3.dot(t, r) + t[3];
 };
 global$1.planeBoxOverlap = GL$1.planeBoxOverlap = function(t, r) {
-  var s = t, n = t[3], a = r, o = r, l = Math.abs(o[3] * s[0]) + Math.abs(o[4] * s[1]) + Math.abs(o[5] * s[2]), h = vec3.dot(s, a) + n;
-  return h <= -l ? global$1.CLIP_OUTSIDE : h <= l ? global$1.CLIP_OVERLAP : global$1.CLIP_INSIDE;
+  var s = t, n = t[3], a = r, o = r, l = Math.abs(o[3] * s[0]) + Math.abs(o[4] * s[1]) + Math.abs(o[5] * s[2]), u = vec3.dot(s, a) + n;
+  return u <= -l ? global$1.CLIP_OUTSIDE : u <= l ? global$1.CLIP_OVERLAP : global$1.CLIP_INSIDE;
 };
 class OctreeNode {
   //children
@@ -8360,10 +8360,10 @@ Octree.prototype.buildFromMesh = function(e, t, r) {
   this.root = o, this.total_nodes = 1, this.total_triangles = n ? n.length / 3 : s.length / 9, this.max_node_triangles = this.total_triangles * Octree.MAX_NODE_TRIANGLES_RATIO;
   var l = vec3.create();
   vec3.scale(l, o.size, Octree.OCTREE_MARGIN_RATIO), l[0] < Octree.OCTREE_MIN_MARGIN && (l[0] = Octree.OCTREE_MIN_MARGIN), l[1] < Octree.OCTREE_MIN_MARGIN && (l[1] = Octree.OCTREE_MIN_MARGIN), l[2] < Octree.OCTREE_MIN_MARGIN && (l[2] = Octree.OCTREE_MIN_MARGIN), vec3.sub(o.min, o.min, l), vec3.add(o.max, o.max, l), o.faces = [];
-  var h = t + r;
+  var u = t + r;
   if (n)
-    for (var c = t; c < h; c += 3) {
-      var u = new Float32Array([
+    for (var c = t; c < u; c += 3) {
+      var h = new Float32Array([
         s[n[c] * 3],
         s[n[c] * 3 + 1],
         s[n[c] * 3 + 2],
@@ -8375,12 +8375,12 @@ Octree.prototype.buildFromMesh = function(e, t, r) {
         s[n[c + 2] * 3 + 2],
         c / 3
       ]);
-      Octree.isValidFace(u) && this.addToNode(u, o, 0);
+      Octree.isValidFace(h) && this.addToNode(h, o, 0);
     }
   else
     for (var c = t * 3; c < r * 3; c += 9) {
-      var u = new Float32Array(10);
-      u.set(s.subarray(c, c + 9)), u[9] = c / 9, Octree.isValidFace(u) && this.addToNode(u, o, 0);
+      var h = new Float32Array(10);
+      h.set(s.subarray(c, c + 9)), h[9] = c / 9, Octree.isValidFace(h) && this.addToNode(h, o, 0);
     }
   return this.total_nodes = this.trim(), o;
 };
@@ -8406,8 +8406,8 @@ Octree.prototype.addToNode = function(e, t, r) {
     var l = t.faces;
     t.faces = null;
     for (var a = 0; a < l.length; ++a) {
-      for (var e = l[a], s = this.computeAABB(e), n = !1, h = 0; h < t.c.length; ++h) {
-        var o = t.c[h];
+      for (var e = l[a], s = this.computeAABB(e), n = !1, u = 0; u < t.c.length; ++u) {
+        var o = t.c[u];
         if (Octree.isInsideAABB(s, o)) {
           this.addToNode(e, o, r + 1), n = !0;
           break;
@@ -8459,8 +8459,8 @@ Octree.prototype.computeAABBFromIndices = function(e, t, r, s) {
     e[n * 3 + 1],
     e[n * 3 + 2]
   ]), l = r + 1; l < r + s; ++l)
-    for (var n = t[l] * 3, h = 0; h < 3; h++)
-      a[h] > e[n + h] && (a[h] = e[n + h]), o[h] < e[n + h] && (o[h] = e[n + h]);
+    for (var n = t[l] * 3, u = 0; u < 3; u++)
+      a[u] > e[n + u] && (a[u] = e[n + u]), o[u] < e[n + u] && (o[u] = e[n + u]);
   return { min: a, max: o };
 };
 Octree.prototype.trim = function(e) {
@@ -8471,35 +8471,35 @@ Octree.prototype.trim = function(e) {
 };
 Octree.prototype.testRay = function() {
   var e = vec3.create(), t = vec3.create(), r = vec3.create(), s = vec3.create();
-  return function(n, a, o, l, h, c) {
+  return function(n, a, o, l, u, c) {
     if (c = c || Octree.NEAREST, !this.root)
       throw "Error: octree not build";
     e.set(n), t.set(a), r.set(this.root.min), s.set(this.root.max);
-    var u = Octree.hitTestBox(
+    var h = Octree.hitTestBox(
       e,
       t,
       r,
       s
     );
-    if (!u)
+    if (!h)
       return null;
-    var u = Octree.testRayInNode(
+    var h = Octree.testRayInNode(
       this.root,
       e,
       t,
-      h,
+      u,
       c
     );
-    if (u == null) return null;
-    if (c == Octree.ALL) return u;
-    var p = vec3.scale(vec3.create(), a, u.t);
-    return vec3.add(p, p, n), u.pos = p, u;
+    if (h == null) return null;
+    if (c == Octree.ALL) return h;
+    var p = vec3.scale(vec3.create(), a, h.t);
+    return vec3.add(p, p, n), h.pos = p, h;
   };
 }();
 Octree.testRayInNode = function(e, t, r, s, n) {
   var a = null, o = null;
   if (e.faces)
-    for (var l = 0, h = e.faces.length; l < h; ++l) {
+    for (var l = 0, u = e.faces.length; l < u; ++l) {
       var c = e.faces[l];
       if (a = Octree.hitTestTriangle(
         t,
@@ -8513,10 +8513,10 @@ Octree.testRayInNode = function(e, t, r, s, n) {
         n == Octree.ALL ? (o || (o = []), o.push(a)) : (a.face = c, o ? o.mergeWith(a) : o = a);
       }
     }
-  var u = vec3.create(), p = vec3.create(), f;
+  var h = vec3.create(), p = vec3.create(), f;
   if (e.c) {
     for (var l = 0; l < e.c.length; ++l)
-      if (f = e.c[l], u.set(f.min), p.set(f.max), a = Octree.hitTestBox(t, r, u, p), a != null && !(n != Octree.ALL && o && a.t > o.t) && (a = Octree.testRayInNode(
+      if (f = e.c[l], h.set(f.min), p.set(f.max), a = Octree.hitTestBox(t, r, h, p), a != null && !(n != Octree.ALL && o && a.t > o.t) && (a = Octree.testRayInNode(
         f,
         t,
         r,
@@ -8552,10 +8552,10 @@ Octree.testSphereInNode = function(e, t, r) {
       ))
         return !0;
     }
-  var o = vec3.create(), l = vec3.create(), h;
+  var o = vec3.create(), l = vec3.create(), u;
   if (e.c) {
     for (var s = 0; s < e.c.length; ++s)
-      if (h = e.c[s], o.set(h.min), l.set(h.max), !!Octree.testSphereBox(t, r, o, l) && Octree.testSphereInNode(h, t, r))
+      if (u = e.c[s], o.set(u.min), l.set(u.max), !!Octree.testSphereBox(t, r, o, l) && Octree.testSphereInNode(u, t, r))
         return !0;
   }
   return !1;
@@ -8568,11 +8568,11 @@ Octree.prototype.findNearestPoint = function(e, t, r, s) {
 Octree.nearestInNode = function(e, t, r, s, n) {
   var a = vec3.create(), o;
   if (n && (o = vec3.create()), e.faces)
-    for (var l = 0, h = e.faces.length; l < h; ++l) {
-      var c = e.faces[l], u = c.subarray(0, 3), p = c.subarray(3, 6), f = c.subarray(6, 9);
-      Octree.closestPointOnTriangle(t, u, p, f, a);
+    for (var l = 0, u = e.faces.length; l < u; ++l) {
+      var c = e.faces[l], h = c.subarray(0, 3), p = c.subarray(3, 6), f = c.subarray(6, 9);
+      Octree.closestPointOnTriangle(t, h, p, f, a);
       var d = vec3.dist(a, t);
-      d < s && (s = d, vec3.copy(r, a), n && global$1.geo.computeTriangleNormal(n, u, p, f));
+      d < s && (s = d, vec3.copy(r, a), n && global$1.geo.computeTriangleNormal(n, h, p, f));
     }
   if (!e.c) return s;
   for (var l = 0; l < e.c.length; ++l) {
@@ -8592,41 +8592,41 @@ Octree.nearestInNode = function(e, t, r, s, n) {
 };
 Octree.closestPointOnTriangle = function() {
   var e = new Float32Array(4), t = vec3.create(), r = vec3.create(), s = vec3.create(), n = vec3.create();
-  return function(a, o, l, h, c) {
-    if (global$1.geo.planeFromTriangle(e, o, l, h), vec3.length(e) > 1e-8 && (global$1.geo.projectPointOnPlane(a, o, e, t), global$1.geo.isPointInsideTriangle(t, o, l, h)))
+  return function(a, o, l, u, c) {
+    if (global$1.geo.planeFromTriangle(e, o, l, u), vec3.length(e) > 1e-8 && (global$1.geo.projectPointOnPlane(a, o, e, t), global$1.geo.isPointInsideTriangle(t, o, l, u)))
       return vec3.copy(c, t), c;
-    global$1.geo.closestPointToSegment(t, o, l, r), global$1.geo.closestPointToSegment(t, l, h, s), global$1.geo.closestPointToSegment(t, h, o, n);
-    var u = vec3.sqrDist(t, r), p = vec3.sqrDist(t, s), f = vec3.sqrDist(t, n), d = Math.min(u, p, f);
-    return d === u ? vec3.copy(c, r) : d === p ? vec3.copy(c, s) : vec3.copy(c, n), c;
+    global$1.geo.closestPointToSegment(t, o, l, r), global$1.geo.closestPointToSegment(t, l, u, s), global$1.geo.closestPointToSegment(t, u, o, n);
+    var h = vec3.sqrDist(t, r), p = vec3.sqrDist(t, s), f = vec3.sqrDist(t, n), d = Math.min(h, p, f);
+    return d === h ? vec3.copy(c, r) : d === p ? vec3.copy(c, s) : vec3.copy(c, n), c;
   };
 }();
 Octree.isInsideAABB = function(e, t) {
   return !(e.min[0] < t.min[0] || e.min[1] < t.min[1] || e.min[2] < t.min[2] || e.max[0] > t.max[0] || e.max[1] > t.max[1] || e.max[2] > t.max[2]);
 };
 Octree.distanceToBox = function(e, t, r) {
-  var s = (r[0] + t[0]) * 0.5, n = (r[1] + t[1]) * 0.5, a = (r[2] + t[2]) * 0.5, o = r[0] - s, l = r[1] - n, h = r[2] - a, c = Math.abs(e[0] - s) - o, u = Math.abs(e[1] - n) - l, p = Math.abs(e[2] - a) - h, f = Math.min(Math.max(c, u, p), 0);
-  return c = Math.max(c, 0), u = Math.max(u, 0), p = Math.max(p, 0), Math.sqrt(c * c + u * u + p * p) + f;
+  var s = (r[0] + t[0]) * 0.5, n = (r[1] + t[1]) * 0.5, a = (r[2] + t[2]) * 0.5, o = r[0] - s, l = r[1] - n, u = r[2] - a, c = Math.abs(e[0] - s) - o, h = Math.abs(e[1] - n) - l, p = Math.abs(e[2] - a) - u, f = Math.min(Math.max(c, h, p), 0);
+  return c = Math.max(c, 0), h = Math.max(h, 0), p = Math.max(p, 0), Math.sqrt(c * c + h * h + p * p) + f;
 };
 Octree.hitTestBox = function() {
   var e = vec3.create(), t = vec3.create(), r = vec3.create(), s = vec3.create(), n = vec3.create(), a = vec3.create(), o = 1e-6, l = vec3.fromValues(o, o, o);
-  return function(h, c, u, p) {
-    if (vec3.subtract(e, u, h), vec3.subtract(t, p, h), vec3.maxValue(e) < 0 && vec3.minValue(t) > 0)
-      return new HitTest(0, h, c);
+  return function(u, c, h, p) {
+    if (vec3.subtract(e, h, u), vec3.subtract(t, p, u), vec3.maxValue(e) < 0 && vec3.minValue(t) > 0)
+      return new HitTest(0, u, c);
     r[0] = 1 / c[0], r[1] = 1 / c[1], r[2] = 1 / c[2], vec3.multiply(e, e, r), vec3.multiply(t, t, r), vec3.min(s, e, t), vec3.max(n, e, t);
     var f = vec3.maxValue(s), d = vec3.minValue(n);
     if (f > 0 && f < d) {
       var g = vec3.add(
         vec3.create(),
         vec3.scale(a, c, f),
-        h
+        u
       );
-      return vec3.add(u, u, l), vec3.subtract(u, u, l), new HitTest(
+      return vec3.add(h, h, l), vec3.subtract(h, h, l), new HitTest(
         f,
         g,
         vec3.fromValues(
-          (g[0] > p[0]) - (g[0] < u[0]),
-          (g[1] > p[1]) - (g[1] < u[1]),
-          (g[2] > p[2]) - (g[2] < u[2])
+          (g[0] > p[0]) - (g[0] < h[0]),
+          (g[1] > p[1]) - (g[1] < h[1]),
+          (g[2] > p[2]) - (g[2] < h[2])
         )
       );
     }
@@ -8635,25 +8635,25 @@ Octree.hitTestBox = function() {
 }();
 Octree.hitTestTriangle = function() {
   var e = vec3.create(), t = vec3.create(), r = vec3.create(), s = vec3.create();
-  return function(n, a, o, l, h, c) {
-    vec3.subtract(e, l, o), vec3.subtract(t, h, o);
-    var u = vec3.cross(vec3.create(), e, t);
-    if (vec3.normalize(u, u), !c && vec3.dot(u, a) > 0) return null;
-    var p = vec3.dot(u, vec3.subtract(s, o, n)) / vec3.dot(u, a);
+  return function(n, a, o, l, u, c) {
+    vec3.subtract(e, l, o), vec3.subtract(t, u, o);
+    var h = vec3.cross(vec3.create(), e, t);
+    if (vec3.normalize(h, h), !c && vec3.dot(h, a) > 0) return null;
+    var p = vec3.dot(h, vec3.subtract(s, o, n)) / vec3.dot(h, a);
     if (p > 0) {
       var f = vec3.scale(vec3.create(), a, p);
       vec3.add(f, f, n), vec3.subtract(r, f, o);
       var d = vec3.dot(t, t), g = vec3.dot(t, e), m = vec3.dot(t, r), b = vec3.dot(e, e), E = vec3.dot(e, r), L = d * b - g * g, T = (b * m - g * E) / L, _ = (d * E - g * m) / L;
       if (T >= 0 && _ >= 0 && T + _ <= 1)
-        return new HitTest(p, f, u);
+        return new HitTest(p, f, h);
     }
     return null;
   };
 }();
 Octree.testSphereTriangle = function() {
   var e = vec3.create(), t = vec3.create(), r = vec3.create(), s = vec3.create(), n = vec3.create(), a = vec3.create(), o = vec3.create(), l = vec3.create();
-  return function(h, c, u, p, f) {
-    vec3.sub(e, u, h), vec3.sub(t, p, h), vec3.sub(r, f, h), vec3.sub(s, t, e), vec3.sub(n, r, e), vec3.cross(l, s, n);
+  return function(u, c, h, p, f) {
+    vec3.sub(e, h, u), vec3.sub(t, p, u), vec3.sub(r, f, u), vec3.sub(s, t, e), vec3.sub(n, r, e), vec3.cross(l, s, n);
     var d = vec3.dot(e, l), g = vec3.dot(l, l), m = d * d > c * g, b = vec3.dot(e, e), E = vec3.dot(e, t), L = vec3.dot(e, r), T = vec3.dot(t, t), _ = vec3.dot(t, r), I = vec3.dot(r, r), A = b > c & E > b & L > b, M = T > c & E > T & _ > T, O = I > c & L > I & _ > I, D = E - b, P = _ - T, N = L - I;
     vec3.sub(a, r, t), vec3.sub(o, e, r);
     var k = vec3.dot(s, s), B = vec3.dot(a, a), S = vec3.dot(o, o), U = vec3.scale(vec3.create(), e, k);
@@ -8668,8 +8668,8 @@ Octree.testSphereTriangle = function() {
     Y = vec3.sub(Y, Y, W);
     var H = vec3.scale(vec3.create(), t, S);
     H = vec3.sub(H, H, z);
-    var Z = vec3.dot(U, U) > c * k * k & vec3.dot(U, q) > 0, oe = vec3.dot(W, W) > c * B * B & vec3.dot(W, Y) > 0, ue = vec3.dot(z, z) > c * S * S & vec3.dot(z, H) > 0, he = m | A | M | O | Z | oe | ue;
-    return !he;
+    var Z = vec3.dot(U, U) > c * k * k & vec3.dot(U, q) > 0, oe = vec3.dot(W, W) > c * B * B & vec3.dot(W, Y) > 0, he = vec3.dot(z, z) > c * S * S & vec3.dot(z, H) > 0, ue = m | A | M | O | Z | oe | he;
+    return !ue;
   };
 }();
 Octree.testSphereBox = function(e, t, r, s) {
@@ -8747,9 +8747,9 @@ GL$1.Raytracer.hitTestBox = function(e, t, r, s, n) {
   }
   var l = vec3.subtract(a.subarray(9, 12), r, e);
   vec3.divide(l, l, t);
-  var h = vec3.subtract(a.subarray(12, 15), s, e);
-  vec3.divide(h, h, t);
-  var c = vec3.min(a.subarray(15, 18), l, h), u = vec3.max(a.subarray(18, 21), l, h), p = vec3.maxValue(c), f = vec3.minValue(u);
+  var u = vec3.subtract(a.subarray(12, 15), s, e);
+  vec3.divide(u, u, t);
+  var c = vec3.min(a.subarray(15, 18), l, u), h = vec3.max(a.subarray(18, 21), l, u), p = vec3.maxValue(c), f = vec3.minValue(h);
   if (p > 0 && p <= f) {
     var d = 1e-6, g = vec3.scale(a.subarray(21, 24), t, p);
     return vec3.add(g, e, g), vec3.addValue(a.subarray(24, 27), r, d), vec3.subValue(a.subarray(27, 30), s, d), new HitTest(
@@ -8765,19 +8765,19 @@ GL$1.Raytracer.hitTestBox = function(e, t, r, s, n) {
   return null;
 };
 GL$1.Raytracer.hitTestSphere = function(e, t, r, s) {
-  var n = vec3.subtract(vec3.create(), e, r), a = vec3.dot(t, t), o = 2 * vec3.dot(t, n), l = vec3.dot(n, n) - s * s, h = o * o - 4 * a * l;
-  if (h > 0) {
-    var c = (-o - Math.sqrt(h)) / (2 * a), u = vec3.add(
+  var n = vec3.subtract(vec3.create(), e, r), a = vec3.dot(t, t), o = 2 * vec3.dot(t, n), l = vec3.dot(n, n) - s * s, u = o * o - 4 * a * l;
+  if (u > 0) {
+    var c = (-o - Math.sqrt(u)) / (2 * a), h = vec3.add(
       vec3.create(),
       e,
       vec3.scale(vec3.create(), t, c)
     );
     return new HitTest(
       c,
-      u,
+      h,
       vec3.scale(
         vec3.create(),
-        vec3.subtract(vec3.create(), u, r),
+        vec3.subtract(vec3.create(), h, r),
         1 / s
       )
     );
@@ -8787,20 +8787,20 @@ GL$1.Raytracer.hitTestSphere = function(e, t, r, s) {
 GL$1.Raytracer.hitTestTriangle = function(e, t, r, s, n) {
   var a = vec3.subtract(vec3.create(), s, r), o = vec3.subtract(vec3.create(), n, r), l = vec3.cross(vec3.create(), a, o);
   vec3.normalize(l, l);
-  var h = vec3.dot(l, vec3.subtract(vec3.create(), r, e)) / vec3.dot(l, t);
-  if (h > 0) {
+  var u = vec3.dot(l, vec3.subtract(vec3.create(), r, e)) / vec3.dot(l, t);
+  if (u > 0) {
     var c = vec3.add(
       vec3.create(),
       e,
-      vec3.scale(vec3.create(), t, h)
-    ), u = vec3.subtract(vec3.create(), c, r), p = vec3.dot(o, o), f = vec3.dot(o, a), d = vec3.dot(o, u), g = vec3.dot(a, a), m = vec3.dot(a, u), b = p * g - f * f, E = (g * d - f * m) / b, L = (p * m - f * d) / b;
-    if (E >= 0 && L >= 0 && E + L <= 1) return new HitTest(h, c, l);
+      vec3.scale(vec3.create(), t, u)
+    ), h = vec3.subtract(vec3.create(), c, r), p = vec3.dot(o, o), f = vec3.dot(o, a), d = vec3.dot(o, h), g = vec3.dot(a, a), m = vec3.dot(a, h), b = p * g - f * f, E = (g * d - f * m) / b, L = (p * m - f * d) / b;
+    if (E >= 0 && L >= 0 && E + L <= 1) return new HitTest(u, c, l);
   }
   return null;
 };
 Mesh.parseOBJ = function(e, t) {
   t = t || {};
-  var r = t.matextension || "", s = [], n = [], a = [], o = [], l = [], h = [], c = [], u = {}, p = null, f = Ie(), d = /* @__PURE__ */ new Map(), g = 0, m = 1;
+  var r = t.matextension || "", s = [], n = [], a = [], o = [], l = [], u = [], c = [], h = {}, p = null, f = Ie(), d = /* @__PURE__ */ new Map(), g = 0, m = 1;
   t.scale && (m = t.scale);
   for (var b = 1, E = 2, L = 3, T = 4, _ = 5, I = 6, A = 7, M = 8, O = {
     v: b,
@@ -8850,7 +8850,7 @@ Mesh.parseOBJ = function(e, t) {
         case _:
         case I:
           var Z = z[1];
-          p = Z, f.name ? (u = {}, f = Ie(Z)) : f.name = Z;
+          p = Z, f.name ? (h = {}, f = Ie(Z)) : f.name = Z;
           break;
         case A:
           ze(z[1]);
@@ -8861,17 +8861,17 @@ Mesh.parseOBJ = function(e, t) {
       }
     }
   }
-  for (var oe = [], ue = 0, he = [], H = 0; H < c.length; ++H) {
+  for (var oe = [], he = 0, ue = [], H = 0; H < c.length; ++H) {
     var f = c[H];
-    f.indices && (f.start = ue, f.length = f.indices.length, oe = oe.concat(f.indices), delete f.indices, ue += f.length, he.push(f));
+    f.indices && (f.start = he, f.length = f.indices.length, oe = oe.concat(f.indices), delete f.indices, he += f.length, ue.push(f));
   }
-  c = he;
+  c = ue;
   var se = {};
   if (!s.length)
     return console.error("mesh without vertices"), null;
   if (t.flip_normals && l.length)
     for (var n = l, H = 0; H < n.length; ++H) n[H] *= -1;
-  se.vertices = new Float32Array(o), l.length && (se.normals = new Float32Array(l)), h.length && (se.coords = new Float32Array(h)), oe && oe.length > 0 && (se.triangles = new (ue > 256 * 256 ? Uint32Array : Uint16Array)(oe)), se.bounding = GL$1.Mesh.computeBoundingBox(se.vertices);
+  se.vertices = new Float32Array(o), l.length && (se.normals = new Float32Array(l)), u.length && (se.coords = new Float32Array(u)), oe && oe.length > 0 && (se.triangles = new (he > 256 * 256 ? Uint32Array : Uint16Array)(oe)), se.bounding = GL$1.Mesh.computeBoundingBox(se.vertices);
   var fe = {};
   if (c.length > 1 && (fe.groups = c), se.info = fe, !se.bounding)
     return console.log("empty mesh"), null;
@@ -8901,7 +8901,7 @@ Mesh.parseOBJ = function(e, t) {
       s[ce * 3 + 0],
       s[ce * 3 + 1],
       s[ce * 3 + 2]
-    ), a.length && h.push(a[ye * 2 + 0], a[ye * 2 + 1]), n.length && l.push(
+    ), a.length && u.push(a[ye * 2 + 0], a[ye * 2 + 1]), n.length && l.push(
       n[be * 3 + 0],
       n[be * 3 + 1],
       n[be * 3 + 2]
@@ -8921,9 +8921,9 @@ Mesh.parseOBJ = function(e, t) {
   }
   function ze(de) {
     if (!f.material)
-      return f.material = de + r, u[de] = f, f;
-    var ce = u[de];
-    return ce || (ce = Ie(p + "_" + de), ce.material = de + r, u[de] = ce), f = ce, ce;
+      return f.material = de + r, h[de] = f, f;
+    var ce = h[de];
+    return ce || (ce = Ie(p + "_" + de), ce.material = de + r, h[de] = ce), f = ce, ce;
   }
 };
 Mesh.parsers.obj = Mesh.parseOBJ;
@@ -8945,20 +8945,20 @@ Mesh.encoders.obj = function(e, t) {
         "vn " + l[a].toFixed(4) + " " + l[a + 1].toFixed(4) + " " + l[a + 2].toFixed(4)
       );
   }
-  var h = e.getBuffer("coords");
-  if (h) {
+  var u = e.getBuffer("coords");
+  if (u) {
     s.push("");
-    for (var c = h.data, a = 0; a < c.length; a += 2)
+    for (var c = u.data, a = 0; a < c.length; a += 2)
       s.push(
         "vt " + c[a].toFixed(4) + " " + c[a + 1].toFixed(4) + "  0.0000"
       );
   }
-  var u = e.info.groups, p = e.getIndexBuffer("triangles");
+  var h = e.info.groups, p = e.getIndexBuffer("triangles");
   if (p) {
     var f = p.data;
-    (!u || !u.length) && (u = [{ start: 0, length: f.length, name: "mesh" }]);
-    for (var d = 0; d < u.length; ++d) {
-      var g = u[d];
+    (!h || !h.length) && (h = [{ start: 0, length: f.length, name: "mesh" }]);
+    for (var d = 0; d < h.length; ++d) {
+      var g = h[d];
       s.push("g " + g.name);
       var m = g.material || "mat_" + d;
       m.indexOf(".json") != -1 && (m = m.substr(0, m.indexOf(".json"))), s.push("usemtl " + m);
@@ -8968,9 +8968,9 @@ Mesh.encoders.obj = function(e, t) {
         );
     }
   } else {
-    (!u || !u.length) && (u = [{ start: 0, length: n.length / 3, name: "mesh" }]);
-    for (var d = 0; d < u.length; ++d) {
-      var g = u[d];
+    (!h || !h.length) && (h = [{ start: 0, length: n.length / 3, name: "mesh" }]);
+    for (var d = 0; d < h.length; ++d) {
+      var g = h[d];
       s.push("g " + g.name), s.push("usemtl " + (g.material || "mat_" + d));
       for (var b = g.start, E = b + g.length, a = b; a < E; a += 3)
         s.push(
@@ -8984,28 +8984,28 @@ Mesh.encoders.obj = function(e, t) {
 Mesh.parsers.mesh = function(e, t) {
   for (var r = {}, s = e.split(`
 `), n = 0; n < s.length; ++n) {
-    var a = s[n], o = a[0], l = a.substr(1).split(","), h = l[0];
+    var a = s[n], o = a[0], l = a.substr(1).split(","), u = l[0];
     if (o == "-") {
-      var c = 1, u = Float32Array;
-      (h == "weights" || h == "bone_indices") && (u = Uint8Array), h == "weights" && (c = 255);
-      for (var p = new u(Number(l[1])), f = 0; f < p.length; ++f)
+      var c = 1, h = Float32Array;
+      (u == "weights" || u == "bone_indices") && (h = Uint8Array), u == "weights" && (c = 255);
+      for (var p = new h(Number(l[1])), f = 0; f < p.length; ++f)
         p[f] = Number(l[f + 2]) * c;
-      r[h] = p;
+      r[u] = p;
     } else if (o == "*") {
-      var u = Uint16Array;
-      Number(l[1]) > 256 * 256 && (u = Uint32Array);
-      for (var p = new u(Number(l[1])), f = 0; f < p.length; ++f) p[f] = Number(l[f + 2]);
-      r[h] = p;
+      var h = Uint16Array;
+      Number(l[1]) > 256 * 256 && (h = Uint32Array);
+      for (var p = new h(Number(l[1])), f = 0; f < p.length; ++f) p[f] = Number(l[f + 2]);
+      r[u] = p;
     } else if (o == "@") {
-      if (h == "bones") {
+      if (u == "bones") {
         for (var d = [], g = Number(l[1]), f = 0; f < g; ++f) {
           var m = l.slice(3 + f * 17, 3 + (f + 1) * 17 - 1).map(Number);
           d.push([l[2 + f * 17], m]);
         }
         r.bones = d;
-      } else if (h == "bind_matrix")
+      } else if (u == "bind_matrix")
         r.bind_matrix = l.slice(1, 17).map(Number);
-      else if (h == "groups") {
+      else if (u == "groups") {
         r.info = { groups: [] };
         for (var b = Number(l[1]), f = 0; f < b; ++f) {
           var E = {
@@ -9042,9 +9042,9 @@ Mesh.encoders.mesh = function(e, t) {
       global$1.typedArrayToArray(e.bounding.subarray(0, 6))
     ].join(",")
   ), e.info && e.info.groups) {
-    for (var h = [], o = 0; o < e.info.groups.length; ++o) {
+    for (var u = [], o = 0; o < e.info.groups.length; ++o) {
       var c = e.info.groups[o];
-      h.push(
+      u.push(
         c.name,
         c.material,
         c.start,
@@ -9052,7 +9052,7 @@ Mesh.encoders.mesh = function(e, t) {
       );
     }
     r.push(
-      ["@groups", e.info.groups.length].concat(h).join(",")
+      ["@groups", e.info.groups.length].concat(u).join(",")
     );
   }
   return e.bones && r.push(["@bones", e.bones.length, e.bones.flat()].join(",")), e.bind_matrix && r.push(
@@ -9155,23 +9155,23 @@ Mesh.compressors.bounding_compressed = function(e) {
   for (var t = global$1.BBox.getMin(e.bounding), r = global$1.BBox.getMax(e.bounding), s = vec3.sub(vec3.create(), r, t), n = e.vertices, a = new Uint16Array(n.length), o = 0; o < n.length; o += 3)
     a[o] = (n[o] - t[0]) / s[0] * 65535, a[o + 1] = (n[o + 1] - t[1]) / s[1] * 65535, a[o + 2] = (n[o + 2] - t[2]) / s[2] * 65535;
   if (e.vertices = a, e.normals) {
-    for (var l = e.normals, h = new Uint8Array(l.length), c = h.constructor == Uint8Array ? 255 : 65535, o = 0; o < l.length; o += 3)
-      h[o] = (l[o] * 0.5 + 0.5) * c, h[o + 1] = (l[o + 1] * 0.5 + 0.5) * c, h[o + 2] = (l[o + 2] * 0.5 + 0.5) * c;
-    e.normals = h;
+    for (var l = e.normals, u = new Uint8Array(l.length), c = u.constructor == Uint8Array ? 255 : 65535, o = 0; o < l.length; o += 3)
+      u[o] = (l[o] * 0.5 + 0.5) * c, u[o + 1] = (l[o + 1] * 0.5 + 0.5) * c, u[o + 2] = (l[o + 2] * 0.5 + 0.5) * c;
+    e.normals = u;
   }
   if (e.coords) {
-    for (var u = e.coords, p = [1e4, 1e4, -1e4, -1e4], o = 0; o < u.length; o += 2) {
-      var f = u[o];
+    for (var h = e.coords, p = [1e4, 1e4, -1e4, -1e4], o = 0; o < h.length; o += 2) {
+      var f = h[o];
       p[0] > f ? p[0] = f : p[2] < f && (p[2] = f);
-      var d = u[o + 1];
+      var d = h[o + 1];
       p[1] > d ? p[1] = d : p[3] < d && (p[3] = d);
     }
     e.format.uvs_bounding = p;
-    for (var g = new Uint16Array(u.length), s = [
+    for (var g = new Uint16Array(h.length), s = [
       p[2] - p[0],
       p[3] - p[1]
-    ], o = 0; o < u.length; o += 2)
-      g[o] = (u[o] - p[0]) / s[0] * 65535, g[o + 1] = (u[o + 1] - p[1]) / s[1] * 65535;
+    ], o = 0; o < h.length; o += 2)
+      g[o] = (h[o] - p[0]) / s[0] * 65535, g[o + 1] = (h[o + 1] - p[1]) / s[1] * 65535;
     e.coords = g;
   }
   if (e.weights) {
@@ -9184,12 +9184,12 @@ Mesh.decompressors.bounding_compressed = function(e) {
   var t = e.bounding;
   if (!t)
     throw "error in mesh decompressing data: bounding not found, cannot use the bounding decompression.";
-  for (var r = global$1.BBox.getMin(t), s = global$1.BBox.getMax(t), n = vec3.sub(vec3.create(), s, r), a = e.format, o = 1 / 255, l = 1 / 65535, h = e.vertices, c = new Float32Array(h.length), u = 0, p = h.length; u < p; u += 3)
-    c[u] = h[u] * l * n[0] + r[0], c[u + 1] = h[u + 1] * l * n[1] + r[1], c[u + 2] = h[u + 2] * l * n[2] + r[2];
+  for (var r = global$1.BBox.getMin(t), s = global$1.BBox.getMax(t), n = vec3.sub(vec3.create(), s, r), a = e.format, o = 1 / 255, l = 1 / 65535, u = e.vertices, c = new Float32Array(u.length), h = 0, p = u.length; h < p; h += 3)
+    c[h] = u[h] * l * n[0] + r[0], c[h + 1] = u[h + 1] * l * n[1] + r[1], c[h + 2] = u[h + 2] * l * n[2] + r[2];
   if (e.vertices = c, e.normals && e.normals.constructor != Float32Array) {
-    for (var f = e.normals, d = new Float32Array(f.length), g = f.constructor == Uint8Array ? o : l, u = 0, p = f.length; u < p; u += 3) {
-      d[u] = f[u] * g * 2 - 1, d[u + 1] = f[u + 1] * g * 2 - 1, d[u + 2] = f[u + 2] * g * 2 - 1;
-      var m = d.subarray(u, u + 3);
+    for (var f = e.normals, d = new Float32Array(f.length), g = f.constructor == Uint8Array ? o : l, h = 0, p = f.length; h < p; h += 3) {
+      d[h] = f[h] * g * 2 - 1, d[h + 1] = f[h + 1] * g * 2 - 1, d[h + 2] = f[h + 2] * g * 2 - 1;
+      var m = d.subarray(h, h + 3);
       vec3.normalize(m, m);
     }
     e.normals = d;
@@ -9198,13 +9198,13 @@ Mesh.decompressors.bounding_compressed = function(e) {
     for (var b = e.coords, E = a.uvs_bounding, n = [
       E[2] - E[0],
       E[3] - E[1]
-    ], L = new Float32Array(b.length), u = 0, p = b.length; u < p; u += 2)
-      L[u] = b[u] * l * n[0] + E[0], L[u + 1] = b[u + 1] * l * n[1] + E[1];
+    ], L = new Float32Array(b.length), h = 0, p = b.length; h < p; h += 2)
+      L[h] = b[h] * l * n[0] + E[0], L[h + 1] = b[h + 1] * l * n[1] + E[1];
     e.coords = L;
   }
   if (e.weights && e.weights.constructor != Float32Array) {
-    for (var T = e.weights, _ = new Float32Array(T.length), I = T.constructor == Uint8Array ? o : l, u = 0, p = T.length; u < p; u += 4)
-      _[u] = T[u] * I, _[u + 1] = T[u + 1] * I, _[u + 2] = T[u + 2] * I, _[u + 3] = T[u + 3] * I;
+    for (var T = e.weights, _ = new Float32Array(T.length), I = T.constructor == Uint8Array ? o : l, h = 0, p = T.length; h < p; h += 4)
+      _[h] = T[h] * I, _[h + 1] = T[h + 1] * I, _[h + 2] = T[h + 2] * I, _[h + 3] = T[h + 3] * I;
     e.weights = _;
   }
 };
@@ -9229,13 +9229,13 @@ function enableWebGLCanvas(e, t) {
   if (s !== r.NO_ERROR && console.error("WebGL error:", s), e.canvas2DtoWebGL_enabled) return r;
   var n = 50, a = 1e4, o = 1e3;
   e.canvas2DtoWebGL_enabled = !0;
-  var l = null, h = e.ctx = r;
-  h.WebGLCanvas = {}, fromValues$2(1, 1, 1, 1);
-  var c = 0, u = new Float32Array(a * 3), p = new GL$1.Mesh(), f = p.createVertexBuffer(
+  var l = null, u = e.ctx = r;
+  u.WebGLCanvas = {}, fromValues$2(1, 1, 1, 1);
+  var c = 0, h = new Float32Array(a * 3), p = new GL$1.Mesh(), f = p.createVertexBuffer(
     "vertices",
     null,
     null,
-    u,
+    h,
     r.STREAM_DRAW
   ), d = GL$1.Mesh.getScreenQuad(), g = GL$1.Mesh.circle({ size: 1 }), m = create$4(), b = t.anisotropic !== void 0 ? t.anisotropic : 2, E = {
     u_texture: 0
@@ -9469,7 +9469,7 @@ function enableWebGLCanvas(e, t) {
       L
     );
   }
-  h.createImageShader = function(G) {
+  u.createImageShader = function(G) {
     return new GL$1.Shader(
       GL$1.Shader.QUAD_VERTEX_SHADER,
       `
@@ -9490,19 +9490,19 @@ function enableWebGLCanvas(e, t) {
 		`,
       L
     );
-  }, h.WebGLCanvas.vertex_shader = _, h._matrix = create$5();
+  }, u.WebGLCanvas.vertex_shader = _, u._matrix = create$5();
   var U = create$5(), W = create(), z = create$2(), q = create$2(), Y = create();
-  h._stack = [], h._stack_size = 0;
-  var H = 0, Z = h.viewport_data.subarray(2, 4);
-  h.translate = function(G, F) {
+  u._stack = [], u._stack_size = 0;
+  var H = 0, Z = u.viewport_data.subarray(2, 4);
+  u.translate = function(G, F) {
     W[0] = G, W[1] = F, translate$1(this._matrix, this._matrix, W);
-  }, h.rotate = function(G) {
+  }, u.rotate = function(G) {
     rotate$2(this._matrix, this._matrix, G), H += G;
-  }, h.scale = function(G, F) {
+  }, u.scale = function(G, F) {
     W[0] = G, W[1] = F, scale$5(this._matrix, this._matrix, W);
-  }, h.resetTransform = function() {
+  }, u.resetTransform = function() {
     r._stack_size = 0, this._matrix.set([1, 0, 0, 0, 1, 0, 0, 0, 1]), H = 0;
-  }, h.save = function() {
+  }, u.save = function() {
     if (!(this._stack_size >= 32)) {
       var G = null;
       this._stack_size == this._stack.length ? G = this._stack[this._stack_size] = {
@@ -9519,7 +9519,7 @@ function enableWebGLCanvas(e, t) {
         clip_level: 0
       } : G = this._stack[this._stack_size], this._stack_size++, G.matrix.set(this._matrix), G.fillColor.set(this._fillcolor), G.strokeColor.set(this._strokecolor), G.shadowColor.set(this._shadowcolor), G.globalAlpha = this._globalAlpha, G.font = this._font, G.fontFamily = this._font_family, G.fontSize = this._font_size, G.fontMode = this._font_mode, G.textAlign = this.textAlign, G.clip_level = this.clip_level;
     }
-  }, h.restore = function() {
+  }, u.restore = function() {
     if (this._stack_size == 0) {
       identity$2(this._matrix), H = 0;
       return;
@@ -9529,14 +9529,14 @@ function enableWebGLCanvas(e, t) {
     this._matrix.set(G.matrix), this._fillcolor.set(G.fillColor), this._strokecolor.set(G.strokeColor), this._shadowcolor.set(G.shadowColor), this._globalAlpha = G.globalAlpha, this._font = G.font, this._font_family = G.fontFamily, this._font_size = parseInt(G.fontSize), this._font_mode = G.fontMode, this.textAlign = G.textAlign;
     var F = this.clip_level;
     this.clip_level = G.clip_level, H = Math.atan2(this._matrix[3], this._matrix[4]), F == this.clip_level || (this.clip_level == 0 ? (r.enable(r.STENCIL_TEST), r.clearStencil(0), r.clear(r.STENCIL_BUFFER_BIT), r.disable(r.STENCIL_TEST)) : (r.stencilFunc(r.LEQUAL, this.clip_level, 255), r.stencilOp(r.KEEP, r.KEEP, r.KEEP)));
-  }, h.clip = function() {
+  }, u.clip = function() {
     this.clip_level == 0, this.clip_level++, r.colorMask(!1, !1, !1, !1), r.depthMask(!1), r.enable(r.STENCIL_TEST), r.stencilFunc(r.EQUAL, this.clip_level - 1, 255), r.stencilOp(r.KEEP, r.KEEP, r.INCR), this.fill(), r.colorMask(!0, !0, !0, !0), r.depthMask(!0), r.stencilFunc(r.EQUAL, this.clip_level, 255), r.stencilOp(r.KEEP, r.KEEP, r.KEEP);
-  }, h.clipImage = function(G, F, V, $, X) {
+  }, u.clipImage = function(G, F, V, $, X) {
     this.clip_level++, r.colorMask(!1, !1, !1, !1), r.depthMask(!1), r.enable(r.STENCIL_TEST), r.stencilFunc(r.EQUAL, this.clip_level - 1, 255), r.stencilOp(r.KEEP, r.KEEP, r.INCR), this.drawImage(G, F, V, $, X, O), r.colorMask(!0, !0, !0, !0), r.depthMask(!0), r.stencilFunc(r.EQUAL, this.clip_level, 255), r.stencilOp(r.KEEP, r.KEEP, r.KEEP);
-  }, h.transform = function(G, F, V, $, X, J) {
+  }, u.transform = function(G, F, V, $, X, J) {
     var j = U;
     j[0] = G, j[1] = F, j[2] = 0, j[3] = V, j[4] = $, j[5] = 0, j[6] = X, j[7] = J, j[8] = 1, multiply$5(this._matrix, this._matrix, j), H = Math.atan2(this._matrix[0], this._matrix[1]);
-  }, h.setTransform = function(G, F, V, $, X, J) {
+  }, u.setTransform = function(G, F, V, $, X, J) {
     var j = this._matrix;
     j[0] = G, j[1] = F, j[2] = 0, j[3] = V, j[4] = $, j[5] = 0, j[6] = X, j[7] = J, j[8] = 1, H = Math.atan2(this._matrix[0], this._matrix[1]);
   };
@@ -9561,7 +9561,7 @@ function enableWebGLCanvas(e, t) {
         anisotropic: b
       });
   }
-  h.drawImage = function(G, F, V, $, X, J) {
+  u.drawImage = function(G, F, V, $, X, J) {
     if (G) {
       var j = G.videoWidth || G.width, ie = G.videoHeight || G.height;
       if (!(j == 0 || ie == 0)) {
@@ -9578,24 +9578,24 @@ function enableWebGLCanvas(e, t) {
         ), this.tintImages || (z[0] = z[1] = z[2] = 1, z[3] = this._globalAlpha), E.u_color = this.tintImages ? this._fillcolor : z, E.u_position = W, E.u_size = Y, E.u_transform = this._matrix, E.u_texture_transform = q, E.u_viewport = Z, J = J || M, J.uniforms(E).draw(d), m[14] -= 1e-3);
       }
     }
-  }, h.createPattern = function(G) {
+  }, u.createPattern = function(G) {
     return oe(G);
   };
-  function ue(G, F, V, $) {
-    this.id = h._last_gradient_id++ % h._max_gradients, this.points = new Float32Array([G, F, V, $]), this.stops = [], this._must_update = !0;
+  function he(G, F, V, $) {
+    this.id = u._last_gradient_id++ % u._max_gradients, this.points = new Float32Array([G, F, V, $]), this.stops = [], this._must_update = !0;
   }
-  h._last_gradient_id = 0, h._max_gradients = 16, h._gradients_pool = [], ue.prototype.addColorStop = function(G, F) {
+  u._last_gradient_id = 0, u._max_gradients = 16, u._gradients_pool = [], he.prototype.addColorStop = function(G, F) {
     var V = hexColorToRGBA(F), $ = new Uint8Array(4);
     $[0] = Math.clamp(V[0], 0, 1) * 255, $[1] = Math.clamp(V[1], 0, 1) * 255, $[2] = Math.clamp(V[2], 0, 1) * 255, $[3] = Math.clamp(V[3], 0, 1) * 255, this.stops.push([G, $]), this.stops.sort(function(X, J) {
       return X[0] > J[0] ? 1 : J[0] > X[0] ? -1 : 0;
     }), this._must_update = !0;
-  }, ue.prototype.toTexture = function() {
-    if (this._texture || (this.id != -1 && (this._texture = h._gradients_pool[this.id]), this._texture || (this._texture = new GL$1.Texture(128, 1, {
+  }, he.prototype.toTexture = function() {
+    if (this._texture || (this.id != -1 && (this._texture = u._gradients_pool[this.id]), this._texture || (this._texture = new GL$1.Texture(128, 1, {
       format: r.RGBA,
       magFilter: r.LINEAR,
       wrap: r.CLAMP_TO_EDGE,
       minFilter: r.NEAREST
-    }), this.id != -1 && (h._gradients_pool[this.id] = this._texture))), !this._must_update) return this._texture;
+    }), this.id != -1 && (u._gradients_pool[this.id] = this._texture))), !this._must_update) return this._texture;
     if (this._must_update = !1, this.stops.length < 1) return this._texture;
     if (this.stops.length < 2)
       return this._texture.fill(this.stops[0][1]), this._texture;
@@ -9618,40 +9618,40 @@ function enableWebGLCanvas(e, t) {
     if (X < 128)
       for (var K = X; K < 128; K += 1) $.set(F[1], K * 4);
     return this._texture.uploadData($), this._texture;
-  }, h.createLinearGradient = function(G, F, V, $) {
-    return new ue(G, F, V, $);
-  }, h.beginPath = function() {
+  }, u.createLinearGradient = function(G, F, V, $) {
+    return new he(G, F, V, $);
+  }, u.beginPath = function() {
     c = 0;
-  }, h.closePath = function() {
-    c < 3 || (u[c] = u[0], u[c + 1] = u[1], u[c + 2] = 1, c += 3);
-  }, h.moveTo = function(G, F) {
-    c == 0 ? (u[c] = G, u[c + 1] = F, u[c + 2] = 1, c += 3) : (u[c] = u[c - 3], u[c + 1] = u[c - 2], u[c + 2] = 0, c += 3, u[c] = G, u[c + 1] = F, u[c + 2] = 0, c += 3);
-  }, h.lineTo = function(G, F) {
-    u[c] = G, u[c + 1] = F, u[c + 2] = 1, c += 3;
-  }, h.bezierCurveTo = function(G, F, V, $, X, J) {
+  }, u.closePath = function() {
+    c < 3 || (h[c] = h[0], h[c + 1] = h[1], h[c + 2] = 1, c += 3);
+  }, u.moveTo = function(G, F) {
+    c == 0 ? (h[c] = G, h[c + 1] = F, h[c + 2] = 1, c += 3) : (h[c] = h[c - 3], h[c + 1] = h[c - 2], h[c + 2] = 0, c += 3, h[c] = G, h[c + 1] = F, h[c + 2] = 0, c += 3);
+  }, u.lineTo = function(G, F) {
+    h[c] = G, h[c + 1] = F, h[c + 2] = 1, c += 3;
+  }, u.bezierCurveTo = function(G, F, V, $, X, J) {
     if (!(c < 3))
       for (var j = [
-        u[c - 3],
-        u[c - 2]
+        h[c - 3],
+        h[c - 2]
       ], ie = [j, [G, F], [V, $], [X, J]], K = 0; K <= n; K++) {
         var Q = K / n, te, ee, ne, ae, le, ve, Te, Ae;
         ne = 3 * (ie[1][0] - ie[0][0]), ee = 3 * (ie[2][0] - ie[1][0]) - ne, te = ie[3][0] - ie[0][0] - ne - ee, ve = 3 * (ie[1][1] - ie[0][1]), le = 3 * (ie[2][1] - ie[1][1]) - ve, ae = ie[3][1] - ie[0][1] - ve - le, Te = Q * Q, Ae = Te * Q;
         var Re = te * Ae + ee * Te + ne * Q + ie[0][0], Me = ae * Ae + le * Te + ve * Q + ie[0][1];
-        u[c] = Re, u[c + 1] = Me, u[c + 2] = 1, c += 3;
+        h[c] = Re, h[c + 1] = Me, h[c + 2] = 1, c += 3;
       }
-  }, h.quadraticCurveTo = function(G, F, V, $) {
+  }, u.quadraticCurveTo = function(G, F, V, $) {
     if (!(c < 3))
-      for (var X = u[c - 3], J = u[c - 2], j = 0; j <= n; j++) {
+      for (var X = h[c - 3], J = h[c - 2], j = 0; j <= n; j++) {
         var ie = j / n, K = 1 - ie, Q = X * K + G * ie, te = J * K + F * ie, ee = G * K + V * ie, ne = F * K + $ * ie;
-        u[c] = Q * K + ee * ie, u[c + 1] = te * K + ne * ie, u[c + 2] = 1, c += 3;
+        h[c] = Q * K + ee * ie, h[c + 1] = te * K + ne * ie, h[c + 2] = 1, c += 3;
       }
-  }, h.fill = function() {
+  }, u.fill = function() {
     if (!(c < 9)) {
       f.uploadRange(0, c * 4), E.u_viewport = Z;
       var G = D;
       this._shadowcolor[3] > 0 && (E.u_color = this._shadowcolor, this.save(), this.translate(this.shadowOffsetX, this.shadowOffsetY), G.uniforms(E).drawRange(p, r.TRIANGLE_FAN, 0, c / 3), this.restore()), E.u_color = this._fillcolor, E.u_transform = this._matrix;
       var F = this._fillStyle;
-      if (F.constructor === ue) {
+      if (F.constructor === he) {
         var V = F, $ = V.toTexture();
         E.u_color = [1, 1, 1, this.globalAlpha], E.u_gradient = V.points, E.u_texture = 0, E.u_itransform = invert$2(U, this._matrix), $.bind(0), G = k;
       } else if (F.constructor === GL$1.Texture) {
@@ -9660,21 +9660,21 @@ function enableWebGLCanvas(e, t) {
       }
       G.uniforms(E).drawRange(p, r.TRIANGLE_FAN, 0, c / 3), m[14] -= 1e-3;
     }
-  }, h.strokeThin = function() {
+  }, u.strokeThin = function() {
     c < 6 || (f.uploadRange(0, c * 4), r.setLineWidth(this.lineWidth), E.u_color = this._strokecolor, E.u_transform = this._matrix, E.u_viewport = Z, D.uniforms(E).drawRange(p, r.LINE_STRIP, 0, c / 3));
   };
-  var he = new Float32Array(a * 3), se = new GL$1.Mesh(), fe = se.createVertexBuffer(
+  var ue = new Float32Array(a * 3), se = new GL$1.Mesh(), fe = se.createVertexBuffer(
     "vertices",
     null,
     null,
-    he,
+    ue,
     r.STREAM_DRAW
   );
-  h.stroke = function() {
+  u.stroke = function() {
     if (!(c < 6)) {
       if (W[0] = this._matrix[0], W[1] = this._matrix[1], this.lineWidth * length(W) <= 1)
         return this.strokeThin();
-      var G = he, F = c, V = this.lineWidth * 0.5, $ = u, X = 0, J = 0, j = 0, ie = 0, K = 0, Q = 0, te = 0, ee = 0;
+      var G = ue, F = c, V = this.lineWidth * 0.5, $ = h, X = 0, J = 0, j = 0, ie = 0, K = 0, Q = 0, te = 0, ee = 0;
       if ($[0] == $[c - 3] && $[1] == $[c - 2]) {
         X = $[c - 3] - $[c - 6], J = $[c - 2] - $[c - 5];
         var ne = Math.sqrt(X * X + J * J);
@@ -9698,9 +9698,9 @@ function enableWebGLCanvas(e, t) {
       }
       le += 6, fe.upload(r.STREAM_DRAW), fe.uploadRange(0, le * 4), E.u_transform = this._matrix, E.u_viewport = Z, this._shadowcolor[3] > 0 && (E.u_color = this._shadowcolor, this.save(), this.translate(this.shadowOffsetX, this.shadowOffsetY), D.uniforms(E).drawRange(p, r.TRIANGLE_STRIP, 0, le / 3), this.restore()), E.u_color = this._strokecolor, D.uniforms(E).drawRange(se, r.TRIANGLE_STRIP, 0, le / 3), m[14] -= 1e-3;
     }
-  }, h.rect = function(G, F, V, $) {
-    u[c] = G, u[c + 1] = F, u[c + 2] = 1, u[c + 3] = G + V, u[c + 4] = F, u[c + 5] = 1, u[c + 6] = G + V, u[c + 7] = F + $, u[c + 8] = 1, u[c + 9] = G, u[c + 10] = F + $, u[c + 11] = 1, u[c + 12] = G, u[c + 13] = F, u[c + 14] = 1, c += 15;
-  }, h.roundRect = function(G, F, V, $, X, J) {
+  }, u.rect = function(G, F, V, $) {
+    h[c] = G, h[c + 1] = F, h[c + 2] = 1, h[c + 3] = G + V, h[c + 4] = F, h[c + 5] = 1, h[c + 6] = G + V, h[c + 7] = F + $, h[c + 8] = 1, h[c + 9] = G, h[c + 10] = F + $, h[c + 11] = 1, h[c + 12] = G, h[c + 13] = F, h[c + 14] = 1, c += 15;
+  }, u.roundRect = function(G, F, V, $, X, J) {
     var j = 0, ie = 0, K = 0, Q = 0;
     if (X === 0) {
       this.rect(G, F, V, $);
@@ -9716,7 +9716,7 @@ function enableWebGLCanvas(e, t) {
       else return;
     else
       j = X || 0, ie = X || 0, K = J || 0, Q = J || 0;
-    var te = u, ee = c;
+    var te = h, ee = c;
     if (j > 0)
       for (var ne = 0; ne < 10; ++ne) {
         var ae = ne / 10 * Math.PI * 0.5;
@@ -9738,7 +9738,7 @@ function enableWebGLCanvas(e, t) {
         te[ee + 0] = G + K * (1 - Math.sin(ae)), te[ee + 1] = F + $ - K * (1 - Math.cos(ae)), te[ee + 2] = 1, ee += 3;
       }
     te[ee + 0] = G, te[ee + 1] = F + j, te[ee + 2] = 1, c = ee + 3;
-  }, h.arc = function(G, F, V, $, X) {
+  }, u.arc = function(G, F, V, $, X) {
     var J = Math.max(
       Math.abs(this._matrix[0]),
       Math.abs(this._matrix[1]),
@@ -9752,29 +9752,29 @@ function enableWebGLCanvas(e, t) {
         this.lineTo(G + Math.cos(Q) * V, F + Math.sin(Q) * V);
       }
     }
-  }, h.strokeRect = function(G, F, V, $) {
+  }, u.strokeRect = function(G, F, V, $) {
     this.beginPath(), this.rect(G, F, V, $), this.stroke();
-  }, h.fillRect = function(G, F, V, $) {
-    if (c = 0, this._fillStyle.constructor == GL$1.Texture || this._fillStyle.constructor === ue) {
+  }, u.fillRect = function(G, F, V, $) {
+    if (c = 0, this._fillStyle.constructor == GL$1.Texture || this._fillStyle.constructor === he) {
       this.beginPath(), this.rect(G, F, V, $), this.fill();
       return;
     }
     E.u_color = this._fillcolor, W[0] = G, W[1] = F, Y[0] = V, Y[1] = $, E.u_position = W, E.u_size = Y, E.u_transform = this._matrix, E.u_viewport = Z, A.uniforms(E).draw(d), m[14] -= 1e-3;
-  }, h.clearRect = function(G, F, V, $) {
+  }, u.clearRect = function(G, F, V, $) {
     (G != 0 || F != 0 || V != e.width || $ != e.height) && (r.enable(r.SCISSOR_TEST), r.scissor(G, F, V, $)), r.clear(r.COLOR_BUFFER_BIT);
     var X = r.viewport_data;
     r.scissor(X[0], X[1], X[2], X[3]), r.disable(r.SCISSOR_TEST);
-  }, h.fillCircle = function(G, F, V) {
-    if (c = 0, this._fillStyle.constructor == GL$1.Texture || this._fillStyle.constructor === ue) {
+  }, u.fillCircle = function(G, F, V) {
+    if (c = 0, this._fillStyle.constructor == GL$1.Texture || this._fillStyle.constructor === he) {
       this.beginPath(), this.arc(G, F, V, 0, Math.PI * 2), this.fill();
       return;
     }
     E.u_color = this._fillcolor, W[0] = G, W[1] = F, Y[0] = V, Y[1] = V, E.u_position = W, E.u_size = Y, E.u_transform = this._matrix, E.u_viewport = Z, A.uniforms(E).draw(g), m[14] -= 1e-3;
-  }, h.start2D = function() {
+  }, u.start2D = function() {
     l = window.gl, window.gl = this;
     var G = this;
     G.disable(G.CULL_FACE), G.disable(G.DEPTH_TEST), G.disable(G.STENCIL_TEST), G.enable(G.BLEND), G.blendFunc(G.SRC_ALPHA, G.ONE_MINUS_SRC_ALPHA), G.blendEquation(G.FUNC_ADD), G.lineWidth = 1, c = 0, identity$1(m), this.clip_level = 0;
-  }, h.finish2D = function() {
+  }, u.finish2D = function() {
     c = 0, r.lineWidth = 1, window.gl = l, r.disable(r.STENCIL_TEST);
   };
   var pe = new Float32Array(o * 3), _e = new Float32Array(o * 2), Ie = new GL$1.Mesh(), ze = Ie.createVertexBuffer(
@@ -9790,7 +9790,7 @@ function enableWebGLCanvas(e, t) {
     _e,
     r.STREAM_DRAW
   );
-  h.fillText = h.strokeText = function(G, F, V) {
+  u.fillText = u.strokeText = function(G, F, V) {
     if (G == null) return;
     G.constructor !== String && (G = String(G));
     let $ = 0;
@@ -9836,7 +9836,7 @@ function enableWebGLCanvas(e, t) {
       for (let re = 0; re < ve; re += 3)
         j[re] -= Me;
     return { x: Q, y: te };
-  }, h.measureText = function(G) {
+  }, u.measureText = function(G) {
     const { info: F } = ce.call(
       this,
       this._font_family,
@@ -9849,13 +9849,13 @@ function enableWebGLCanvas(e, t) {
       j ? $ += j.nwidth : $ += X;
     }
     return $ *= V, { width: $, height: V };
-  }, h.cacheFontAtlas = function(G = "monospace", F = "normal", V = !1) {
+  }, u.cacheFontAtlas = function(G = "monospace", F = "normal", V = !1) {
     const $ = `:font_${G}:${F}:${enableWebGLCanvas.useInternationalFont}`;
     if (!V && T[$])
       return T[$];
     const X = ce.call(this, G, F, V);
     return T[$] = X, X;
-  }, h.loadCachedTextures = async function() {
+  }, u.loadCachedTextures = async function() {
     const G = await getAllData();
     if (G && (G == null ? void 0 : G.length) > 0)
       for (let F in G) {
@@ -9951,10 +9951,10 @@ function enableWebGLCanvas(e, t) {
     };
     return T[$] = Me, saveComplexData(Me, 1), T[$];
   }
-  h.getImageData = function(G, F, V, $) {
+  u.getImageData = function(G, F, V, $) {
     var X = new Uint8Array(V * $ * 4);
     return r.readPixels(G, F, V, $, r.RGBA, r.UNSIGNED_BYTE, X), { data: X, width: V, height: $, resolution: 1 };
-  }, h.putImageData = function(G, F, V) {
+  }, u.putImageData = function(G, F, V) {
     var $ = new GL$1.Texture(G.width, G.height, {
       filter: r.NEAREST,
       pixel_data: G.data
@@ -10025,11 +10025,11 @@ function enableWebGLCanvas(e, t) {
       var F = G.split(" ");
       F.length >= 3 ? (this._font_mode = F[0], this._font_size = parseFloat(F[1]), Number.isNaN(this._font_size) && (this._font_size = 14), this._font_size < 5 && (this._font_size = 5), this._font_family = F[2]) : F.length == 2 ? (this._font_mode = "normal", this._font_size = parseFloat(F[0]), Number.isNaN(this._font_size) && (this._font_size = 14), this._font_size < 5 && (this._font_size = 5), this._font_family = F[1]) : (this._font_mode = "normal", this._font_family = F[0]);
     }
-  }), h._fillcolor = fromValues$2(0, 0, 0, 1), h._strokecolor = fromValues$2(0, 0, 0, 1), h._shadowcolor = fromValues$2(0, 0, 0, 0), h._globalAlpha = 1, h._font = "14px monospace", h._font_family = "monospace", h._font_size = "14px", h._font_mode = "normal", h.clip_level = 0, h.strokeStyle = "rgba(0,0,0,1)", h.fillStyle = "rgba(0,0,0,1)", h.shadowColor = "transparent", h.shadowOffsetX = h.shadowOffsetY = 0, h.globalAlpha = 1, h.globalCompositeOperation = "source-over", h.setLineWidth = h.lineWidth, h.lineWidth = 4, h.imageSmoothingEnabled = !0, h.tintImages = !1;
+  }), u._fillcolor = fromValues$2(0, 0, 0, 1), u._strokecolor = fromValues$2(0, 0, 0, 1), u._shadowcolor = fromValues$2(0, 0, 0, 0), u._globalAlpha = 1, u._font = "14px monospace", u._font_family = "monospace", u._font_size = "14px", u._font_mode = "normal", u.clip_level = 0, u.strokeStyle = "rgba(0,0,0,1)", u.fillStyle = "rgba(0,0,0,1)", u.shadowColor = "transparent", u.shadowOffsetX = u.shadowOffsetY = 0, u.globalAlpha = 1, u.globalCompositeOperation = "source-over", u.setLineWidth = u.lineWidth, u.lineWidth = 4, u.imageSmoothingEnabled = !0, u.tintImages = !1;
   var ye = ["arcTo", "isPointInPath", "createImageData"], be = function() {
   };
-  for (var Ee in ye) h[ye[Ee]] = be;
-  return h;
+  for (var Ee in ye) u[ye[Ee]] = be;
+  return u;
 }
 function openDatabase() {
   return new Promise((e, t) => {
@@ -10073,15 +10073,15 @@ function textureToBase64(e) {
     0
   ), t.checkFramebufferStatus(t.FRAMEBUFFER) !== t.FRAMEBUFFER_COMPLETE)
     return console.error("Framebuffer is not complete."), t.bindFramebuffer(t.FRAMEBUFFER, null), t.deleteFramebuffer(a), null;
-  const o = new Uint8Array(s * n * 4), l = e.format || t.RGBA, h = e.type || t.UNSIGNED_BYTE;
+  const o = new Uint8Array(s * n * 4), l = e.format || t.RGBA, u = e.type || t.UNSIGNED_BYTE;
   try {
-    t.readPixels(0, 0, s, n, l, h, o);
+    t.readPixels(0, 0, s, n, l, u, o);
   } catch (d) {
     return console.error("Error reading pixels from framebuffer:", d), null;
   }
   const c = document.createElement("canvas");
   c.width = s, c.height = n;
-  const u = c.getContext("2d"), p = u.createImageData(s, n);
+  const h = c.getContext("2d"), p = h.createImageData(s, n);
   for (let d = 0; d < n; d++) {
     const g = d * s * 4, m = (n - d - 1) * s * 4;
     p.data.set(
@@ -10089,7 +10089,7 @@ function textureToBase64(e) {
       m
     );
   }
-  u.putImageData(p, 0, 0);
+  h.putImageData(p, 0, 0);
   const f = c.toDataURL("image/png");
   return t.bindFramebuffer(t.FRAMEBUFFER, null), t.deleteFramebuffer(a), f;
 }
@@ -10125,17 +10125,17 @@ async function saveComplexData(e, t = 1) {
         data: M
         // 텍스처 데이터
       };
-    }), h = /* @__PURE__ */ new Date();
-    h.setDate(h.getDate() + t);
+    }), u = /* @__PURE__ */ new Date();
+    u.setDate(u.getDate() + t);
     const c = {
       info: e.info,
       textures: l,
       // Null 값 제거
       name: e.name,
-      expiresAt: h.toISOString()
-    }, u = a.put(c);
-    u.onsuccess = function() {
-    }, u.onerror = function(p) {
+      expiresAt: u.toISOString()
+    }, h = a.put(c);
+    h.onsuccess = function() {
+    }, h.onerror = function(p) {
       console.error("Error saving data:", p);
     };
   } catch (s) {
@@ -10147,19 +10147,19 @@ async function getAllData() {
   return new Promise((t, r) => {
     const n = e.transaction("fontTexture", "readwrite").objectStore("fontTexture"), a = n.getAll();
     a.onsuccess = async function(o) {
-      const h = o.target.result.filter((c) => {
-        const u = /* @__PURE__ */ new Date(), p = new Date(c.expiresAt);
-        return u < p ? !0 : (n.delete(c.name), !1);
+      const u = o.target.result.filter((c) => {
+        const h = /* @__PURE__ */ new Date(), p = new Date(c.expiresAt);
+        return h < p ? !0 : (n.delete(c.name), !1);
       });
-      if ((h == null ? void 0 : h.length) === 0) {
+      if ((u == null ? void 0 : u.length) === 0) {
         t([]);
         return;
       }
-      for (const c of h)
+      for (const c of u)
         c.textures = await Promise.all(
-          c.textures.map(async (u) => makeTexture(u))
+          c.textures.map(async (h) => makeTexture(h))
         );
-      t(h);
+      t(u);
     }, a.onerror = function(o) {
       console.error("Error retrieving data:", o.target.error), r(o.target.error);
     };
@@ -10197,8 +10197,8 @@ const C = class C {
       for (const l in r.prototype) {
         if (!Object.prototype.hasOwnProperty.call(r.prototype, l) || Object.prototype.hasOwnProperty.call(t.prototype, l))
           continue;
-        const h = (n = (s = r.prototype).__lookupGetter__) == null ? void 0 : n.call(s, l), c = (o = (a = r.prototype).__lookupSetter__) == null ? void 0 : o.call(a, l);
-        h ? t.prototype.__defineGetter__(l, h) : t.prototype[l] = r.prototype[l], c && t.prototype.__defineSetter__(l, c);
+        const u = (n = (s = r.prototype).__lookupGetter__) == null ? void 0 : n.call(s, l), c = (o = (a = r.prototype).__lookupSetter__) == null ? void 0 : o.call(a, l);
+        u ? t.prototype.__defineGetter__(l, u) : t.prototype[l] = r.prototype[l], c && t.prototype.__defineSetter__(l, c);
       }
   }
   //used to create nodes from wrapping functions
@@ -10215,13 +10215,13 @@ const C = class C {
       console.warn(
         "PointerEvent not supported. Converting to touch event."
       );
-      const h = {
+      const u = {
         down: "start",
         move: "move",
         up: "end",
         cancel: "cancel"
       };
-      h[o] ? (a = "touch", o = h[o]) : o === "enter" ? console.log("debug: Should I send a move event?") : console.warn(`Event ${o} will not be called`);
+      u[o] ? (a = "touch", o = u[o]) : o === "enter" ? console.log("debug: Should I send a move event?") : console.warn(`Event ${o} will not be called`);
     }
     if ([
       "down",
@@ -10338,10 +10338,10 @@ const C = class C {
     let o = [];
     typeof r == "string" ? o = r.split(",") : r == this.EVENT || r == this.ACTION ? o = ["_event_"] : o = ["*"];
     for (let l = 0; l < o.length; ++l) {
-      let h = o[l];
-      h === "" && (h = "*");
+      let u = o[l];
+      u === "" && (u = "*");
       const c = s ? "registered_slot_out_types" : "registered_slot_in_types";
-      this[c][h] === void 0 && (this[c][h] = { nodes: [] }), this[c][h].nodes.includes(a) || this[c][h].nodes.push(a), s ? this.slot_types_out.includes(h.toLowerCase()) || (this.slot_types_out.push(h.toLowerCase()), this.slot_types_out.sort()) : this.slot_types_in.includes(h.toLowerCase()) || (this.slot_types_in.push(h.toLowerCase()), this.slot_types_in.sort());
+      this[c][u] === void 0 && (this[c][u] = { nodes: [] }), this[c][u].nodes.includes(a) || this[c][u].nodes.push(a), s ? this.slot_types_out.includes(u.toLowerCase()) || (this.slot_types_out.push(u.toLowerCase()), this.slot_types_out.sort()) : this.slot_types_in.includes(u.toLowerCase()) || (this.slot_types_in.push(u.toLowerCase()), this.slot_types_in.sort());
     }
   }
   /**
@@ -10391,22 +10391,22 @@ const C = class C {
     let o = Array(r.length), l = "";
     if (s !== null) {
       let c = C.getParameterNames(r);
-      for (let u = 0; u < c.length; ++u) {
+      for (let h = 0; h < c.length; ++h) {
         let p = 0;
-        s && (s[u] != null && s[u].constructor === String ? p = "'" + s[u] + "'" : s[u] != null && (p = s[u])), l += "this.addInput('" + c[u] + "'," + p + `);
+        s && (s[h] != null && s[h].constructor === String ? p = "'" + s[h] + "'" : s[h] != null && (p = s[h])), l += "this.addInput('" + c[h] + "'," + p + `);
 `;
       }
     }
     n !== null && (l += "this.addOutput('out'," + (n != null ? n.constructor === String ? "'" + n + "'" : n : 0) + `);
 `), a && (l += "this.properties = " + JSON.stringify(a) + `;
 `);
-    let h = Function(l);
-    return h.title = t.split("/").pop(), h.desc = "Generated from " + r.name, h.prototype.onExecute = function() {
+    let u = Function(l);
+    return u.title = t.split("/").pop(), u.desc = "Generated from " + r.name, u.prototype.onExecute = function() {
       for (let p = 0; p < o.length; ++p)
         o[p] = this.getInputData(p);
-      let u = r.apply(this, o);
-      this.setOutputData(0, u);
-    }, this.registerNodeType(t, h), h;
+      let h = r.apply(this, o);
+      this.setOutputData(0, h);
+    }, this.registerNodeType(t, u), u;
   }
   /**
    * Removes all previously registered node's types
@@ -10751,28 +10751,28 @@ const Ge = class Ge {
     if (!a)
       return;
     if (s = s || a.length, r) {
-      for (let h = 0; h < t; h++) {
+      for (let u = 0; u < t; u++) {
         for (let c = 0; c < s; ++c) {
-          const u = a[c];
-          LiteGraph.use_deferred_actions && u._waiting_actions && u._waiting_actions.length && u.executePendingActions(), u.mode == LiteGraph.ALWAYS && u.onExecute && u.doExecute();
+          const h = a[c];
+          LiteGraph.use_deferred_actions && h._waiting_actions && h._waiting_actions.length && h.executePendingActions(), h.mode == LiteGraph.ALWAYS && h.onExecute && h.doExecute();
         }
         this.fixedtime += this.fixedtime_lapse, this.onExecuteStep && this.onExecuteStep();
       }
       this.onAfterExecute && this.onAfterExecute();
     } else
       try {
-        for (let h = 0; h < t; h++) {
+        for (let u = 0; u < t; u++) {
           for (let c = 0; c < s; ++c) {
-            const u = a[c];
-            LiteGraph.use_deferred_actions && u._waiting_actions && u._waiting_actions.length && u.executePendingActions(), u.mode == LiteGraph.ALWAYS && u.onExecute && u.onExecute();
+            const h = a[c];
+            LiteGraph.use_deferred_actions && h._waiting_actions && h._waiting_actions.length && h.executePendingActions(), h.mode == LiteGraph.ALWAYS && h.onExecute && h.onExecute();
           }
           this.fixedtime += this.fixedtime_lapse, this.onExecuteStep && this.onExecuteStep();
         }
         this.onAfterExecute && this.onAfterExecute(), this.errors_in_execution = !1;
-      } catch (h) {
+      } catch (u) {
         if (this.errors_in_execution = !0, LiteGraph.throw_errors)
-          throw h;
-        LiteGraph.debug && console.log("Error during execution: " + h), this.stop();
+          throw u;
+        LiteGraph.debug && console.log("Error during execution: " + u), this.stop();
       }
     const o = LiteGraph.getTime();
     let l = o - n;
@@ -10792,7 +10792,7 @@ const Ge = class Ge {
   computeExecutionOrder(t, r) {
     let s = [], n = [], a = {};
     const o = {}, l = {};
-    for (let c = 0, u = this._nodes.length; c < u; ++c) {
+    for (let c = 0, h = this._nodes.length; c < h; ++c) {
       const p = this._nodes[c];
       if (t && !p.onExecute)
         continue;
@@ -10806,8 +10806,8 @@ const Ge = class Ge {
     for (; n.length != 0; ) {
       const c = n.shift();
       if (s.push(c), delete a[c.id], !!c.outputs)
-        for (let u = 0; u < c.outputs.length; u++) {
-          const p = c.outputs[u];
+        for (let h = 0; h < c.outputs.length; h++) {
+          const p = c.outputs[h];
           if (!(p == null || p.links == null || p.links.length == 0))
             for (let f = 0; f < p.links.length; f++) {
               const d = p.links[f], g = this.links[d];
@@ -10825,14 +10825,14 @@ const Ge = class Ge {
     for (const c in a)
       s.push(a[c]);
     s.length != this._nodes.length && LiteGraph.debug && console.warn("something went wrong, nodes missing");
-    const h = s.length;
-    for (let c = 0; c < h; ++c)
+    const u = s.length;
+    for (let c = 0; c < u; ++c)
       s[c].order = c;
-    s = s.sort(function(c, u) {
-      const p = c.constructor.priority || c.priority || 0, f = u.constructor.priority || u.priority || 0;
-      return p == f ? c.order - u.order : p - f;
+    s = s.sort(function(c, h) {
+      const p = c.constructor.priority || c.priority || 0, f = h.constructor.priority || h.priority || 0;
+      return p == f ? c.order - h.order : p - f;
     });
-    for (let c = 0; c < h; ++c)
+    for (let c = 0; c < u; ++c)
       s[c].order = c;
     return s;
   }
@@ -10866,24 +10866,24 @@ const Ge = class Ge {
     t = t || 100;
     const s = this.computeExecutionOrder(!1, !0), n = [];
     for (let o = 0; o < s.length; ++o) {
-      const l = s[o], h = l._level || 1;
-      n[h] || (n[h] = []), n[h].push(l);
+      const l = s[o], u = l._level || 1;
+      n[u] || (n[u] = []), n[u].push(l);
     }
     let a = t;
     for (let o = 0; o < n.length; ++o) {
       const l = n[o];
       if (!l)
         continue;
-      let h = 100, c = t + LiteGraph.NODE_TITLE_HEIGHT;
-      for (let u = 0; u < l.length; ++u) {
-        const p = l[u];
+      let u = 100, c = t + LiteGraph.NODE_TITLE_HEIGHT;
+      for (let h = 0; h < l.length; ++h) {
+        const p = l[h];
         p.pos[0] = r == LiteGraph.VERTICAL_LAYOUT ? c : a, p.pos[1] = r == LiteGraph.VERTICAL_LAYOUT ? a : c;
         const f = r == LiteGraph.VERTICAL_LAYOUT ? 1 : 0;
-        p.size[f] > h && (h = p.size[f]);
+        p.size[f] > u && (u = p.size[f]);
         const d = r == LiteGraph.VERTICAL_LAYOUT ? 0 : 1;
         c += p.size[d] + t + LiteGraph.NODE_TITLE_HEIGHT;
       }
-      a += h + t;
+      a += u + t;
     }
     this.setDirtyCanvas(!0, !0);
   }
@@ -11319,8 +11319,8 @@ const Ge = class Ge {
           "weird LLink bug, link info is not a LLink but a regular object"
         );
         const l = new LLink();
-        for (const h in o)
-          l[h] = o[h];
+        for (const u in o)
+          l[u] = o[u];
         this.links[a] = l, o = l;
       }
       r.push(o.serialize());
@@ -11361,8 +11361,8 @@ const Ge = class Ge {
           );
           continue;
         }
-        const h = new LLink();
-        h.configure(l), a[h.id] = h;
+        const u = new LLink();
+        u.configure(l), a[u.id] = u;
       }
       t.links = a;
     }
@@ -11372,14 +11372,14 @@ const Ge = class Ge {
     if (this._nodes = [], s) {
       for (let a = 0, o = s.length; a < o; ++a) {
         const l = s[a];
-        let h = LiteGraph.createNode(l.type, l.title);
-        h || (LiteGraph.debug && console.log(
+        let u = LiteGraph.createNode(l.type, l.title);
+        u || (LiteGraph.debug && console.log(
           "Node not found or has errors: " + l.type
-        ), h = new LGraphNode(), h.last_serialization = l, h.has_errors = !0, n = !0), h.id = l.id, this.add(h, !0);
+        ), u = new LGraphNode(), u.last_serialization = l, u.has_errors = !0, n = !0), u.id = l.id, this.add(u, !0);
       }
       for (let a = 0, o = s.length; a < o; ++a) {
-        const l = s[a], h = this.getNodeById(l.id);
-        h && h.configure(l);
+        const l = s[a], u = this.getNodeById(l.id);
+        u && u.configure(l);
       }
     }
     if (this._groups.length = 0, t.groups)
@@ -11396,6 +11396,8 @@ const Ge = class Ge {
       a.addEventListener("load", function(o) {
         const l = JSON.parse(o.target.result);
         s.configure(l), r && r();
+      }), a.addEventListener("error", function() {
+        console.error("LGraph: FileReader error loading graph file"), r && r(new Error("Failed to read file"));
       }), a.readAsText(t);
       return;
     }
@@ -11980,26 +11982,26 @@ class LGraphNode {
     if (!(!o || !o.length)) {
       this.graph && (this.graph._last_trigger_time = LiteGraph.getTime());
       for (let l = 0; l < o.length; ++l) {
-        const h = o[l];
-        if (s != null && s != h)
+        const u = o[l];
+        if (s != null && s != u)
           continue;
         const c = this.graph.links[o[l]];
         if (!c)
           continue;
         c._last_time = LiteGraph.getTime();
-        const u = this.graph.getNodeById(c.target_id);
-        if (u) {
-          if (u.inputs[c.target_slot], u.mode === LiteGraph.ON_TRIGGER)
-            n.action_call || (n.action_call = this.id + "_trigg_" + Math.floor(Math.random() * 9999)), u.onExecute && u.doExecute(r, n);
-          else if (u.onAction) {
+        const h = this.graph.getNodeById(c.target_id);
+        if (h) {
+          if (h.inputs[c.target_slot], h.mode === LiteGraph.ON_TRIGGER)
+            n.action_call || (n.action_call = this.id + "_trigg_" + Math.floor(Math.random() * 9999)), h.onExecute && h.doExecute(r, n);
+          else if (h.onAction) {
             n.action_call || (n.action_call = this.id + "_act_" + Math.floor(Math.random() * 9999));
-            const p = u.inputs[c.target_slot];
-            LiteGraph.use_deferred_actions && u.onExecute ? (u._waiting_actions || (u._waiting_actions = []), u._waiting_actions.push([
+            const p = h.inputs[c.target_slot];
+            LiteGraph.use_deferred_actions && h.onExecute ? (h._waiting_actions || (h._waiting_actions = []), h._waiting_actions.push([
               p.name,
               r,
               n,
               c.target_slot
-            ])) : u.actionDo(
+            ])) : h.actionDo(
               p.name,
               r,
               n,
@@ -12185,25 +12187,25 @@ class LGraphNode {
     const n = LiteGraph.NODE_TEXT_SIZE, a = c(this.title);
     let o = 0, l = 0;
     if (this.inputs)
-      for (let u = 0, p = this.inputs.length; u < p; ++u) {
-        const f = this.inputs[u], d = f.label || f.name || "", g = c(d);
+      for (let h = 0, p = this.inputs.length; h < p; ++h) {
+        const f = this.inputs[h], d = f.label || f.name || "", g = c(d);
         o < g && (o = g);
       }
     if (this.outputs)
-      for (let u = 0, p = this.outputs.length; u < p; ++u) {
-        const f = this.outputs[u], d = f.label || f.name || "", g = c(d);
+      for (let h = 0, p = this.outputs.length; h < p; ++h) {
+        const f = this.outputs[h], d = f.label || f.name || "", g = c(d);
         l < g && (l = g);
       }
     s[0] = Math.max(o + l + 10, a), s[0] = Math.max(s[0], LiteGraph.NODE_WIDTH), this.widgets && this.widgets.length && (s[0] = Math.max(s[0], LiteGraph.NODE_WIDTH * 1.5)), s[1] = (this.constructor.slot_start_y || 0) + r * LiteGraph.NODE_SLOT_HEIGHT;
-    let h = 0;
+    let u = 0;
     if (this.widgets && this.widgets.length) {
-      for (let u = 0, p = this.widgets.length; u < p; ++u)
-        this.widgets[u].computeSize ? h += this.widgets[u].computeSize(s[0])[1] + 4 : h += LiteGraph.NODE_WIDGET_HEIGHT + 4;
-      h += 8;
+      for (let h = 0, p = this.widgets.length; h < p; ++h)
+        this.widgets[h].computeSize ? u += this.widgets[h].computeSize(s[0])[1] + 4 : u += LiteGraph.NODE_WIDGET_HEIGHT + 4;
+      u += 8;
     }
-    this.widgets_up ? s[1] = Math.max(s[1], h) : this.widgets_start_y != null ? s[1] = Math.max(s[1], h + this.widgets_start_y) : s[1] += h;
-    function c(u) {
-      return u ? n * u.length * 0.6 : 0;
+    this.widgets_up ? s[1] = Math.max(s[1], u) : this.widgets_start_y != null ? s[1] = Math.max(s[1], u + this.widgets_start_y) : s[1] += u;
+    function c(h) {
+      return h ? n * h.length * 0.6 : 0;
     }
     return this.constructor.min_height && s[1] < this.constructor.min_height && (s[1] = this.constructor.min_height), s[1] += 6, s;
   }
@@ -12264,8 +12266,8 @@ class LGraphNode {
   getBounding(t, r) {
     t = t || new Float32Array(4);
     const s = this.pos, n = this.flags.collapsed, a = this.size;
-    let o = 0, l = 1, h = 0, c = 0;
-    return r && (o = 4, l = 6 + o, h = 4, c = 5 + h), t[0] = s[0] - o, t[1] = s[1] - LiteGraph.NODE_TITLE_HEIGHT - h, t[2] = n ? (this._collapsed_width || LiteGraph.NODE_COLLAPSED_WIDTH) + l : a[0] + l, t[3] = n ? LiteGraph.NODE_TITLE_HEIGHT + c : a[1] + LiteGraph.NODE_TITLE_HEIGHT + c, this.onBounding && this.onBounding(t), t;
+    let o = 0, l = 1, u = 0, c = 0;
+    return r && (o = 4, l = 6 + o, u = 4, c = 5 + u), t[0] = s[0] - o, t[1] = s[1] - LiteGraph.NODE_TITLE_HEIGHT - u, t[2] = n ? (this._collapsed_width || LiteGraph.NODE_COLLAPSED_WIDTH) + l : a[0] + l, t[3] = n ? LiteGraph.NODE_TITLE_HEIGHT + c : a[1] + LiteGraph.NODE_TITLE_HEIGHT + c, this.onBounding && this.onBounding(t), t;
   }
   /**
    * checks if a point is inside the shape of a node
@@ -12428,26 +12430,26 @@ class LGraphNode {
     if (!o)
       return -1;
     (r == "" || r == "*") && (r = 0);
-    for (let l = 0, h = o.length; l < h; ++l) {
+    for (let l = 0, u = o.length; l < u; ++l) {
       const c = (r + "").toLowerCase().split(",");
-      let u = o[l].type == "0" || o[l].type == "*" ? "0" : o[l].type;
-      u = (u + "").toLowerCase().split(",");
+      let h = o[l].type == "0" || o[l].type == "*" ? "0" : o[l].type;
+      h = (h + "").toLowerCase().split(",");
       for (let p = 0; p < c.length; p++)
-        for (let f = 0; f < u.length; f++)
-          if (c[p] == "_event_" && (c[p] = LiteGraph.EVENT), u[p] == "_event_" && (u[p] = LiteGraph.EVENT), c[p] == "*" && (c[p] = 0), u[p] == "*" && (u[p] = 0), c[p] == u[f]) {
+        for (let f = 0; f < h.length; f++)
+          if (c[p] == "_event_" && (c[p] = LiteGraph.EVENT), h[p] == "_event_" && (h[p] = LiteGraph.EVENT), c[p] == "*" && (c[p] = 0), h[p] == "*" && (h[p] = 0), c[p] == h[f]) {
             if (n && o[l].links && o[l].links !== null)
               continue;
             return s ? o[l] : l;
           }
     }
     if (n && !a)
-      for (let l = 0, h = o.length; l < h; ++l) {
+      for (let l = 0, u = o.length; l < u; ++l) {
         const c = (r + "").toLowerCase().split(",");
-        let u = o[l].type == "0" || o[l].type == "*" ? "0" : o[l].type;
-        u = (u + "").toLowerCase().split(",");
+        let h = o[l].type == "0" || o[l].type == "*" ? "0" : o[l].type;
+        h = (h + "").toLowerCase().split(",");
         for (let p = 0; p < c.length; p++)
-          for (let f = 0; f < u.length; f++)
-            if (c[p] == "*" && (c[p] = 0), u[p] == "*" && (u[p] = 0), c[p] == u[f])
+          for (let f = 0; f < h.length; f++)
+            if (c[p] == "*" && (c[p] = 0), h[p] == "*" && (h[p] = 0), c[p] == h[f])
               return s ? o[l] : l;
       }
     return -1;
@@ -12467,13 +12469,13 @@ class LGraphNode {
       generalTypeInCase: !0
     }, n || {});
     r && r.constructor === Number && (r = this.graph.getNodeById(r));
-    const h = r.findInputSlotByType(
+    const u = r.findInputSlotByType(
       s,
       !1,
       !0
     );
-    if (h >= 0 && h !== null)
-      return this.connect(t, r, h);
+    if (u >= 0 && u !== null)
+      return this.connect(t, r, u);
     if (l.createEventInCase && s == LiteGraph.EVENT)
       return this.connect(t, r, -1);
     if (l.generalTypeInCase) {
@@ -12515,13 +12517,13 @@ class LGraphNode {
       generalTypeInCase: !0
     }, n || {});
     r && r.constructor === Number && (r = this.graph.getNodeById(r));
-    const h = r.findOutputSlotByType(
+    const u = r.findOutputSlotByType(
       s,
       !1,
       !0
     );
-    if (h >= 0 && h !== null)
-      return r.connect(h, this, t);
+    if (u >= 0 && u !== null)
+      return r.connect(u, this, t);
     if (l.generalTypeInCase) {
       const c = r.findOutputSlotByType(
         0,
@@ -12616,9 +12618,9 @@ class LGraphNode {
           }), n = !0);
           break;
       }
-    let h;
-    return LiteGraph.use_uuids ? h = LiteGraph.uuidv4() : h = ++this.graph.last_link_id, o = new LLink(
-      h,
+    let u;
+    return LiteGraph.use_uuids ? u = LiteGraph.uuidv4() : u = ++this.graph.last_link_id, o = new LLink(
+      u,
       a.type || l.type,
       this.id,
       t,
@@ -12673,23 +12675,19 @@ class LGraphNode {
         const o = s.links[n], l = this.graph.links[o];
         if (l.target_id == r.id) {
           s.links.splice(n, 1);
-          const h = r.inputs[l.target_slot];
-          h.link = null, delete this.graph.links[o], this.graph && this.graph._version++, r.onConnectionsChange && r.onConnectionsChange(
+          const u = r.inputs[l.target_slot];
+          u.link = null, delete this.graph.links[o], this.graph && this.graph._version++, r.onConnectionsChange && r.onConnectionsChange(
             LiteGraph.INPUT,
             l.target_slot,
             !1,
             l,
-            h
+            u
           ), this.onConnectionsChange && this.onConnectionsChange(
             LiteGraph.OUTPUT,
             t,
             !1,
             l,
             s
-          ), this.graph && this.graph.onNodeConnectionChange && this.graph.onNodeConnectionChange(
-            LiteGraph.OUTPUT,
-            this,
-            t
           ), this.graph && this.graph.onNodeConnectionChange && (this.graph.onNodeConnectionChange(
             LiteGraph.OUTPUT,
             this,
@@ -12707,18 +12705,14 @@ class LGraphNode {
         const o = s.links[n], l = this.graph.links[o];
         if (!l)
           continue;
-        const h = this.graph.getNodeById(l.target_id);
+        const u = this.graph.getNodeById(l.target_id);
         let c = null;
-        this.graph && this.graph._version++, h && (c = h.inputs[l.target_slot], c.link = null, h.onConnectionsChange && h.onConnectionsChange(
+        this.graph && this.graph._version++, u && (c = u.inputs[l.target_slot], c.link = null, u.onConnectionsChange && u.onConnectionsChange(
           LiteGraph.INPUT,
           l.target_slot,
           !1,
           l,
           c
-        ), this.graph && this.graph.onNodeConnectionChange && this.graph.onNodeConnectionChange(
-          LiteGraph.INPUT,
-          h,
-          l.target_slot
         )), delete this.graph.links[o], this.onConnectionsChange && this.onConnectionsChange(
           LiteGraph.OUTPUT,
           t,
@@ -12729,9 +12723,9 @@ class LGraphNode {
           LiteGraph.OUTPUT,
           this,
           t
-        ), this.graph.onNodeConnectionChange(
+        ), u && this.graph.onNodeConnectionChange(
           LiteGraph.INPUT,
-          h,
+          u,
           l.target_slot
         ));
       }
@@ -12766,9 +12760,9 @@ class LGraphNode {
         if (!o || !o.links || o.links.length == 0)
           return !1;
         let l = null;
-        for (let h = 0, c = o.links.length; h < c; h++)
-          if (l = h, o.links[h] == s) {
-            o.links.splice(h, 1);
+        for (let u = 0, c = o.links.length; u < c; u++)
+          if (l = u, o.links[u] == s) {
+            o.links.splice(u, 1);
             break;
           }
         delete this.graph.links[s], this.graph && this.graph._version++, this.onConnectionsChange && this.onConnectionsChange(
@@ -13045,8 +13039,8 @@ class DragAndScale {
       );
     else if (t.type == LiteGraph.pointerevents_method + "move") {
       if (!l) {
-        const h = n - this.last_mouse[0], c = a - this.last_mouse[1];
-        this.dragging && this.mouseDrag(h, c);
+        const u = n - this.last_mouse[0], c = a - this.last_mouse[1];
+        this.dragging && this.mouseDrag(u, c);
       }
     } else t.type == LiteGraph.pointerevents_method + "up" ? (this.dragging = !1, LiteGraph.pointerListenerRemove(
       document,
@@ -13107,18 +13101,16 @@ class DragAndScale {
 const _LGraphCanvas = class _LGraphCanvas {
   constructor(e, t, r) {
     // 변경이 생겼을때 스택에 추가
-    R(this, "saveUndoStack", async function() {
-      var r, s;
-      const e = this.graph.serialize(), t = this.tempDeepClone(e);
-      (((r = this.undoStack) == null ? void 0 : r.length) === 0 || ((s = this.undoStack) == null ? void 0 : s.length) > 0 && !this.checkObjectEqual(
+    R(this, "saveUndoStack", function() {
+      const e = this.graph.serialize(), t = this.tempDeepClone(e), r = !this.undoStack || this.undoStack.length === 0, s = !r && !this.checkObjectEqual(
         t,
         this.undoStack[this.undoStack.length - 1]
-      )) && this.undoStack.push(t), this.undoStack.length > this.maxStackSize && this.undoStack.shift(), this.redoStack.length = 0;
+      );
+      (r || s) && (this.undoStack.push(t), this.undoStack.length > this.maxStackSize && this.undoStack.shift(), this.redoStack.length = 0);
     });
-    this.graph = t, this.options = r = r || {}, this.move_grp_alone = !1, this.ALWAYS_FLOW = !1, this.isKeyPressed = !1, this._menus = [], this.maxStackSize = r.maxStackSize || 1e3, this.undoStack = [], this.redoStack = [], this.saveUndoStackEvt = this.debounceTime(
-      this.saveUndoStack.bind(this),
-      50
-    ), this.background_image = _LGraphCanvas.DEFAULT_BACKGROUND_IMAGE, e && e.constructor === String && (e = document.querySelector(e)), this.ds = new DragAndScale(), this.zoom_modify_alpha = !0, this.title_text_font = "" + LiteGraph.NODE_TEXT_SIZE + "px Arial", this.inner_text_font = "normal " + LiteGraph.NODE_SUBTEXT_SIZE + "px Arial", this.node_title_color = LiteGraph.NODE_TITLE_COLOR, this.default_link_color = LiteGraph.LINK_COLOR, this.default_connection_color = {
+    this.graph = t, this.options = r = r || {}, this.move_grp_alone = !1, this.ALWAYS_FLOW = !1, this._menus = [], this.maxStackSize = r.maxStackSize || 1e3, this.undoStack = [], this.redoStack = [], this._arrowKeySessionActive = !1, this._resetArrowKeySession = this.debounceTime(() => {
+      this._arrowKeySessionActive = !1;
+    }, 300), this.background_image = _LGraphCanvas.DEFAULT_BACKGROUND_IMAGE, e && e.constructor === String && (e = document.querySelector(e)), this.ds = new DragAndScale(), this.zoom_modify_alpha = !0, this.title_text_font = "" + LiteGraph.NODE_TEXT_SIZE + "px Arial", this.inner_text_font = "normal " + LiteGraph.NODE_SUBTEXT_SIZE + "px Arial", this.node_title_color = LiteGraph.NODE_TITLE_COLOR, this.default_link_color = LiteGraph.LINK_COLOR, this.default_connection_color = {
       input_off: "#778",
       input_on: "#7F7",
       //"#BBD"
@@ -13270,11 +13262,11 @@ const _LGraphCanvas = class _LGraphCanvas {
     LiteGraph.pointerListenerRemove(
       this.canvas,
       "move",
-      this._mousedown_callback
+      this._mousemove_callback
     ), LiteGraph.pointerListenerRemove(
       this.canvas,
       "up",
-      this._mousedown_callback
+      this._mouseup_callback
     ), LiteGraph.pointerListenerRemove(
       this.canvas,
       "down",
@@ -13318,11 +13310,11 @@ const _LGraphCanvas = class _LGraphCanvas {
     const t = e._overlay_element, r = this.ds.scale, s = this.ds.offset;
     let n = LiteGraph.NODE_TITLE_HEIGHT;
     if (!e.flags.collapsed) {
-      const u = Math.max(
+      const h = Math.max(
         e.inputs ? e.inputs.length : 0,
         e.outputs ? e.outputs.length : 0
       );
-      u > 0 && !e.horizontal && (n = LiteGraph.NODE_TITLE_HEIGHT + (u - 0.3) * LiteGraph.NODE_SLOT_HEIGHT);
+      h > 0 && !e.horizontal && (n = LiteGraph.NODE_TITLE_HEIGHT + (h - 0.3) * LiteGraph.NODE_SLOT_HEIGHT);
     }
     const a = t.style.display;
     t.style.display = "block", t.style.visibility = "hidden", t.style.position = "absolute", t.style.width = e.size[0] + "px", t.style.transform = "";
@@ -13330,8 +13322,8 @@ const _LGraphCanvas = class _LGraphCanvas {
     t.style.visibility = "";
     const l = n + o + 20;
     e.size[1] < l && (e.size[1] = l);
-    const h = (e.pos[0] + s[0]) * r, c = (e.pos[1] + n + s[1]) * r;
-    t.style.left = h + "px", t.style.top = c + "px", t.style.width = e.size[0] + "px", t.style.height = "auto", t.style.maxHeight = "200px", t.style.transform = `scale(${r})`, t.style.transformOrigin = "top left", t.style.display = a;
+    const u = (e.pos[0] + s[0]) * r, c = (e.pos[1] + n + s[1]) * r;
+    t.style.left = u + "px", t.style.top = c + "px", t.style.width = e.size[0] + "px", t.style.height = "auto", t.style.maxHeight = "200px", t.style.transform = `scale(${r})`, t.style.transformOrigin = "top left", t.style.display = a;
   }
   /**
    * Updates all node overlays' positions
@@ -13452,24 +13444,25 @@ const _LGraphCanvas = class _LGraphCanvas {
       !0
     )), !a)
       return;
-    this.graph.getGroupOnPos(e.canvasX, e.canvasY) && e.which == 1 && e.altKey && (this.move_grp_alone = !0);
+    this.graph.getGroupOnPos(e.canvasX, e.canvasY) && e.button == 0 && e.altKey && (this.move_grp_alone = !0);
     let l = this.graph.getNodeOnPos(
       e.canvasX,
       e.canvasY,
       this.visible_nodes,
       5
-    ), h = !1;
-    const c = LiteGraph.getTime(), u = e.isPrimary === void 0 || !e.isPrimary, p = c - this.last_mouseclick < 300 && u;
-    if (this.mouse[0] = e.clientX, this.mouse[1] = e.clientY, this.graph_mouse[0] = e.canvasX, this.graph_mouse[1] = e.canvasY, this.last_click_position = [this.mouse[0], this.mouse[1]], this.pointer_is_down && u ? this.pointer_is_double = !0 : this.pointer_is_double = !1, this.pointer_is_down = !0, this.canvas.focus(), LiteGraph.closeAllContextMenus(r), !(this.onMouse && this.onMouse(e) == !0)) {
-      if (l || this.closePanels(), e.which == 1 && !this.pointer_is_double) {
-        if (this.saveUndoStack(), e.ctrlKey && (this.dragging_rectangle = new Float32Array(4), this.dragging_rectangle[0] = e.canvasX, this.dragging_rectangle[1] = e.canvasY, this.dragging_rectangle[2] = 1, this.dragging_rectangle[3] = 1, h = !0), LiteGraph.alt_drag_do_clone_nodes && e.altKey && l && this.allow_interaction && !h && !this.read_only) {
+    ), u = !1;
+    const c = LiteGraph.getTime(), h = e.isPrimary === void 0 || !e.isPrimary, p = c - this.last_mouseclick < 300 && h;
+    if (this.mouse[0] = e.clientX, this.mouse[1] = e.clientY, this.graph_mouse[0] = e.canvasX, this.graph_mouse[1] = e.canvasY, this.last_click_position = [this.mouse[0], this.mouse[1]], this.pointer_is_down && h ? this.pointer_is_double = !0 : this.pointer_is_double = !1, this.pointer_is_down = !0, this.canvas.focus(), LiteGraph.closeAllContextMenus(r), !(this.onMouse && this.onMouse(e) == !0)) {
+      if (l || this.closePanels(), e.button == 0 && !this.pointer_is_double) {
+        if (e.ctrlKey && (this.dragging_rectangle = new Float32Array(4), this.dragging_rectangle[0] = e.canvasX, this.dragging_rectangle[1] = e.canvasY, this.dragging_rectangle[2] = 1, this.dragging_rectangle[3] = 1, u = !0), LiteGraph.alt_drag_do_clone_nodes && e.altKey && l && this.allow_interaction && !u && !this.read_only) {
+          this.saveUndoStack();
           let d = l.clone();
-          (d = l.clone()) && (d.pos[0] += 5, d.pos[1] += 5, this.graph.add(d, !1, { doCalcSize: !1 }), l = d, h = !0, t || (this.allow_dragnodes && (this.graph.beforeChange(), this.node_dragged = l), this.selected_nodes[l.id] || this.processNodeSelected(l, e)));
+          (d = l.clone()) && (d.pos[0] += 5, d.pos[1] += 5, this.graph.add(d, !1, { doCalcSize: !1 }), l = d, u = !0, t || (this.allow_dragnodes && (this.graph.beforeChange(), this.node_dragged = l), this.selected_nodes[l.id] || this.processNodeSelected(l, e)));
         }
         let f = !1;
-        if (l && (this.allow_interaction || l.flags.allow_interaction) && !h && !this.read_only) {
+        if (l && (this.allow_interaction || l.flags.allow_interaction) && !u && !this.read_only) {
           if (!this.live_mode && !l.flags.pinned && this.bringToFront(l), this.allow_interaction && !this.connecting_node && !l.flags.collapsed && !this.live_mode)
-            if (!h && l.resizable !== !1 && LiteGraph.isInsideRectangle(
+            if (!u && l.resizable !== !1 && LiteGraph.isInsideRectangle(
               e.canvasX,
               e.canvasY,
               l.pos[0] + l.size[0] - 5,
@@ -13477,7 +13470,7 @@ const _LGraphCanvas = class _LGraphCanvas {
               10,
               10
             ))
-              this.graph.beforeChange(), this.resizing_node = l, this.canvas.style.cursor = "se-resize", h = !0;
+              this.saveUndoStack(), this.graph.beforeChange(), this.resizing_node = l, this.canvas.style.cursor = "se-resize", u = !0;
             else {
               if (l.outputs)
                 for (let d = 0, g = l.outputs.length; d < g; ++d) {
@@ -13493,10 +13486,10 @@ const _LGraphCanvas = class _LGraphCanvas {
                     30,
                     20
                   )) {
-                    this.connecting_node = l, this.connecting_output = m, this.connecting_output.slot_index = d, this.connecting_pos = l.getConnectionPos(
+                    this.saveUndoStack(), this.connecting_node = l, this.connecting_output = m, this.connecting_output.slot_index = d, this.connecting_pos = l.getConnectionPos(
                       !1,
                       d
-                    ), this.connecting_slot = d, LiteGraph.shift_click_do_break_link_from && e.shiftKey && l.disconnectOutput(d), p ? l.onOutputDblClick && l.onOutputDblClick(d, e) : l.onOutputClick && l.onOutputClick(d, e), h = !0;
+                    ), this.connecting_slot = d, LiteGraph.shift_click_do_break_link_from && e.shiftKey && l.disconnectOutput(d), p ? l.onOutputDblClick && l.onOutputDblClick(d, e) : l.onOutputClick && l.onOutputClick(d, e), u = !0;
                     break;
                   }
                 }
@@ -13513,17 +13506,17 @@ const _LGraphCanvas = class _LGraphCanvas {
                   )) {
                     if (p ? l.onInputDblClick && l.onInputDblClick(d, e) : l.onInputClick && l.onInputClick(d, e), m.link !== null) {
                       const E = this.graph.links[m.link];
-                      LiteGraph.click_do_break_link_to && (l.disconnectInput(d), this.dirty_bgcanvas = !0, h = !0), (this.allow_reconnect_links || //this.move_destination_link_without_shift ||
+                      this.saveUndoStack(), LiteGraph.click_do_break_link_to && (l.disconnectInput(d), this.dirty_bgcanvas = !0, u = !0), (this.allow_reconnect_links || //this.move_destination_link_without_shift ||
                       e.shiftKey) && (LiteGraph.click_do_break_link_to || l.disconnectInput(d), this.connecting_node = this.graph._nodes_by_id[E.origin_id], this.connecting_slot = E.origin_slot, this.connecting_output = this.connecting_node.outputs[this.connecting_slot], this.connecting_pos = this.connecting_node.getConnectionPos(
                         !1,
                         this.connecting_slot
-                      ), this.dirty_bgcanvas = !0, h = !0);
+                      ), this.dirty_bgcanvas = !0, u = !0);
                     }
-                    h || (this.connecting_node = l, this.connecting_input = m, this.connecting_input.slot_index = d, this.connecting_pos = l.getConnectionPos(!0, d), this.connecting_slot = d, this.dirty_bgcanvas = !0, h = !0);
+                    u || (this.saveUndoStack(), this.connecting_node = l, this.connecting_input = m, this.connecting_input.slot_index = d, this.connecting_pos = l.getConnectionPos(!0, d), this.connecting_slot = d, this.dirty_bgcanvas = !0, u = !0);
                   }
                 }
             }
-          if (!h) {
+          if (!u) {
             const d = [
               e.canvasX - l.pos[0],
               e.canvasY - l.pos[1]
@@ -13543,9 +13536,9 @@ const _LGraphCanvas = class _LGraphCanvas {
               }
               this.live_mode && (f = !0, t = !0);
             }
-            t ? l.is_selected || this.processNodeSelected(l, e) : (this.allow_dragnodes && (this.graph.beforeChange(), this.node_dragged = l), this.processNodeSelected(l, e)), this.dirty_canvas = !0;
+            t ? l.is_selected || this.processNodeSelected(l, e) : (this.allow_dragnodes && (this.saveUndoStack(), this.graph.beforeChange(), this.node_dragged = l), this.processNodeSelected(l, e)), this.dirty_canvas = !0;
           }
-        } else if (!h) {
+        } else if (!u) {
           if (!this.read_only)
             for (let d = 0; d < this.visible_links.length; ++d) {
               const g = this.visible_links[d], m = g._pos;
@@ -13557,7 +13550,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           this.selected_group = this.graph.getGroupOnPos(
             e.canvasX,
             e.canvasY
-          ), this.selected_group_resizing = !1, this.selected_group && !this.read_only && p && (e.preventDefault(), e.stopPropagation(), this.showGrpPanel(this.selected_group), this.block_drag_grp = !0), this.selected_group && !this.read_only && !p && (this.block_drag_grp = !1, e.ctrlKey && (this.dragging_rectangle = null), LiteGraph.distance(
+          ), this.selected_group_resizing = !1, this.selected_group && !this.read_only && p && (e.preventDefault(), e.stopPropagation(), this.showGrpPanel(this.selected_group), this.block_drag_grp = !0), this.selected_group && !this.read_only && !p && (this.saveUndoStack(), this.block_drag_grp = !1, e.ctrlKey && (this.dragging_rectangle = null), LiteGraph.distance(
             [e.canvasX, e.canvasY],
             [
               this.selected_group.pos[0] + this.selected_group.size[0],
@@ -13565,10 +13558,10 @@ const _LGraphCanvas = class _LGraphCanvas {
             ]
           ) * this.ds.scale < 10 ? this.selected_group_resizing = !0 : this.selected_group.recomputeInsideNodes()), f = !0;
         }
-        !h && f && this.allow_dragcanvas && (this.dragging_canvas = !0);
-      } else if (e.which == 2)
+        !u && f && this.allow_dragcanvas && (this.dragging_canvas = !0);
+      } else if (e.button == 1)
         if (this.saveUndoStack(), LiteGraph.middle_click_slot_add_default_node) {
-          if (l && this.allow_interaction && !h && !this.read_only && !this.connecting_node && !l.flags.collapsed && !this.live_mode) {
+          if (l && this.allow_interaction && !u && !this.read_only && !this.connecting_node && !l.flags.collapsed && !this.live_mode) {
             let f = !1, d = !1, g = !1;
             if (l.outputs)
               for (let m = 0, b = l.outputs.length; m < b; ++m) {
@@ -13629,8 +13622,8 @@ const _LGraphCanvas = class _LGraphCanvas {
               });
             }
           }
-        } else !h && this.allow_dragcanvas && (this.dragging_canvas = !0);
-      else (e.which == 3 || this.pointer_is_double) && (this.saveUndoStack(), this.allow_interaction && !h && !this.read_only && (l && (Object.keys(this.selected_nodes).length && (this.selected_nodes[l.id] || e.shiftKey || e.ctrlKey || e.metaKey) ? this.selected_nodes[l.id] || this.selectNodes([l], !0) : this.selectNodes([l])), this.processContextMenu(l, e)));
+        } else !u && this.allow_dragcanvas && (this.dragging_canvas = !0);
+      else (e.button == 2 || this.pointer_is_double) && (this.saveUndoStack(), this.allow_interaction && !u && !this.read_only && (l && (Object.keys(this.selected_nodes).length && (this.selected_nodes[l.id] || e.shiftKey || e.ctrlKey || e.metaKey) ? this.selected_nodes[l.id] || this.selectNodes([l], !0) : this.selectNodes([l])), this.processContextMenu(l, e)));
       return this.last_mouse[0] = e.clientX, this.last_mouse[1] = e.clientY, this.last_mouseclick = LiteGraph.getTime(), this.last_mouse_dragging = !0, this.graph.change(), (!r.document.activeElement || r.document.activeElement.nodeName.toLowerCase() != "input" && r.document.activeElement.nodeName.toLowerCase() != "textarea") && e.preventDefault(), e.stopPropagation(), this.onMouseDown && this.onMouseDown(e), !1;
     }
   }
@@ -13787,7 +13780,13 @@ const _LGraphCanvas = class _LGraphCanvas {
           e.canvasY - this.resizing_node.pos[1]
         ];
         let a = this.resizing_node.computeSize();
-        this.resizing_node._overlay_initial_size && (a[0] = Math.max(a[0], this.resizing_node._overlay_initial_size[0]), a[1] = Math.max(a[1], this.resizing_node._overlay_initial_size[1])), n[0] = Math.max(a[0], n[0]), n[1] = Math.max(a[1], n[1]), this.resizing_node.setSize(n), this.canvas.style.cursor = "se-resize", this.dirty_canvas = !0, this.dirty_bgcanvas = !0;
+        this.resizing_node._overlay_initial_size && (a[0] = Math.max(
+          a[0],
+          this.resizing_node._overlay_initial_size[0]
+        ), a[1] = Math.max(
+          a[1],
+          this.resizing_node._overlay_initial_size[1]
+        )), n[0] = Math.max(a[0], n[0]), n[1] = Math.max(a[1], n[1]), this.resizing_node.setSize(n), this.canvas.style.cursor = "se-resize", this.dirty_canvas = !0, this.dirty_bgcanvas = !0;
       }
     }
     return e.preventDefault(), !1;
@@ -13819,7 +13818,7 @@ const _LGraphCanvas = class _LGraphCanvas {
       !0
     )), this.adjustMouseEvent(e);
     const n = LiteGraph.getTime();
-    if (e.click_time = n - this.last_mouseclick, this.last_mouse_dragging = !1, this.last_click_position = null, this.block_click && (this.block_click = !1), e.which == 1) {
+    if (e.click_time = n - this.last_mouseclick, this.last_mouse_dragging = !1, this.last_click_position = null, this.block_click && (this.block_click = !1), e.button == 0) {
       if (this.node_widget && this.processNodeWidgets(
         this.node_widget[0],
         this.graph_mouse,
@@ -13840,8 +13839,8 @@ const _LGraphCanvas = class _LGraphCanvas {
       );
       if (this.dragging_rectangle) {
         if (this.graph) {
-          const o = this.graph._nodes, l = new Float32Array(4), h = Math.abs(this.dragging_rectangle[2]), c = Math.abs(this.dragging_rectangle[3]), u = this.dragging_rectangle[2] < 0 ? this.dragging_rectangle[0] - h : this.dragging_rectangle[0], p = this.dragging_rectangle[3] < 0 ? this.dragging_rectangle[1] - c : this.dragging_rectangle[1];
-          if (this.dragging_rectangle[0] = u, this.dragging_rectangle[1] = p, this.dragging_rectangle[2] = h, this.dragging_rectangle[3] = c, !a || h > 10 && c > 10) {
+          const o = this.graph._nodes, l = new Float32Array(4), u = Math.abs(this.dragging_rectangle[2]), c = Math.abs(this.dragging_rectangle[3]), h = this.dragging_rectangle[2] < 0 ? this.dragging_rectangle[0] - u : this.dragging_rectangle[0], p = this.dragging_rectangle[3] < 0 ? this.dragging_rectangle[1] - c : this.dragging_rectangle[1];
+          if (this.dragging_rectangle[0] = h, this.dragging_rectangle[1] = p, this.dragging_rectangle[2] = u, this.dragging_rectangle[3] = c, !a || u > 10 && c > 10) {
             const f = [];
             for (let d = 0; d < o.length; ++d) {
               const g = o[d];
@@ -13860,28 +13859,28 @@ const _LGraphCanvas = class _LGraphCanvas {
         const l = (this.connecting_output || this.connecting_input).type;
         if (a) {
           if (this.connecting_output) {
-            const h = this.isOverNodeInput(
+            const u = this.isOverNodeInput(
               a,
               e.canvasX,
               e.canvasY
             );
-            h != -1 ? this.connecting_node.connect(
+            u != -1 ? this.connecting_node.connect(
               this.connecting_slot,
               a,
-              h
+              u
             ) : this.connecting_node.connectByType(
               this.connecting_slot,
               a,
               l
             );
           } else if (this.connecting_input) {
-            const h = this.isOverNodeOutput(
+            const u = this.isOverNodeOutput(
               a,
               e.canvasX,
               e.canvasY
             );
-            h != -1 ? a.connect(
-              h,
+            u != -1 ? a.connect(
+              u,
               this.connecting_node,
               this.connecting_slot
             ) : this.connecting_node.connectByTypeOutput(
@@ -13937,7 +13936,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           e.canvasX - this.node_capturing_input.pos[0],
           e.canvasY - this.node_capturing_input.pos[1]
         ]);
-    } else e.which == 2 ? (this.dirty_canvas = !0, this.dragging_canvas = !1) : e.which == 3 && (this.dirty_canvas = !0, this.dragging_canvas = !1);
+    } else e.button == 1 ? (this.dirty_canvas = !0, this.dragging_canvas = !1) : e.button == 2 && (this.dirty_canvas = !0, this.dragging_canvas = !1);
     return t && (this.pointer_is_down = !1, this.pointer_is_double = !1), this.graph.change(), e.stopPropagation(), e.preventDefault(), !1;
   }
   /**
@@ -14037,30 +14036,22 @@ const _LGraphCanvas = class _LGraphCanvas {
     let t = !1;
     if (e.target.localName != "input") {
       if (e.type == "keydown") {
-        this.isKeyPressed = !0, e.keyCode == 32 && (this.saveUndoStack(), this.dragging_canvas = !0, t = !0), e.keyCode == 27 && (this.saveUndoStack(), this.node_panel && this.node_panel.close(), this.options_panel && this.options_panel.close(), t = !0), e.keyCode == 65 && e.ctrlKey && (this.saveUndoStack(), this.selectNodes(), t = !0), e.keyCode === 67 && (e.metaKey || e.ctrlKey) && !e.shiftKey && this.selected_nodes && (this.saveUndoStack(), this.copyToClipboard(), t = !0), e.keyCode === 86 && (e.metaKey || e.ctrlKey) && (this.saveUndoStack(), this.pasteFromClipboard(e.shiftKey), t = !0);
-        const r = (s) => {
-          if (this.selected_nodes && s.key === "ArrowUp") {
-            this.saveUndoStackEvt();
-            for (let n in this.selected_nodes)
-              this.selected_nodes[n].pos[1] -= 1;
+        if (e.keyCode == 32 && (this.dragging_canvas = !0, t = !0), e.keyCode == 27 && (this.node_panel && this.node_panel.close(), this.options_panel && this.options_panel.close(), t = !0), e.keyCode == 65 && e.ctrlKey && (this.selectNodes(), t = !0), e.keyCode === 67 && (e.metaKey || e.ctrlKey) && !e.shiftKey && this.selected_nodes && (this.copyToClipboard(), t = !0), e.keyCode === 86 && (e.metaKey || e.ctrlKey) && (this.saveUndoStack(), this.pasteFromClipboard(e.shiftKey), t = !0), ((s) => {
+          if (!(!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(s.key) || !this.selected_nodes)) {
+            if (this._arrowKeySessionActive || (this._arrowKeySessionActive = !0, this.saveUndoStack()), this._resetArrowKeySession(), s.key === "ArrowUp")
+              for (let a in this.selected_nodes)
+                this.selected_nodes[a].pos[1] -= 1;
+            else if (s.key === "ArrowDown")
+              for (let a in this.selected_nodes)
+                this.selected_nodes[a].pos[1] += 1;
+            else if (s.key === "ArrowLeft")
+              for (let a in this.selected_nodes)
+                this.selected_nodes[a].pos[0] -= 1;
+            else if (s.key === "ArrowRight")
+              for (let a in this.selected_nodes)
+                this.selected_nodes[a].pos[0] += 1;
           }
-          if (this.selected_nodes && s.key === "ArrowDown") {
-            this.saveUndoStackEvt();
-            for (let n in this.selected_nodes)
-              this.selected_nodes[n].pos[1] += 1;
-          }
-          if (this.selected_nodes && s.key === "ArrowLeft") {
-            this.saveUndoStackEvt();
-            for (let n in this.selected_nodes)
-              this.selected_nodes[n].pos[0] -= 1;
-          }
-          if (this.selected_nodes && s.key === "ArrowRight") {
-            this.saveUndoStackEvt();
-            for (let n in this.selected_nodes)
-              this.selected_nodes[n].pos[0] += 1;
-          }
-        };
-        if (this.isKeyPressed ? r(e) : this.isKeyPressed = !1, (e.keyCode == 46 || e.keyCode == 8) && e.target.localName != "input" && e.target.localName != "textarea" && (this.saveUndoStack(), this.deleteSelectedNodes(), t = !0), this.selected_nodes)
+        })(e), (e.keyCode == 46 || e.keyCode == 8) && e.target.localName != "input" && e.target.localName != "textarea" && (this.saveUndoStack(), this.deleteSelectedNodes(), t = !0), this.selected_nodes)
           for (const s in this.selected_nodes)
             this.selected_nodes[s].onKeyDown && this.selected_nodes[s].onKeyDown(e);
       } else if (e.type == "keyup") {
@@ -14127,18 +14118,18 @@ const _LGraphCanvas = class _LGraphCanvas {
           const l = n.inputs[o];
           if (!l || l.link == null)
             continue;
-          const h = this.graph.links[l.link];
-          if (!h)
+          const u = this.graph.links[l.link];
+          if (!u)
             continue;
           const c = this.graph.getNodeById(
-            h.origin_id
+            u.origin_id
           );
           c && e.links.push([
             c._relative_id,
-            h.origin_slot,
+            u.origin_slot,
             //j,
             n._relative_id,
-            h.target_slot,
+            u.target_slot,
             c.id
           ]);
         }
@@ -14157,28 +14148,28 @@ const _LGraphCanvas = class _LGraphCanvas {
     this.graph.beforeChange();
     const r = JSON.parse(t);
     let s = !1, n = !1;
-    for (let o = 0; o < r.nodes.length; ++o)
-      s ? (s[0] > r.nodes[o].pos[0] && (s[0] = r.nodes[o].pos[0], n[0] = o), s[1] > r.nodes[o].pos[1] && (s[1] = r.nodes[o].pos[1], n[1] = o)) : (s = [
-        r.nodes[o].pos[0],
-        r.nodes[o].pos[1]
-      ], n = [o, o]);
-    const a = [];
-    for (let o = 0; o < r.nodes.length; ++o) {
-      const l = r.nodes[o], h = LiteGraph.createNode(l.type);
-      h && (h.configure(l), h.pos[0] += this.graph_mouse[0] - s[0], h.pos[1] += this.graph_mouse[1] - s[1], this.graph.add(h, { doProcessChange: !1 }), a.push(h));
+    for (let l = 0; l < r.nodes.length; ++l)
+      s ? (s[0] > r.nodes[l].pos[0] && (s[0] = r.nodes[l].pos[0], n[0] = l), s[1] > r.nodes[l].pos[1] && (s[1] = r.nodes[l].pos[1], n[1] = l)) : (s = [
+        r.nodes[l].pos[0],
+        r.nodes[l].pos[1]
+      ], n = [l, l]);
+    const a = [], o = {};
+    for (let l = 0; l < r.nodes.length; ++l) {
+      const u = r.nodes[l], c = LiteGraph.createNode(u.type);
+      c && (c.configure(u), c.pos[0] += this.graph_mouse[0] - s[0], c.pos[1] += this.graph_mouse[1] - s[1], this.graph.add(c, { doProcessChange: !1 }), a.push(c), o[l] = c);
     }
-    for (let o = 0; o < r.links.length; ++o) {
-      const l = r.links[o];
-      let h;
-      const c = l[0];
-      if (c != null)
-        h = a[c];
+    for (let l = 0; l < r.links.length; ++l) {
+      const u = r.links[l];
+      let c;
+      const h = u[0];
+      if (h != null)
+        c = o[h];
       else if (LiteGraph.ctrl_shift_v_paste_connect_unselected_outputs && e) {
-        const p = l[4];
-        p && (h = this.graph.getNodeById(p));
+        const f = u[4];
+        f && (c = this.graph.getNodeById(f));
       }
-      const u = a[l[2]];
-      h && u ? h.connect(l[1], u, l[3]) : console.warn("Warning, nodes missing on pasting");
+      const p = o[u[2]];
+      c && p ? c.connect(u[1], p, u[3]) : console.warn("Warning, nodes missing on pasting");
     }
     this.selectNodes(a), this.graph.afterChange();
   }
@@ -14201,15 +14192,15 @@ const _LGraphCanvas = class _LGraphCanvas {
       const o = e.dataTransfer.files;
       if (o && o.length)
         for (let l = 0; l < o.length; l++) {
-          const h = e.dataTransfer.files[0], c = h.name;
-          if (_LGraphCanvas.getFileExtension(c), a.onDropFile && a.onDropFile(h), a.onDropData) {
-            const u = new FileReader();
-            u.onload = function(f) {
+          const u = e.dataTransfer.files[0], c = u.name;
+          if (_LGraphCanvas.getFileExtension(c), a.onDropFile && a.onDropFile(u), a.onDropData) {
+            const h = new FileReader();
+            h.onload = function(f) {
               const d = f.target.result;
-              a.onDropData(d, c, h);
+              a.onDropData(d, c, u);
             };
-            const p = h.type.split("/")[0];
-            p == "text" || p == "" ? u.readAsText(h) : p == "image" ? u.readAsDataURL(h) : u.readAsArrayBuffer(h);
+            const p = u.type.split("/")[0];
+            p == "text" || p == "" ? h.readAsText(u) : p == "image" ? h.readAsDataURL(u) : h.readAsArrayBuffer(u);
           }
         }
     }
@@ -14443,7 +14434,7 @@ const _LGraphCanvas = class _LGraphCanvas {
         const a = this.connecting_output || this.connecting_input, o = a.type;
         let l = a.dir;
         l == null && (this.connecting_output ? l = this.connecting_node.horizontal ? LiteGraph.DOWN : LiteGraph.RIGHT : l = this.connecting_node.horizontal ? LiteGraph.UP : LiteGraph.LEFT);
-        const h = a.shape;
+        const u = a.shape;
         switch (o) {
           case LiteGraph.EVENT:
             n = LiteGraph.EVENT_LINK_COLOR;
@@ -14461,7 +14452,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           n,
           l,
           LiteGraph.CENTER
-        ), e.beginPath(), o === LiteGraph.EVENT || h === LiteGraph.BOX_SHAPE ? (e.rect(
+        ), e.beginPath(), o === LiteGraph.EVENT || u === LiteGraph.BOX_SHAPE ? (e.rect(
           this.connecting_pos[0] - 6 + 0.5,
           this.connecting_pos[1] - 5 + 0.5,
           14,
@@ -14471,7 +14462,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           this.graph_mouse[1] - 5 + 0.5,
           14,
           10
-        )) : h === LiteGraph.ARROW_SHAPE ? (e.moveTo(
+        )) : u === LiteGraph.ARROW_SHAPE ? (e.moveTo(
           this.connecting_pos[0] + 8,
           this.connecting_pos[1] + 0.5
         ), e.lineTo(
@@ -14557,15 +14548,15 @@ const _LGraphCanvas = class _LGraphCanvas {
     let o = 50;
     if (r.font = "14px Arial", t.inputs)
       for (let l = 0; l < t.inputs.length; ++l) {
-        const h = t.inputs[l];
-        if (!h.not_subgraph_input) {
+        const u = t.inputs[l];
+        if (!u.not_subgraph_input) {
           if (this.drawButton(20, o + 2, n - 20, a - 2)) {
             const c = t.constructor.input_node_type || "graph/input";
-            this.graph.beforeChange();
-            const u = LiteGraph.createNode(c);
-            u ? (e.add(u), this.block_click = !1, this.last_click_position = null, this.selectNodes([u]), this.node_dragged = u, this.dragging_canvas = !1, u.setProperty("name", h.name), u.setProperty("type", h.type), this.node_dragged.pos[0] = this.graph_mouse[0] - 5, this.node_dragged.pos[1] = this.graph_mouse[1] - 5, this.graph.afterChange()) : console.error("graph input node not found:", c);
+            this.saveUndoStack(), this.graph.beforeChange();
+            const h = LiteGraph.createNode(c);
+            h ? (e.add(h), this.block_click = !1, this.last_click_position = null, this.selectNodes([h]), this.node_dragged = h, this.dragging_canvas = !1, h.setProperty("name", u.name), h.setProperty("type", u.type), this.node_dragged.pos[0] = this.graph_mouse[0] - 5, this.node_dragged.pos[1] = this.graph_mouse[1] - 5, this.graph.afterChange()) : console.error("graph input node not found:", c);
           }
-          r.fillStyle = "#9C9", r.beginPath(), r.arc(n - 16, o + a * 0.5, 5, 0, 2 * Math.PI), r.fill(), r.fillStyle = "#AAA", r.fillText(h.name, 30, o + a * 0.75), r.fillStyle = "#777", r.fillText(h.type, 130, o + a * 0.75), o += a;
+          r.fillStyle = "#9C9", r.beginPath(), r.arc(n - 16, o + a * 0.5, 5, 0, 2 * Math.PI), r.fill(), r.fillStyle = "#AAA", r.fillText(u.name, 30, o + a * 0.75), r.fillStyle = "#777", r.fillText(u.type, 130, o + a * 0.75), o += a;
         }
       }
     this.drawButton(20, o + 2, n - 20, a - 2, "+", "#151515", "#222") && this.showSubgraphPropertiesDialog(t);
@@ -14573,19 +14564,19 @@ const _LGraphCanvas = class _LGraphCanvas {
   drawSubgraphPanelRight(e, t, r) {
     const s = t.outputs ? t.outputs.length : 0, n = this.bgcanvas.width, a = 200, o = Math.floor(LiteGraph.NODE_SLOT_HEIGHT * 1.6);
     r.fillStyle = "#111", r.globalAlpha = 0.8, r.beginPath(), r.roundRect(n - a - 10, 10, a, (s + 1) * o + 50, [8]), r.fill(), r.globalAlpha = 1, r.fillStyle = "#888", r.font = "14px Arial", r.textAlign = "left";
-    const l = "Graph Outputs", h = r.measureText(l).width;
-    if (r.fillText(l, n - h - 20, 34), this.drawButton(n - a, 20, 20, 20, "X", "#151515")) {
+    const l = "Graph Outputs", u = r.measureText(l).width;
+    if (r.fillText(l, n - u - 20, 34), this.drawButton(n - a, 20, 20, 20, "X", "#151515")) {
       this.closeSubgraph();
       return;
     }
     let c = 50;
     if (r.font = "14px Arial", t.outputs)
-      for (let u = 0; u < t.outputs.length; ++u) {
-        const p = t.outputs[u];
+      for (let h = 0; h < t.outputs.length; ++h) {
+        const p = t.outputs[h];
         if (!p.not_subgraph_input) {
           if (this.drawButton(n - a, c + 2, a - 20, o - 2)) {
             const f = t.constructor.output_node_type || "graph/output";
-            this.graph.beforeChange();
+            this.saveUndoStack(), this.graph.beforeChange();
             const d = LiteGraph.createNode(f);
             d ? (e.add(d), this.block_click = !1, this.last_click_position = null, this.selectNodes([d]), this.node_dragged = d, this.dragging_canvas = !1, d.setProperty("name", p.name), d.setProperty("type", p.type), this.node_dragged.pos[0] = this.graph_mouse[0] - 5, this.node_dragged.pos[1] = this.graph_mouse[1] - 5, this.graph.afterChange()) : console.error("graph input node not found:", f);
           }
@@ -14604,16 +14595,16 @@ const _LGraphCanvas = class _LGraphCanvas {
   }
   //Draws a button into the canvas overlay and computes if it was clicked using the immediate gui paradigm
   drawButton(e, t, r, s, n, a, o, l) {
-    const h = this.ctx;
+    const u = this.ctx;
     a = a || LiteGraph.NODE_DEFAULT_COLOR, o = o || "#555", l = l || LiteGraph.NODE_TEXT_COLOR;
     let c = this.ds.convertOffsetToCanvas(this.graph_mouse);
-    const u = LiteGraph.isInsideRectangle(c[0], c[1], e, t, r, s);
+    const h = LiteGraph.isInsideRectangle(c[0], c[1], e, t, r, s);
     if (c = this.last_click_position ? [this.last_click_position[0], this.last_click_position[1]] : null, c) {
       const d = this.canvas.getBoundingClientRect();
       c[0] -= d.left, c[1] -= d.top;
     }
     const p = c && LiteGraph.isInsideRectangle(c[0], c[1], e, t, r, s);
-    h.fillStyle = u ? o : a, p && (h.fillStyle = "#AAA"), h.beginPath(), h.roundRect(e, t, r, s, [4]), h.fill(), n != null && n.constructor == String && (h.fillStyle = l, h.textAlign = "center", h.font = (s * 0.65 | 0) + "px Arial", h.fillText(n, e + r * 0.5, t + s * 0.75), h.textAlign = "left");
+    u.fillStyle = h ? o : a, p && (u.fillStyle = "#AAA"), u.beginPath(), u.roundRect(e, t, r, s, [4]), u.fill(), n != null && n.constructor == String && (u.fillStyle = l, u.textAlign = "center", u.font = (s * 0.65 | 0) + "px Arial", u.fillText(n, e + r * 0.5, t + s * 0.75), u.textAlign = "left");
     const f = p && !this.block_click;
     return p && this.blockClick(), f;
   }
@@ -14717,7 +14708,7 @@ const _LGraphCanvas = class _LGraphCanvas {
     const o = this.editor_alpha;
     if (t.globalAlpha = o, this.render_shadows && !a ? (t.shadowColor = LiteGraph.DEFAULT_SHADOW_COLOR, t.shadowOffsetX = 2 * this.ds.scale, t.shadowOffsetY = 2 * this.ds.scale, t.shadowBlur = 3 * this.ds.scale) : t.shadowColor = "transparent", e.flags.collapsed && e.onDrawCollapsed && e.onDrawCollapsed(t, this) == !0)
       return;
-    const l = e._shape || LiteGraph.BOX_SHAPE, h = r;
+    const l = e._shape || LiteGraph.BOX_SHAPE, u = r;
     r.set(e.size);
     const c = e.horizontal;
     if (e.flags.collapsed) {
@@ -14726,24 +14717,24 @@ const _LGraphCanvas = class _LGraphCanvas {
       b != null && (e._collapsed_width = Math.min(
         e.size[0],
         t.measureText(b).width + LiteGraph.NODE_TITLE_HEIGHT * 2
-      ), h[0] = e._collapsed_width, h[1] = 0);
+      ), u[0] = e._collapsed_width, u[1] = 0);
     }
-    e.clip_area && (t.save(), t.beginPath(), l == LiteGraph.BOX_SHAPE ? t.rect(0, 0, h[0], h[1]) : l == LiteGraph.ROUND_SHAPE ? t.roundRect(0, 0, h[0], h[1], [10]) : l == LiteGraph.CIRCLE_SHAPE && t.arc(
-      h[0] * 0.5,
-      h[1] * 0.5,
-      h[0] * 0.5,
+    e.clip_area && (t.save(), t.beginPath(), l == LiteGraph.BOX_SHAPE ? t.rect(0, 0, u[0], u[1]) : l == LiteGraph.ROUND_SHAPE ? t.roundRect(0, 0, u[0], u[1], [10]) : l == LiteGraph.CIRCLE_SHAPE && t.arc(
+      u[0] * 0.5,
+      u[1] * 0.5,
+      u[0] * 0.5,
       0,
       Math.PI * 2
     ), t.clip()), e.has_errors && (n = "red"), this.drawNodeShape(
       e,
       t,
-      h,
+      u,
       s,
       n,
       e.is_selected,
       e.mouseOver
     ), t.shadowColor = "transparent", e.onDrawForeground && e.onDrawForeground(t, this, this.canvas), t.textAlign = c ? "center" : "left", t.font = this.inner_text_font;
-    const u = !a, p = this.connecting_output, f = this.connecting_input;
+    const h = !a, p = this.connecting_output, f = this.connecting_input;
     t.lineWidth = 1;
     let d = 0;
     const g = new Float32Array(2);
@@ -14789,7 +14780,7 @@ const _LGraphCanvas = class _LGraphCanvas {
             _[1] - 5 + 0.5,
             14,
             10
-          ) : T === LiteGraph.ARROW_SHAPE ? (t.moveTo(_[0] + 8, _[1] + 0.5), t.lineTo(_[0] - 4, _[1] + 6 + 0.5), t.lineTo(_[0] - 4, _[1] - 6 + 0.5), t.closePath()) : T === LiteGraph.GRID_SHAPE ? (t.rect(_[0] - 4, _[1] - 4, 2, 2), t.rect(_[0] - 1, _[1] - 4, 2, 2), t.rect(_[0] + 2, _[1] - 4, 2, 2), t.rect(_[0] - 4, _[1] - 1, 2, 2), t.rect(_[0] - 1, _[1] - 1, 2, 2), t.rect(_[0] + 2, _[1] - 1, 2, 2), t.rect(_[0] - 4, _[1] + 2, 2, 2), t.rect(_[0] - 1, _[1] + 2, 2, 2), t.rect(_[0] + 2, _[1] + 2, 2, 2)) : a ? t.rect(_[0] - 4, _[1] - 4, 8, 8) : t.arc(_[0], _[1], 4, 0, Math.PI * 2), t.fill(), u) {
+          ) : T === LiteGraph.ARROW_SHAPE ? (t.moveTo(_[0] + 8, _[1] + 0.5), t.lineTo(_[0] - 4, _[1] + 6 + 0.5), t.lineTo(_[0] - 4, _[1] - 6 + 0.5), t.closePath()) : T === LiteGraph.GRID_SHAPE ? (t.rect(_[0] - 4, _[1] - 4, 2, 2), t.rect(_[0] - 1, _[1] - 4, 2, 2), t.rect(_[0] + 2, _[1] - 4, 2, 2), t.rect(_[0] - 4, _[1] - 1, 2, 2), t.rect(_[0] - 1, _[1] - 1, 2, 2), t.rect(_[0] + 2, _[1] - 1, 2, 2), t.rect(_[0] - 4, _[1] + 2, 2, 2), t.rect(_[0] - 1, _[1] + 2, 2, 2), t.rect(_[0] + 2, _[1] + 2, 2, 2)) : a ? t.rect(_[0] - 4, _[1] - 4, 8, 8) : t.arc(_[0], _[1], 4, 0, Math.PI * 2), t.fill(), h) {
             const I = E.label != null ? E.label : E.name;
             I && (t.fillStyle = LiteGraph.NODE_TEXT_COLOR, c || E.dir == LiteGraph.UP ? t.fillText(I, _[0], _[1] - 10) : this.options.useWebgl ? t.fillText(I, _[0] + 10, _[1] + 2) : t.fillText(I, _[0] + 10, _[1] + 5));
           }
@@ -14812,7 +14803,7 @@ const _LGraphCanvas = class _LGraphCanvas {
             _[1] - 5 + 0.5,
             14,
             10
-          ) : T === LiteGraph.ARROW_SHAPE ? (t.moveTo(_[0] + 8, _[1] + 0.5), t.lineTo(_[0] - 4, _[1] + 6 + 0.5), t.lineTo(_[0] - 4, _[1] - 6 + 0.5), t.closePath()) : T === LiteGraph.GRID_SHAPE ? (t.rect(_[0] - 4, _[1] - 4, 2, 2), t.rect(_[0] - 1, _[1] - 4, 2, 2), t.rect(_[0] + 2, _[1] - 4, 2, 2), t.rect(_[0] - 4, _[1] - 1, 2, 2), t.rect(_[0] - 1, _[1] - 1, 2, 2), t.rect(_[0] + 2, _[1] - 1, 2, 2), t.rect(_[0] - 4, _[1] + 2, 2, 2), t.rect(_[0] - 1, _[1] + 2, 2, 2), t.rect(_[0] + 2, _[1] + 2, 2, 2), I = !1) : a ? t.rect(_[0] - 4, _[1] - 4, 8, 8) : t.arc(_[0], _[1], 4, 0, Math.PI * 2), t.fill(), !a && I && t.stroke(), u) {
+          ) : T === LiteGraph.ARROW_SHAPE ? (t.moveTo(_[0] + 8, _[1] + 0.5), t.lineTo(_[0] - 4, _[1] + 6 + 0.5), t.lineTo(_[0] - 4, _[1] - 6 + 0.5), t.closePath()) : T === LiteGraph.GRID_SHAPE ? (t.rect(_[0] - 4, _[1] - 4, 2, 2), t.rect(_[0] - 1, _[1] - 4, 2, 2), t.rect(_[0] + 2, _[1] - 4, 2, 2), t.rect(_[0] - 4, _[1] - 1, 2, 2), t.rect(_[0] - 1, _[1] - 1, 2, 2), t.rect(_[0] + 2, _[1] - 1, 2, 2), t.rect(_[0] - 4, _[1] + 2, 2, 2), t.rect(_[0] - 1, _[1] + 2, 2, 2), t.rect(_[0] + 2, _[1] + 2, 2, 2), I = !1) : a ? t.rect(_[0] - 4, _[1] - 4, 8, 8) : t.arc(_[0], _[1], 4, 0, Math.PI * 2), t.fill(), !a && I && t.stroke(), h) {
             const A = E.label != null ? E.label : E.name;
             if (A)
               if (t.fillStyle = LiteGraph.NODE_TEXT_COLOR, c || E.dir == LiteGraph.DOWN)
@@ -14860,19 +14851,19 @@ const _LGraphCanvas = class _LGraphCanvas {
   drawNodeShape(e, t, r, s, n, a, o) {
     const l = new Float32Array(4);
     t.strokeStyle = s, t.fillStyle = n;
-    const h = LiteGraph.NODE_TITLE_HEIGHT, c = this.ds.scale < 0.5, u = e._shape || e.constructor.shape || LiteGraph.ROUND_SHAPE, p = e.constructor.title_mode;
+    const u = LiteGraph.NODE_TITLE_HEIGHT, c = this.ds.scale < 0.5, h = e._shape || e.constructor.shape || LiteGraph.ROUND_SHAPE, p = e.constructor.title_mode;
     let f = !0;
     p == LiteGraph.TRANSPARENT_TITLE || p == LiteGraph.NO_TITLE ? f = !1 : p == LiteGraph.AUTOHIDE_TITLE && o && (f = !0);
     const d = l;
-    d[0] = 0, d[1] = f ? -h : 0, d[2] = r[0] + 1, d[3] = f ? r[1] + h : r[1];
+    d[0] = 0, d[1] = f ? -u : 0, d[2] = r[0] + 1, d[3] = f ? r[1] + u : r[1];
     const g = t.globalAlpha;
-    if (t.beginPath(), u == LiteGraph.BOX_SHAPE || c ? t.fillRect(d[0], d[1], d[2], d[3]) : u == LiteGraph.ROUND_SHAPE || u == LiteGraph.CARD_SHAPE ? t.roundRect(
+    if (t.beginPath(), h == LiteGraph.BOX_SHAPE || c ? t.fillRect(d[0], d[1], d[2], d[3]) : h == LiteGraph.ROUND_SHAPE || h == LiteGraph.CARD_SHAPE ? t.roundRect(
       d[0],
       d[1],
       d[2],
       d[3],
-      u == LiteGraph.CARD_SHAPE ? [this.round_radius, this.round_radius, 0, 0] : [this.round_radius]
-    ) : u == LiteGraph.CIRCLE_SHAPE && t.arc(
+      h == LiteGraph.CARD_SHAPE ? [this.round_radius, this.round_radius, 0, 0] : [this.round_radius]
+    ) : h == LiteGraph.CIRCLE_SHAPE && t.arc(
       r[0] * 0.5,
       r[1] * 0.5,
       r[0] * 0.5,
@@ -14882,7 +14873,7 @@ const _LGraphCanvas = class _LGraphCanvas {
       if (e.onDrawTitleBar)
         e.onDrawTitleBar(
           t,
-          h,
+          u,
           r,
           this.ds.scale,
           s
@@ -14894,47 +14885,47 @@ const _LGraphCanvas = class _LGraphCanvas {
           L || (L = _LGraphCanvas.gradients[E] = t.createLinearGradient(0, 0, 400, 0), L.addColorStop(0, E), L.addColorStop(1, "#000")), t.fillStyle = L;
         } else
           t.fillStyle = E;
-        t.beginPath(), u == LiteGraph.BOX_SHAPE || c ? t.rect(0, -h, r[0] + 1, h) : (u == LiteGraph.ROUND_SHAPE || u == LiteGraph.CARD_SHAPE) && t.roundRect(
+        t.beginPath(), h == LiteGraph.BOX_SHAPE || c ? t.rect(0, -u, r[0] + 1, u) : (h == LiteGraph.ROUND_SHAPE || h == LiteGraph.CARD_SHAPE) && t.roundRect(
           0,
-          -h,
+          -u,
           r[0] + 1,
-          h,
+          u,
           e.flags.collapsed ? [this.round_radius] : [this.round_radius, this.round_radius, 0, 0]
         ), t.fill(), t.shadowColor = "transparent";
       }
       let m = !1;
       LiteGraph.node_box_coloured_by_mode && LiteGraph.NODE_MODES_COLORS[e.mode] && (m = LiteGraph.NODE_MODES_COLORS[e.mode]), LiteGraph.node_box_coloured_when_on && (m = e.action_triggered ? "#FFF" : e.execute_triggered ? "#AAA" : m);
       const b = 10;
-      if (e.onDrawTitleBox ? e.onDrawTitleBox(t, h, r, this.ds.scale) : u == LiteGraph.ROUND_SHAPE || u == LiteGraph.CIRCLE_SHAPE || u == LiteGraph.CARD_SHAPE ? (c && (t.fillStyle = "black", t.beginPath(), t.arc(
-        h * 0.5,
-        h * -0.5,
+      if (e.onDrawTitleBox ? e.onDrawTitleBox(t, u, r, this.ds.scale) : h == LiteGraph.ROUND_SHAPE || h == LiteGraph.CIRCLE_SHAPE || h == LiteGraph.CARD_SHAPE ? (c && (t.fillStyle = "black", t.beginPath(), t.arc(
+        u * 0.5,
+        u * -0.5,
         b * 0.5 + 1,
         0,
         Math.PI * 2
       ), t.fill()), t.fillStyle = e.boxcolor || m || LiteGraph.NODE_DEFAULT_BOXCOLOR, c ? t.fillRect(
-        h * 0.5 - b * 0.5,
-        h * -0.5 - b * 0.5,
+        u * 0.5 - b * 0.5,
+        u * -0.5 - b * 0.5,
         b,
         b
       ) : (t.beginPath(), t.arc(
-        h * 0.5,
-        h * -0.5,
+        u * 0.5,
+        u * -0.5,
         b * 0.5,
         0,
         Math.PI * 2
       ), t.fill())) : (c && (t.fillStyle = "black", t.fillRect(
-        (h - b) * 0.5 - 1,
-        (h + b) * -0.5 - 1,
+        (u - b) * 0.5 - 1,
+        (u + b) * -0.5 - 1,
         b + 2,
         b + 2
       )), t.fillStyle = e.boxcolor || m || LiteGraph.NODE_DEFAULT_BOXCOLOR, t.fillRect(
-        (h - b) * 0.5,
-        (h + b) * -0.5,
+        (u - b) * 0.5,
+        (u + b) * -0.5,
         b,
         b
       )), t.globalAlpha = g, e.onDrawTitleText && e.onDrawTitleText(
         t,
-        h,
+        u,
         r,
         this.ds.scale,
         this.title_text_font,
@@ -14945,13 +14936,13 @@ const _LGraphCanvas = class _LGraphCanvas {
         E && (a ? t.fillStyle = LiteGraph.NODE_SELECTED_TITLE_COLOR : t.fillStyle = e.constructor.title_text_color || this.node_title_color, e.flags.collapsed ? (t.textAlign = "left", t.measureText(E), t.fillText(
           E.substr(0, 20),
           //avoid urls too long
-          h,
+          u,
           // + measure.width * 0.5,
-          LiteGraph.NODE_TITLE_TEXT_Y - h
+          LiteGraph.NODE_TITLE_TEXT_Y - u
         ), t.textAlign = "left") : (t.textAlign = "left", t.fillText(
           E,
-          h,
-          LiteGraph.NODE_TITLE_TEXT_Y - h
+          u,
+          LiteGraph.NODE_TITLE_TEXT_Y - u
         )));
       }
       if (!e.flags.collapsed && e.subgraph && !e.skip_subgraph_button) {
@@ -14963,28 +14954,28 @@ const _LGraphCanvas = class _LGraphCanvas {
           E - 4,
           E - 4
         );
-        t.fillStyle = T ? "#888" : "#555", u == LiteGraph.BOX_SHAPE || c ? t.fillRect(L + 2, -E + 2, E - 4, E - 4) : (t.beginPath(), t.roundRect(L + 2, -E + 2, E - 4, E - 4, [4]), t.fill()), t.fillStyle = "#333", t.beginPath(), t.moveTo(L + E * 0.2, -E * 0.6), t.lineTo(L + E * 0.8, -E * 0.6), t.lineTo(L + E * 0.5, -E * 0.3), t.fill();
+        t.fillStyle = T ? "#888" : "#555", h == LiteGraph.BOX_SHAPE || c ? t.fillRect(L + 2, -E + 2, E - 4, E - 4) : (t.beginPath(), t.roundRect(L + 2, -E + 2, E - 4, E - 4, [4]), t.fill()), t.fillStyle = "#333", t.beginPath(), t.moveTo(L + E * 0.2, -E * 0.6), t.lineTo(L + E * 0.8, -E * 0.6), t.lineTo(L + E * 0.5, -E * 0.3), t.fill();
       }
       e.onDrawTitle && e.onDrawTitle(t);
     }
-    a && (e.onBounding && e.onBounding(d), p == LiteGraph.TRANSPARENT_TITLE && (d[1] -= h, d[3] += h), t.lineWidth = 1, t.globalAlpha = 0.8, t.beginPath(), u == LiteGraph.BOX_SHAPE ? t.rect(
+    a && (e.onBounding && e.onBounding(d), p == LiteGraph.TRANSPARENT_TITLE && (d[1] -= u, d[3] += u), t.lineWidth = 1, t.globalAlpha = 0.8, t.beginPath(), h == LiteGraph.BOX_SHAPE ? t.rect(
       -6 + d[0],
       -6 + d[1],
       12 + d[2],
       12 + d[3]
-    ) : u == LiteGraph.ROUND_SHAPE || u == LiteGraph.CARD_SHAPE && e.flags.collapsed ? t.roundRect(
+    ) : h == LiteGraph.ROUND_SHAPE || h == LiteGraph.CARD_SHAPE && e.flags.collapsed ? t.roundRect(
       -6 + d[0],
       -6 + d[1],
       12 + d[2],
       12 + d[3],
       [this.round_radius * 2]
-    ) : u == LiteGraph.CARD_SHAPE ? t.roundRect(
+    ) : h == LiteGraph.CARD_SHAPE ? t.roundRect(
       -6 + d[0],
       -6 + d[1],
       12 + d[2],
       12 + d[3],
       [this.round_radius * 2, 2, this.round_radius * 2, 2]
-    ) : u == LiteGraph.CIRCLE_SHAPE && t.arc(
+    ) : h == LiteGraph.CIRCLE_SHAPE && t.arc(
       r[0] * 0.5,
       r[1] * 0.5,
       r[0] * 0.5 + 6,
@@ -15001,11 +14992,11 @@ const _LGraphCanvas = class _LGraphCanvas {
     const t = new Float32Array(4), r = new Float32Array(4), s = new Float32Array(2), n = new Float32Array(2), a = LiteGraph.getTime(), o = this.visible_area;
     t[0] = o[0] - 20, t[1] = o[1] - 20, t[2] = o[2] + 40, t[3] = o[3] + 40, e.lineWidth = this.connections_width, e.fillStyle = "#AAA", e.strokeStyle = "#AAA", e.globalAlpha = this.editor_alpha;
     const l = this.graph._nodes;
-    for (let h = 0, c = l.length; h < c; ++h) {
-      const u = l[h];
-      if (!(!u.inputs || !u.inputs.length))
-        for (let p = 0; p < u.inputs.length; ++p) {
-          const f = u.inputs[p];
+    for (let u = 0, c = l.length; u < c; ++u) {
+      const h = l[u];
+      if (!(!h.inputs || !h.inputs.length))
+        for (let p = 0; p < h.inputs.length; ++p) {
+          const f = h.inputs[p];
           if (!f || f.link == null)
             continue;
           const d = f.link, g = this.graph.links[d];
@@ -15023,13 +15014,13 @@ const _LGraphCanvas = class _LGraphCanvas {
             b,
             s
           );
-          const L = u.getConnectionPos(!0, p, n);
+          const L = h.getConnectionPos(!0, p, n);
           if (r[0] = E[0], r[1] = E[1], r[2] = L[0] - E[0], r[3] = L[1] - E[1], r[2] < 0 && (r[0] += r[2], r[2] = Math.abs(r[2])), r[3] < 0 && (r[1] += r[3], r[3] = Math.abs(r[3])), !LiteGraph.overlapBounding(r, t))
             continue;
-          const T = m.outputs[b], _ = u.inputs[p];
+          const T = m.outputs[b], _ = h.inputs[p];
           if (!T || !_)
             continue;
-          const I = T.dir || (m.horizontal ? LiteGraph.DOWN : LiteGraph.RIGHT), A = _.dir || (u.horizontal ? LiteGraph.UP : LiteGraph.LEFT);
+          const I = T.dir || (m.horizontal ? LiteGraph.DOWN : LiteGraph.RIGHT), A = _.dir || (h.horizontal ? LiteGraph.UP : LiteGraph.LEFT);
           if (this.ALWAYS_FLOW)
             this.renderLink(
               e,
@@ -15138,21 +15129,21 @@ const _LGraphCanvas = class _LGraphCanvas {
     otherRoundX: a,
     otherRoundY: o,
     otherRoundWidth: l,
-    otherRoundHeight: h
+    otherRoundHeight: u
   }) {
-    l === s && (e.beginPath(), e.moveTo(t, r - 10), e.lineTo(t, r + n + 10), e.stroke(), e.beginPath(), e.moveTo(t + +s, r - 10), e.lineTo(t + s, r + n + 10), e.stroke(), e.beginPath(), e.moveTo(a, o - 10), e.lineTo(a, o + h + 10), e.stroke(), e.beginPath(), e.moveTo(a + l, o - 10), e.lineTo(
+    l === s && (e.beginPath(), e.moveTo(t, r - 10), e.lineTo(t, r + n + 10), e.stroke(), e.beginPath(), e.moveTo(t + +s, r - 10), e.lineTo(t + s, r + n + 10), e.stroke(), e.beginPath(), e.moveTo(a, o - 10), e.lineTo(a, o + u + 10), e.stroke(), e.beginPath(), e.moveTo(a + l, o - 10), e.lineTo(
       a + l,
-      o + h + 10
-    ), e.stroke()), h === n && (e.beginPath(), e.moveTo(t - 10, r), e.lineTo(t + s + 10, r), e.stroke(), e.beginPath(), e.moveTo(t - 10, r + n), e.lineTo(t + s + 10, r + n), e.stroke(), e.beginPath(), e.moveTo(a - 10, o), e.lineTo(a + l + 10, o), e.stroke(), e.beginPath(), e.moveTo(a - 10, o + h), e.lineTo(
+      o + u + 10
+    ), e.stroke()), u === n && (e.beginPath(), e.moveTo(t - 10, r), e.lineTo(t + s + 10, r), e.stroke(), e.beginPath(), e.moveTo(t - 10, r + n), e.lineTo(t + s + 10, r + n), e.stroke(), e.beginPath(), e.moveTo(a - 10, o), e.lineTo(a + l + 10, o), e.stroke(), e.beginPath(), e.moveTo(a - 10, o + u), e.lineTo(
       a + l + 10,
-      o + h
-    ), e.stroke()), a === t && (r < o ? (e.beginPath(), e.moveTo(t, r), e.lineTo(a, o + h), e.stroke()) : (e.beginPath(), e.moveTo(a, o), e.lineTo(t, r + n), e.stroke())), a + l === t + s && (r < o ? (e.beginPath(), e.moveTo(t + s, r), e.lineTo(
+      o + u
+    ), e.stroke()), a === t && (r < o ? (e.beginPath(), e.moveTo(t, r), e.lineTo(a, o + u), e.stroke()) : (e.beginPath(), e.moveTo(a, o), e.lineTo(t, r + n), e.stroke())), a + l === t + s && (r < o ? (e.beginPath(), e.moveTo(t + s, r), e.lineTo(
       a + l,
-      o + h
-    ), e.stroke()) : (e.beginPath(), e.moveTo(a + l, o), e.lineTo(t + s, r + n), e.stroke())), o === r && (t < a ? (e.beginPath(), e.moveTo(t, r), e.lineTo(a + l, o), e.stroke()) : (e.beginPath(), e.moveTo(a, o), e.lineTo(t + s, r), e.stroke())), o + h === r + n && (t < a ? (e.beginPath(), e.moveTo(t, r + n), e.lineTo(
+      o + u
+    ), e.stroke()) : (e.beginPath(), e.moveTo(a + l, o), e.lineTo(t + s, r + n), e.stroke())), o === r && (t < a ? (e.beginPath(), e.moveTo(t, r), e.lineTo(a + l, o), e.stroke()) : (e.beginPath(), e.moveTo(a, o), e.lineTo(t + s, r), e.stroke())), o + u === r + n && (t < a ? (e.beginPath(), e.moveTo(t, r + n), e.lineTo(
       a + l,
-      o + h
-    ), e.stroke()) : (e.beginPath(), e.moveTo(a, o + h), e.lineTo(t + s, r + n), e.stroke()));
+      o + u
+    ), e.stroke()) : (e.beginPath(), e.moveTo(a, o + u), e.lineTo(t + s, r + n), e.stroke()));
   }
   drawGroups(e, t) {
     var s, n, a, o, l;
@@ -15160,31 +15151,31 @@ const _LGraphCanvas = class _LGraphCanvas {
       return;
     const r = this.graph._groups;
     t.save(), t.globalAlpha = 0.5 * this.editor_alpha;
-    for (let h = 0; h < r.length; ++h) {
-      const c = r[h];
+    for (let u = 0; u < r.length; ++u) {
+      const c = r[u];
       if (!LiteGraph.overlapBounding(this.visible_area, c._bounding))
         continue;
-      const u = c._pos, p = c._size, f = c.color || _LGraphCanvas.node_colors.black.groupcolor;
+      const h = c._pos, p = c._size, f = c.color || _LGraphCanvas.node_colors.black.groupcolor;
       t.fillStyle = f, t.globalAlpha = 0.75, t.beginPath();
       const d = 10;
-      t.fillStyle = f || "#333", t.beginPath(), t.moveTo(u[0] + d, u[1]), t.lineTo(u[0] + p[0] - d, u[1]), t.quadraticCurveTo(
-        u[0] + p[0],
-        u[1],
-        u[0] + p[0],
-        u[1] + d
-      ), t.lineTo(u[0] + p[0], u[1] + p[1] - d), t.quadraticCurveTo(
-        u[0] + p[0],
-        u[1] + p[1],
-        u[0] + p[0] - d,
-        u[1] + p[1]
-      ), t.lineTo(u[0] + d, u[1] + p[1]), t.quadraticCurveTo(
-        u[0],
-        u[1] + p[1],
-        u[0],
-        u[1] + p[1] - d
-      ), t.lineTo(u[0], u[1] + d), t.quadraticCurveTo(u[0], u[1], u[0] + d, u[1]), t.closePath(), t.fill(), this.read_only || (t.fillStyle = "#0085FF", t.beginPath(), t.moveTo(u[0] + p[0] - 7, u[1] + p[1]), t.lineTo(u[0] + p[0], u[1] + p[1]), t.lineTo(u[0] + p[0], u[1] + p[1] - 7), t.closePath(), t.fill());
+      t.fillStyle = f || "#333", t.beginPath(), t.moveTo(h[0] + d, h[1]), t.lineTo(h[0] + p[0] - d, h[1]), t.quadraticCurveTo(
+        h[0] + p[0],
+        h[1],
+        h[0] + p[0],
+        h[1] + d
+      ), t.lineTo(h[0] + p[0], h[1] + p[1] - d), t.quadraticCurveTo(
+        h[0] + p[0],
+        h[1] + p[1],
+        h[0] + p[0] - d,
+        h[1] + p[1]
+      ), t.lineTo(h[0] + d, h[1] + p[1]), t.quadraticCurveTo(
+        h[0],
+        h[1] + p[1],
+        h[0],
+        h[1] + p[1] - d
+      ), t.lineTo(h[0], h[1] + d), t.quadraticCurveTo(h[0], h[1], h[0] + d, h[1]), t.closePath(), t.fill(), this.read_only || (t.fillStyle = "#0085FF", t.beginPath(), t.moveTo(h[0] + p[0] - 7, h[1] + p[1]), t.lineTo(h[0] + p[0], h[1] + p[1]), t.lineTo(h[0] + p[0], h[1] + p[1] - 7), t.closePath(), t.fill());
       const g = LiteGraph.DEFAULT_GROUP_FONT_SIZE || 20, m = c.font_size || g;
-      if (t.fillStyle = "#ffffff", t.font = "Bold " + m + "px Arial", t.textAlign = "left", t.fillText(c.title, u[0] + 12, u[1] + m + 8), !this.read_only) {
+      if (t.fillStyle = "#ffffff", t.font = "Bold " + m + "px Arial", t.textAlign = "left", t.fillText(c.title, h[0] + 12, h[1] + m + 8), !this.read_only) {
         const b = c.font_size * 0.6;
         t.font = `${b}px Arial`, t.fillStyle = "#c6c6c6";
         const E = `x / y / 넓이 / 높이: ${parseInt(
@@ -15201,7 +15192,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           } else
             L = _;
         }
-        t.fillText(L, u[0] + 10, u[1] + c.size[1] - 12);
+        t.fillText(L, h[0] + 10, h[1] + c.size[1] - 12);
       }
       if (this.selected_group && (c == null ? void 0 : c.id) !== ((s = this.selected_group) == null ? void 0 : s.id) && !this.read_only) {
         t.strokeStyle = "#c4c4c4", t.lineWidth = 1;
@@ -15233,9 +15224,9 @@ const _LGraphCanvas = class _LGraphCanvas {
    * @returns {boolean} 충돌 여부
    */
   checkLineSegmentIntersectsRect(e, t, r, s = 10) {
-    const [n, a, o, l] = r, h = n - s, c = n + o + s, u = a - s, p = a + l + s, f = e[0], d = e[1], g = t[0], m = t[1], b = (O, D) => {
+    const [n, a, o, l] = r, u = n - s, c = n + o + s, h = a - s, p = a + l + s, f = e[0], d = e[1], g = t[0], m = t[1], b = (O, D) => {
       let P = 0;
-      return O < h ? P |= 1 : O > c && (P |= 2), D < u ? P |= 4 : D > p && (P |= 8), P;
+      return O < u ? P |= 1 : O > c && (P |= 2), D < h ? P |= 4 : D > p && (P |= 8), P;
     };
     let E = b(f, d), L = b(g, m);
     if (E & L)
@@ -15256,7 +15247,7 @@ const _LGraphCanvas = class _LGraphCanvas {
       }
       return !0;
     };
-    return !!(M(-I, f - h) && M(I, c - f) && M(-A, d - u) && M(A, p - d));
+    return !!(M(-I, f - u) && M(I, c - f) && M(-A, d - h) && M(A, p - d));
   }
   /**
    * 링크 경로를 막고 있는 노드들을 찾습니다
@@ -15268,22 +15259,47 @@ const _LGraphCanvas = class _LGraphCanvas {
    */
   findObstructingNodes(e, t, r) {
     if (!this.graph || !r) return [];
-    const s = [], n = this.graph._nodes, a = r.origin_id, o = r.target_id, l = LiteGraph.RIGHT, h = LiteGraph.LEFT, c = this.computeDefaultPath(e, t, l, h);
-    console.log("[DEBUG] Checking obstruction for link", r.id, "with", n.length, "nodes"), console.log("[DEBUG] Path points:", c);
-    for (let u = 0; u < n.length; u++) {
-      const p = n[u];
+    const s = [], n = this.graph._nodes, a = r.origin_id, o = r.target_id, l = LiteGraph.RIGHT, u = LiteGraph.LEFT, c = this.computeDefaultPath(
+      e,
+      t,
+      l,
+      u
+    );
+    console.log(
+      "[DEBUG] Checking obstruction for link",
+      r.id,
+      "with",
+      n.length,
+      "nodes"
+    ), console.log("[DEBUG] Path points:", c);
+    for (let h = 0; h < n.length; h++) {
+      const p = n[h];
       if (p.id === a || p.id === o)
         continue;
       const f = [p.pos[0], p.pos[1], p.size[0], p.size[1]];
       let d = !1;
       for (let g = 0; g < c.length - 1; g++)
-        if (this.checkLineSegmentIntersectsRect(c[g], c[g + 1], f)) {
-          d = !0, console.log("[DEBUG] Node", p.id, p.title, "obstructs segment", g);
+        if (this.checkLineSegmentIntersectsRect(
+          c[g],
+          c[g + 1],
+          f
+        )) {
+          d = !0, console.log(
+            "[DEBUG] Node",
+            p.id,
+            p.title,
+            "obstructs segment",
+            g
+          );
           break;
         }
       d && s.push(p);
     }
-    return console.log("[DEBUG] Found", s.length, "obstructing nodes"), s;
+    return console.log(
+      "[DEBUG] Found",
+      s.length,
+      "obstructing nodes"
+    ), s;
   }
   /**
    * 노드를 피하는 우회 경로를 계산합니다
@@ -15300,13 +15316,13 @@ const _LGraphCanvas = class _LGraphCanvas {
       return this.computeDefaultPath(e, t, s, n);
     const a = 15, o = [e];
     let l = [...e];
-    for (let h = 0; h < r.length; h++) {
-      const c = r[h], u = [
+    for (let u = 0; u < r.length; u++) {
+      const c = r[u], h = [
         c.pos[0] - a,
         c.pos[1] - a,
         c.size[0] + a * 2,
         c.size[1] + a * 2
-      ], p = u[1], f = u[1] + u[3], d = u[0], g = u[0] + u[2], m = Math.abs(l[1] - p), b = Math.abs(l[1] - f), L = m < b ? p : f, T = Math.abs(l[0] - d), _ = Math.abs(l[0] - g);
+      ], p = h[1], f = h[1] + h[3], d = h[0], g = h[0] + h[2], m = Math.abs(l[1] - p), b = Math.abs(l[1] - f), L = m < b ? p : f, T = Math.abs(l[0] - d), _ = Math.abs(l[0] - g);
       if (Math.min(T, _) < Math.min(m, b)) {
         const A = T < _ ? d : g;
         o.push([A, l[1]]), o.push([A, t[1]]);
@@ -15327,10 +15343,10 @@ const _LGraphCanvas = class _LGraphCanvas {
    */
   computeDefaultPath(e, t, r, s) {
     const n = [];
-    let a = e[0], o = e[1], l = t[0], h = t[1];
-    r == LiteGraph.RIGHT ? a += 10 : r == LiteGraph.LEFT ? a -= 10 : r == LiteGraph.DOWN ? o += 10 : r == LiteGraph.UP && (o -= 10), s == LiteGraph.LEFT ? l -= 10 : s == LiteGraph.RIGHT ? l += 10 : s == LiteGraph.UP ? h -= 10 : s == LiteGraph.DOWN && (h += 10);
+    let a = e[0], o = e[1], l = t[0], u = t[1];
+    r == LiteGraph.RIGHT ? a += 10 : r == LiteGraph.LEFT ? a -= 10 : r == LiteGraph.DOWN ? o += 10 : r == LiteGraph.UP && (o -= 10), s == LiteGraph.LEFT ? l -= 10 : s == LiteGraph.RIGHT ? l += 10 : s == LiteGraph.UP ? u -= 10 : s == LiteGraph.DOWN && (u += 10);
     const c = (a + l) * 0.5;
-    return n.push([e[0], e[1]]), n.push([a, o]), n.push([c, o]), n.push([c, h]), n.push([l, h]), n.push([t[0], t[1]]), n;
+    return n.push([e[0], e[1]]), n.push([a, o]), n.push([c, o]), n.push([c, u]), n.push([l, u]), n.push([t[0], t[1]]), n;
   }
   /**
    * draws a link between two points
@@ -15345,13 +15361,13 @@ const _LGraphCanvas = class _LGraphCanvas {
    * @param {number} end_dir the direction enum
    * @param {number} num_sublines number of sublines (useful to represent vec3 or rgb)
    **/
-  renderLink(e, t, r, s, n, a, o, l, h, c) {
+  renderLink(e, t, r, s, n, a, o, l, u, c) {
     if (o = "#3b3b3b", s) {
       const f = this.graph.getNodeById(s.origin_id), d = this.graph.getNodeById(s.target_id), g = f.properties.status, m = d.properties.status, b = f.properties.resultIndex;
       typeof b == "number" && s.origin_slot === b && (g === 1 && m === 1 ? o = "#34c38f" : g === -1 || m === -1 ? o = "#f46a6a" : (g === 0 || m === 0) && (o = "#3b3b3b"));
     }
-    s && this.visible_links.push(s), !o && s && (o = s.color || _LGraphCanvas.link_type_colors[s.type]), o || (o = this.default_link_color), s != null && this.highlighted_links[s.id] && (o = "#FFF"), l = l || LiteGraph.RIGHT, h = h || LiteGraph.LEFT;
-    const u = LiteGraph.distance(t, r);
+    s && this.visible_links.push(s), !o && s && (o = s.color || _LGraphCanvas.link_type_colors[s.type]), o || (o = this.default_link_color), s != null && this.highlighted_links[s.id] && (o = "#FFF"), l = l || LiteGraph.RIGHT, u = u || LiteGraph.LEFT;
+    const h = LiteGraph.distance(t, r);
     this.render_connections_border && this.ds.scale > 0.6 && (e.lineWidth = this.connections_width + 4), e.lineJoin = "round", c = c || 1, c > 1 && (e.lineWidth = 0.5), e.beginPath();
     for (let f = 0; f < c; f += 1) {
       const d = (f - (c - 1) * 0.5) * 5;
@@ -15360,30 +15376,30 @@ const _LGraphCanvas = class _LGraphCanvas {
         let g = 0, m = 0, b = 0, E = 0;
         switch (l) {
           case LiteGraph.LEFT:
-            g = u * -0.25;
+            g = h * -0.25;
             break;
           case LiteGraph.RIGHT:
-            g = u * 0.25;
+            g = h * 0.25;
             break;
           case LiteGraph.UP:
-            m = u * -0.25;
+            m = h * -0.25;
             break;
           case LiteGraph.DOWN:
-            m = u * 0.25;
+            m = h * 0.25;
             break;
         }
-        switch (h) {
+        switch (u) {
           case LiteGraph.LEFT:
-            b = u * -0.25;
+            b = h * -0.25;
             break;
           case LiteGraph.RIGHT:
-            b = u * 0.25;
+            b = h * 0.25;
             break;
           case LiteGraph.UP:
-            E = u * -0.25;
+            E = h * -0.25;
             break;
           case LiteGraph.DOWN:
-            E = u * 0.25;
+            E = h * 0.25;
             break;
         }
         e.bezierCurveTo(
@@ -15399,80 +15415,92 @@ const _LGraphCanvas = class _LGraphCanvas {
         let g = 0, m = 0, b = 0, E = 0;
         switch (l) {
           case LiteGraph.LEFT:
-            g = u * -0.25;
+            g = h * -0.25;
             break;
           case LiteGraph.RIGHT:
-            g = u * 0.25;
+            g = h * 0.25;
             break;
           case LiteGraph.UP:
-            m = u * -0.25;
+            m = h * -0.25;
             break;
           case LiteGraph.DOWN:
-            m = u * 0.25;
+            m = h * 0.25;
             break;
         }
-        switch (h) {
+        switch (u) {
           case LiteGraph.LEFT:
-            b = u * -0.25;
+            b = h * -0.25;
             break;
           case LiteGraph.RIGHT:
-            b = u * 0.25;
+            b = h * 0.25;
             break;
           case LiteGraph.UP:
-            E = u * -0.25;
+            E = h * -0.25;
             break;
           case LiteGraph.DOWN:
-            E = u * 0.25;
+            E = h * 0.25;
             break;
         }
         e.lineTo(
           t[0] + g,
           t[1] + m + d
-        ), e.lineTo(
-          r[0] + b,
-          r[1] + E + d
-        ), e.lineTo(r[0], r[1] + d);
+        ), e.lineTo(r[0] + b, r[1] + E + d), e.lineTo(r[0], r[1] + d);
       } else if (this.links_render_mode == LiteGraph.STRAIGHT_LINK) {
         e.moveTo(t[0], t[1]);
         let g;
         if (s) {
-          const m = this.findObstructingNodes(t, r, s);
-          g = this.computeAvoidancePath(t, r, m, l, h);
+          const m = this.findObstructingNodes(
+            t,
+            r,
+            s
+          );
+          g = this.computeAvoidancePath(
+            t,
+            r,
+            m,
+            l,
+            u
+          );
         } else
-          g = this.computeDefaultPath(t, r, l, h);
+          g = this.computeDefaultPath(
+            t,
+            r,
+            l,
+            u
+          );
         for (let m = 1; m < g.length; m++)
           e.lineTo(g[m][0], g[m][1] + d);
       } else
         return;
     }
     this.render_connections_border && this.ds.scale > 0.6 && !n && (e.strokeStyle = "rgba(0,0,0,0.5)", e.stroke()), e.lineWidth = this.connections_width, e.fillStyle = e.strokeStyle = o, e.stroke();
-    let p = this.links_render_mode === LiteGraph.STRAIGHT_LINK ? this.computeStraightLinkPoint(t, r, 0.5, l, h) : this.computeConnectionPoint(t, r, 0.5, l, h);
-    if (s && s._pos && (s._pos[0] = p[0], s._pos[1] = p[1]), this.ds.scale >= 0.6 && this.highquality_render && h != LiteGraph.CENTER && !this.read_only) {
+    let p = this.links_render_mode === LiteGraph.STRAIGHT_LINK ? this.computeStraightLinkPoint(t, r, 0.5, l, u) : this.computeConnectionPoint(t, r, 0.5, l, u);
+    if (s && s._pos && (s._pos[0] = p[0], s._pos[1] = p[1]), this.ds.scale >= 0.6 && this.highquality_render && u != LiteGraph.CENTER && !this.read_only) {
       if (this.render_connection_arrows) {
         const f = this.computeConnectionPoint(
           t,
           r,
           0.25,
           l,
-          h
+          u
         ), d = this.computeConnectionPoint(
           t,
           r,
           0.26,
           l,
-          h
+          u
         ), g = this.computeConnectionPoint(
           t,
           r,
           0.75,
           l,
-          h
+          u
         ), m = this.computeConnectionPoint(
           t,
           r,
           0.76,
           l,
-          h
+          u
         );
         let b = 0, E = 0;
         this.render_curved_connections ? (b = -Math.atan2(d[0] - f[0], d[1] - f[1]), E = -Math.atan2(m[0] - g[0], m[1] - g[1])) : E = b = r[1] > t[1] ? 0 : Math.PI, e.save(), e.translate(f[0], f[1]), e.rotate(b), e.beginPath(), e.moveTo(-5, -3), e.lineTo(0, 7), e.lineTo(5, -3), e.fill(), e.restore(), e.save(), e.translate(g[0], g[1]), e.rotate(E), e.beginPath(), e.moveTo(-5, -3), e.lineTo(0, 7), e.lineTo(5, -3), e.fill(), e.restore();
@@ -15486,10 +15514,25 @@ const _LGraphCanvas = class _LGraphCanvas {
         if (this.links_render_mode === LiteGraph.STRAIGHT_LINK) {
           let m;
           if (s) {
-            const _ = this.findObstructingNodes(t, r, s);
-            m = this.computeAvoidancePath(t, r, _, l, h);
+            const _ = this.findObstructingNodes(
+              t,
+              r,
+              s
+            );
+            m = this.computeAvoidancePath(
+              t,
+              r,
+              _,
+              l,
+              u
+            );
           } else
-            m = this.computeDefaultPath(t, r, l, h);
+            m = this.computeDefaultPath(
+              t,
+              r,
+              l,
+              u
+            );
           let b = 0;
           const E = [];
           for (let _ = 1; _ < m.length; _++) {
@@ -15517,22 +15560,22 @@ const _LGraphCanvas = class _LGraphCanvas {
             r,
             d,
             l,
-            h
+            u
           ), e.beginPath(), e.arc(g[0], g[1], 5, 0, 2 * Math.PI), e.fill();
       }
     }
   }
   computeStraightLinkPoint(e, t, r, s, n) {
-    let a = e[0], o = e[1], l = t[0], h = t[1];
-    s === LiteGraph.RIGHT ? a += 10 : s === LiteGraph.LEFT ? a -= 10 : s === LiteGraph.DOWN ? o += 10 : s === LiteGraph.UP && (o -= 10), n === LiteGraph.LEFT ? l -= 10 : n === LiteGraph.RIGHT ? l += 10 : n === LiteGraph.UP ? h -= 10 : n === LiteGraph.DOWN && (h += 10);
-    const c = (a + l) * 0.5, u = Math.abs(c - a), p = Math.abs(h - o), f = Math.abs(l - c), d = u + p + f;
+    let a = e[0], o = e[1], l = t[0], u = t[1];
+    s === LiteGraph.RIGHT ? a += 10 : s === LiteGraph.LEFT ? a -= 10 : s === LiteGraph.DOWN ? o += 10 : s === LiteGraph.UP && (o -= 10), n === LiteGraph.LEFT ? l -= 10 : n === LiteGraph.RIGHT ? l += 10 : n === LiteGraph.UP ? u -= 10 : n === LiteGraph.DOWN && (u += 10);
+    const c = (a + l) * 0.5, h = Math.abs(c - a), p = Math.abs(u - o), f = Math.abs(l - c), d = h + p + f;
     let g = r * d;
-    return g <= u ? [a + (c > a ? g : -g), o] : (g -= u, g <= p ? [c, o + (h > o ? g : -g)] : (g -= p, [c + (l > c ? g : -g), h]));
+    return g <= h ? [a + (c > a ? g : -g), o] : (g -= h, g <= p ? [c, o + (u > o ? g : -g)] : (g -= p, [c + (l > c ? g : -g), u]));
   }
   //returns the link center point based on curvature
   computeConnectionPoint(e, t, r, s, n) {
     s = s || LiteGraph.RIGHT, n = n || LiteGraph.LEFT;
-    const a = LiteGraph.distance(e, t), o = e, l = [e[0], e[1]], h = [t[0], t[1]], c = t;
+    const a = LiteGraph.distance(e, t), o = e, l = [e[0], e[1]], u = [t[0], t[1]], c = t;
     switch (s) {
       case LiteGraph.LEFT:
         l[0] += a * -0.25;
@@ -15549,19 +15592,19 @@ const _LGraphCanvas = class _LGraphCanvas {
     }
     switch (n) {
       case LiteGraph.LEFT:
-        h[0] += a * -0.25;
+        u[0] += a * -0.25;
         break;
       case LiteGraph.RIGHT:
-        h[0] += a * 0.25;
+        u[0] += a * 0.25;
         break;
       case LiteGraph.UP:
-        h[1] += a * -0.25;
+        u[1] += a * -0.25;
         break;
       case LiteGraph.DOWN:
-        h[1] += a * 0.25;
+        u[1] += a * 0.25;
         break;
     }
-    const u = (1 - r) * (1 - r) * (1 - r), p = 3 * ((1 - r) * (1 - r)) * r, f = 3 * (1 - r) * (r * r), d = r * r * r, g = u * o[0] + p * l[0] + f * h[0] + d * c[0], m = u * o[1] + p * l[1] + f * h[1] + d * c[1];
+    const h = (1 - r) * (1 - r) * (1 - r), p = 3 * ((1 - r) * (1 - r)) * r, f = 3 * (1 - r) * (r * r), d = r * r * r, g = h * o[0] + p * l[0] + f * u[0] + d * c[0], m = h * o[1] + p * l[1] + f * u[1] + d * c[1];
     return [g, m];
   }
   drawExecutionOrder(e) {
@@ -15598,22 +15641,22 @@ const _LGraphCanvas = class _LGraphCanvas {
     t += 2;
     const o = LiteGraph.NODE_WIDGET_HEIGHT, l = this.ds.scale > 0.5;
     r.save(), r.globalAlpha = this.editor_alpha;
-    const h = LiteGraph.WIDGET_OUTLINE_COLOR, c = LiteGraph.WIDGET_BGCOLOR, u = LiteGraph.WIDGET_TEXT_COLOR, p = LiteGraph.WIDGET_SECONDARY_TEXT_COLOR, f = 15;
+    const u = LiteGraph.WIDGET_OUTLINE_COLOR, c = LiteGraph.WIDGET_BGCOLOR, h = LiteGraph.WIDGET_TEXT_COLOR, p = LiteGraph.WIDGET_SECONDARY_TEXT_COLOR, f = 15;
     for (let d = 0; d < a.length; ++d) {
       let g = a[d], m = t;
-      g.y && (m = g.y), g.last_y = m, r.strokeStyle = h, r.fillStyle = "#222", r.textAlign = "left", g.disabled && (r.globalAlpha *= 0.5);
+      g.y && (m = g.y), g.last_y = m, r.strokeStyle = u, r.fillStyle = "#222", r.textAlign = "left", g.disabled && (r.globalAlpha *= 0.5);
       const b = g.width || n;
       let E = g.options.max - g.options.min, L = (g.value - g.options.min) / E;
       switch (g.type) {
         case "button":
-          g.clicked && (r.fillStyle = "#AAA", g.clicked = !1, this.dirty_canvas = !0), r.fillRect(f, m, b - f * 2, o), l && !g.disabled && r.strokeRect(f, m, b - f * 2, o), l && (r.textAlign = "center", r.fillStyle = u, r.fillText(
+          g.clicked && (r.fillStyle = "#AAA", g.clicked = !1, this.dirty_canvas = !0), r.fillRect(f, m, b - f * 2, o), l && !g.disabled && r.strokeRect(f, m, b - f * 2, o), l && (r.textAlign = "center", r.fillStyle = h, r.fillText(
             g.label || g.name,
             b * 0.5,
             m + o * 0.7
           ));
           break;
         case "toggle":
-          if (r.textAlign = "left", r.strokeStyle = h, r.fillStyle = c, r.beginPath(), l ? r.roundRect(f, m, b - f * 2, o, [
+          if (r.textAlign = "left", r.strokeStyle = u, r.fillStyle = c, r.beginPath(), l ? r.roundRect(f, m, b - f * 2, o, [
             o * 0.5
           ]) : r.rect(f, m, b - f * 2, o), r.fill(), l && !g.disabled && r.stroke(), r.fillStyle = g.value ? "#89A" : "#333", r.beginPath(), r.arc(
             b - f * 2,
@@ -15624,7 +15667,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           ), r.fill(), l) {
             r.fillStyle = p;
             const T = g.label || g.name;
-            T != null && r.fillText(T, f * 2, m + o * 0.7), r.fillStyle = g.value ? u : p, r.textAlign = "right", r.fillText(
+            T != null && r.fillText(T, f * 2, m + o * 0.7), r.fillStyle = g.value ? h : p, r.textAlign = "right", r.fillText(
               g.value ? g.options.on || "true" : g.options.off || "false",
               b - 40,
               m + o * 0.7
@@ -15652,7 +15695,7 @@ const _LGraphCanvas = class _LGraphCanvas {
               o
             );
           }
-          l && (r.textAlign = "center", r.fillStyle = u, r.fillText(
+          l && (r.textAlign = "center", r.fillStyle = h, r.fillText(
             g.label || g.name + "  " + Number(g.value).toFixed(
               g.options.precision != null ? g.options.precision : 3
             ),
@@ -15662,14 +15705,14 @@ const _LGraphCanvas = class _LGraphCanvas {
           break;
         case "number":
         case "combo":
-          if (r.textAlign = "left", r.strokeStyle = h, r.fillStyle = c, r.beginPath(), l ? r.roundRect(f, m, b - f * 2, o, [
+          if (r.textAlign = "left", r.strokeStyle = u, r.fillStyle = c, r.beginPath(), l ? r.roundRect(f, m, b - f * 2, o, [
             o * 0.5
           ]) : r.rect(f, m, b - f * 2, o), r.fill(), l)
-            if (g.disabled || r.stroke(), r.fillStyle = u, g.disabled || (r.beginPath(), r.moveTo(f + 16, m + 5), r.lineTo(f + 6, m + o * 0.5), r.lineTo(f + 16, m + o - 5), r.fill(), r.beginPath(), r.moveTo(b - f - 16, m + 5), r.lineTo(b - f - 6, m + o * 0.5), r.lineTo(b - f - 16, m + o - 5), r.fill()), r.fillStyle = p, r.fillText(
+            if (g.disabled || r.stroke(), r.fillStyle = h, g.disabled || (r.beginPath(), r.moveTo(f + 16, m + 5), r.lineTo(f + 6, m + o * 0.5), r.lineTo(f + 16, m + o - 5), r.fill(), r.beginPath(), r.moveTo(b - f - 16, m + 5), r.lineTo(b - f - 6, m + o * 0.5), r.lineTo(b - f - 16, m + o - 5), r.fill()), r.fillStyle = p, r.fillText(
               g.label || g.name,
               f * 2 + 5,
               m + o * 0.7
-            ), r.fillStyle = u, r.textAlign = "right", g.type == "number")
+            ), r.fillStyle = h, r.textAlign = "right", g.type == "number")
               r.fillText(
                 Number(g.value).toFixed(
                   g.options.precision !== void 0 ? g.options.precision : 3
@@ -15692,12 +15735,12 @@ const _LGraphCanvas = class _LGraphCanvas {
           break;
         case "string":
         case "text":
-          if (r.textAlign = "left", r.strokeStyle = h, r.fillStyle = c, r.beginPath(), l ? r.roundRect(f, m, b - f * 2, o, [
+          if (r.textAlign = "left", r.strokeStyle = u, r.fillStyle = c, r.beginPath(), l ? r.roundRect(f, m, b - f * 2, o, [
             o * 0.5
           ]) : r.rect(f, m, b - f * 2, o), r.fill(), l) {
             g.disabled || r.stroke(), r.save(), r.beginPath(), r.rect(f, m, b - f * 2, o), r.clip(), r.fillStyle = p;
             const T = g.label || g.name;
-            T != null && r.fillText(T, f * 2, m + o * 0.7), r.fillStyle = u, r.textAlign = "right", r.fillText(
+            T != null && r.fillText(T, f * 2, m + o * 0.7), r.fillStyle = h, r.textAlign = "right", r.fillText(
               String(g.value).substr(0, 30),
               b - f * 2,
               m + o * 0.7
@@ -15967,8 +16010,8 @@ const _LGraphCanvas = class _LGraphCanvas {
   static getBoundaryNodes(e) {
     let t = null, r = null, s = null, n = null;
     for (const a in e) {
-      const o = e[a], [l, h] = o.pos, [c, u] = o.size;
-      (t === null || h < t.pos[1]) && (t = o), (r === null || l + c > r.pos[0] + r.size[0]) && (r = o), (s === null || h + u > s.pos[1] + s.size[1]) && (s = o), (n === null || l < n.pos[0]) && (n = o);
+      const o = e[a], [l, u] = o.pos, [c, h] = o.size;
+      (t === null || u < t.pos[1]) && (t = o), (r === null || l + c > r.pos[0] + r.size[0]) && (r = o), (s === null || u + h > s.pos[1] + s.size[1]) && (s = o), (n === null || l < n.pos[0]) && (n = o);
     }
     return {
       top: t,
@@ -16050,7 +16093,7 @@ const _LGraphCanvas = class _LGraphCanvas {
   static onMenuAdd(e, t, r, s, n) {
     const a = _LGraphCanvas.active_canvas, o = a.getCanvasWindow(), l = a.graph;
     if (!l) return;
-    function h(c, u) {
+    function u(c, h) {
       const p = LiteGraph.getNodeTypesCategories(
         a.filter || l.filter
       ).filter(function(g) {
@@ -16069,7 +16112,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           content: L,
           has_submenu: !0,
           callback: function(_, I, A, M) {
-            h(_.value, M);
+            u(_.value, M);
           }
         });
       }), LiteGraph.getNodeTypesInCategory(
@@ -16091,11 +16134,11 @@ const _LGraphCanvas = class _LGraphCanvas {
         f.push(m);
       }), new ContextMenu(
         f,
-        { event: r, parentMenu: u },
+        { event: r, parentMenu: h },
         o
       );
     }
-    return h("", s), !1;
+    return u("", s), !1;
   }
   static onMenuCollapseAll() {
   }
@@ -16105,12 +16148,12 @@ const _LGraphCanvas = class _LGraphCanvas {
     if (!n)
       return;
     const a = this, l = _LGraphCanvas.active_canvas.getCanvasWindow();
-    let h = n.optional_inputs;
-    n.onGetInputs && (h = n.onGetInputs());
+    let u = n.optional_inputs;
+    n.onGetInputs && (u = n.onGetInputs());
     let c = [];
-    if (h)
-      for (let p = 0; p < h.length; p++) {
-        const f = h[p];
+    if (u)
+      for (let p = 0; p < u.length; p++) {
+        const f = u[p];
         if (!f) {
           c.push(null);
           continue;
@@ -16132,13 +16175,13 @@ const _LGraphCanvas = class _LGraphCanvas {
       c,
       {
         event: r,
-        callback: u,
+        callback: h,
         parentMenu: s,
         node: n
       },
       l
     );
-    function u(p, f, d) {
+    function h(p, f, d) {
       n && (p.callback && p.callback.call(a, n, p, f, d), p.value && (n.graph.beforeChange(), n.addInput(p.value[0], p.value[1], p.value[2]), n.onNodeInputAdd && n.onNodeInputAdd(p.value), n.setDirtyCanvas(!0, !0), n.graph.afterChange()));
     }
     return !1;
@@ -16147,12 +16190,12 @@ const _LGraphCanvas = class _LGraphCanvas {
     if (!n)
       return;
     const a = this, l = _LGraphCanvas.active_canvas.getCanvasWindow();
-    let h = n.optional_outputs;
-    n.onGetOutputs && (h = n.onGetOutputs());
+    let u = n.optional_outputs;
+    n.onGetOutputs && (u = n.onGetOutputs());
     let c = [];
-    if (h)
-      for (let p = 0; p < h.length; p++) {
-        const f = h[p];
+    if (u)
+      for (let p = 0; p < u.length; p++) {
+        const f = u[p];
         if (!f) {
           c.push(null);
           continue;
@@ -16182,13 +16225,13 @@ const _LGraphCanvas = class _LGraphCanvas {
       c,
       {
         event: r,
-        callback: u,
+        callback: h,
         parentMenu: s,
         node: n
       },
       l
     );
-    function u(p, f, d) {
+    function h(p, f, d) {
       if (!n || (p.callback && p.callback.call(a, n, p, f, d), !p.value))
         return;
       const g = p.value[1];
@@ -16198,7 +16241,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           m.push({ content: b, value: g[b] });
         return new ContextMenu(m, {
           event: f,
-          callback: u,
+          callback: h,
           parentMenu: s,
           node: n
         }), !1;
@@ -16212,14 +16255,14 @@ const _LGraphCanvas = class _LGraphCanvas {
       return;
     const a = _LGraphCanvas.active_canvas, o = a.getCanvasWindow(), l = [];
     for (const c in n.properties) {
-      let u = n.properties[c] !== void 0 ? n.properties[c] : " ";
-      typeof u == "object" && (u = JSON.stringify(u));
+      let h = n.properties[c] !== void 0 ? n.properties[c] : " ";
+      typeof h == "object" && (h = JSON.stringify(h));
       const p = n.getPropertyInfo(c);
-      (p.type == "enum" || p.type == "combo") && (u = _LGraphCanvas.getPropertyPrintableValue(
-        u,
+      (p.type == "enum" || p.type == "combo") && (h = _LGraphCanvas.getPropertyPrintableValue(
+        h,
         p.values
-      )), u = _LGraphCanvas.decodeHTML(u), l.push({
-        content: "<span class='property_name'>" + (p.label ? p.label : c) + "</span><span class='property_value'>" + u + "</span>",
+      )), h = _LGraphCanvas.decodeHTML(h), l.push({
+        content: "<span class='property_name'>" + (p.label ? p.label : c) + "</span><span class='property_value'>" + h + "</span>",
         value: c
       });
     }
@@ -16229,14 +16272,14 @@ const _LGraphCanvas = class _LGraphCanvas {
       l,
       {
         event: r,
-        callback: h,
+        callback: u,
         parentMenu: s,
         allow_html: !0,
         node: n
       },
       o
     );
-    function h(c, u, p, f) {
+    function u(c, h, p, f) {
       if (!n)
         return;
       const d = this.getBoundingClientRect();
@@ -16269,12 +16312,12 @@ const _LGraphCanvas = class _LGraphCanvas {
     n && n.outputs && n.outputs[e.origin_slot] && (o = n.outputs[e.origin_slot].type);
     let l = !1;
     a && a.outputs && a.outputs[e.target_slot] && (l = a.inputs[e.target_slot].type);
-    const h = ["Add Node", null, "Delete", null], c = new ContextMenu(h, {
+    const u = ["Add Node", null, "Delete", null], c = new ContextMenu(u, {
       event: t,
       title: e.data != null ? e.data.constructor.name : null,
-      callback: u
+      callback: h
     });
-    function u(p, f, d) {
+    function h(p, f, d) {
       switch (p) {
         case "Add Node":
           _LGraphCanvas.onMenuAdd(
@@ -16331,36 +16374,36 @@ const _LGraphCanvas = class _LGraphCanvas {
     if (!r.nodeType)
       return console.warn("No type to createDefaultNodeForSlot"), !1;
     const o = n ? r.nodeFrom : r.nodeTo;
-    let l = n ? r.slotFrom : r.slotTo, h = !1;
+    let l = n ? r.slotFrom : r.slotTo, u = !1;
     switch (typeof l) {
       case "string":
-        h = n ? o.findOutputSlot(l, !1) : o.findInputSlot(l, !1), l = n ? o.outputs[l] : o.inputs[l];
+        u = n ? o.findOutputSlot(l, !1) : o.findInputSlot(l, !1), l = n ? o.outputs[l] : o.inputs[l];
         break;
       case "object":
-        h = n ? o.findOutputSlot(l.name) : o.findInputSlot(l.name);
+        u = n ? o.findOutputSlot(l.name) : o.findInputSlot(l.name);
         break;
       case "number":
-        h = l, l = n ? o.outputs[l] : o.inputs[l];
+        u = l, l = n ? o.outputs[l] : o.inputs[l];
         break;
       case "undefined":
       default:
         return console.warn("Cant get slot information " + l), !1;
     }
-    (l === !1 || h === !1) && console.warn(
-      "createDefaultNodeForSlot bad slotX " + l + " " + h
+    (l === !1 || u === !1) && console.warn(
+      "createDefaultNodeForSlot bad slotX " + l + " " + u
     );
-    const c = l.type == LiteGraph.EVENT ? "_event_" : l.type, u = n ? LiteGraph.slot_types_default_out : LiteGraph.slot_types_default_in;
-    if (u && u[c]) {
+    const c = l.type == LiteGraph.EVENT ? "_event_" : l.type, h = n ? LiteGraph.slot_types_default_out : LiteGraph.slot_types_default_in;
+    if (h && h[c]) {
       l.link;
       let p = !1;
-      if (typeof u[c] == "object" || Array.isArray(u[c])) {
-        for (const f in u[c])
-          if (r.nodeType == u[c][f] || r.nodeType == "AUTO") {
-            p = u[c][f];
+      if (typeof h[c] == "object" || Array.isArray(h[c])) {
+        for (const f in h[c])
+          if (r.nodeType == h[c][f] || r.nodeType == "AUTO") {
+            p = h[c][f];
             break;
           }
       } else
-        (r.nodeType == u[c] || r.nodeType == "AUTO") && (p = u[c]);
+        (r.nodeType == h[c] || r.nodeType == "AUTO") && (p = h[c]);
       if (p) {
         let f = !1;
         typeof p == "object" && p.node && (f = p, p = p.node);
@@ -16395,11 +16438,11 @@ const _LGraphCanvas = class _LGraphCanvas {
             r.position[0] + r.posAdd[0] + (r.posSizeFix[0] ? r.posSizeFix[0] * d.size[0] : 0),
             r.position[1] + r.posAdd[1] + (r.posSizeFix[1] ? r.posSizeFix[1] * d.size[1] : 0)
           ], n ? r.nodeFrom.connectByType(
-            h,
+            u,
             d,
             c
           ) : r.nodeTo.connectByTypeOutput(
-            h,
+            u,
             d,
             c
           ), !0;
@@ -16427,32 +16470,32 @@ const _LGraphCanvas = class _LGraphCanvas {
     if (!n && !a)
       return console.warn("No data passed to showConnectionMenu"), !1;
     const o = n ? r.nodeFrom : r.nodeTo;
-    let l = n ? r.slotFrom : r.slotTo, h = !1;
+    let l = n ? r.slotFrom : r.slotTo, u = !1;
     switch (typeof l) {
       case "string":
-        h = n ? o.findOutputSlot(l, !1) : o.findInputSlot(l, !1), l = n ? o.outputs[l] : o.inputs[l];
+        u = n ? o.findOutputSlot(l, !1) : o.findInputSlot(l, !1), l = n ? o.outputs[l] : o.inputs[l];
         break;
       case "object":
-        h = n ? o.findOutputSlot(l.name) : o.findInputSlot(l.name);
+        u = n ? o.findOutputSlot(l.name) : o.findInputSlot(l.name);
         break;
       case "number":
-        h = l, l = n ? o.outputs[l] : o.inputs[l];
+        u = l, l = n ? o.outputs[l] : o.inputs[l];
         break;
       default:
         return console.warn("Cant get slot information " + l), !1;
     }
     const c = ["Add Node", null];
     s.allow_searchbox && (c.push("Search"), c.push(null));
-    const u = l.type == LiteGraph.EVENT ? "_event_" : l.type, p = n ? LiteGraph.slot_types_default_out : LiteGraph.slot_types_default_in;
-    if (p && p[u])
-      if (typeof p[u] == "object" || Array.isArray(p[u]))
-        for (const g in p[u])
-          c.push(p[u][g]);
+    const h = l.type == LiteGraph.EVENT ? "_event_" : l.type, p = n ? LiteGraph.slot_types_default_out : LiteGraph.slot_types_default_in;
+    if (p && p[h])
+      if (typeof p[h] == "object" || Array.isArray(p[h]))
+        for (const g in p[h])
+          c.push(p[h][g]);
       else
-        c.push(p[u]);
+        c.push(p[h]);
     const f = new ContextMenu(c, {
       event: r.e,
-      title: (l && l.name != "" ? l.name + (u ? " | " : "") : "") + (l && u ? u : ""),
+      title: (l && l.name != "" ? l.name + (h ? " | " : "") : "") + (l && h ? h : ""),
       callback: d
     });
     function d(g, m, b) {
@@ -16470,13 +16513,13 @@ const _LGraphCanvas = class _LGraphCanvas {
             f,
             function(E) {
               n ? r.nodeFrom.connectByType(
-                h,
+                u,
                 E,
-                u
+                h
               ) : r.nodeTo.connectByTypeOutput(
-                h,
+                u,
                 E,
-                u
+                h
               );
             }
           );
@@ -16485,11 +16528,11 @@ const _LGraphCanvas = class _LGraphCanvas {
           n ? s.showSearchBox(b, {
             node_from: r.nodeFrom,
             slot_from: l,
-            type_filter_in: u
+            type_filter_in: h
           }) : s.showSearchBox(b, {
             node_to: r.nodeTo,
             slot_from: l,
-            type_filter_out: u
+            type_filter_out: h
           });
           break;
       }
@@ -16502,8 +16545,8 @@ const _LGraphCanvas = class _LGraphCanvas {
     l.is_modified = !1, l.className = "graphdialog", l.innerHTML = "<span class='name'></span><input autofocus type='text' class='value'/><button>OK</button>", l.close = function() {
       l.parentNode && l.parentNode.removeChild(l);
     };
-    const h = l.querySelector(".name");
-    h.innerText = a;
+    const u = l.querySelector(".name");
+    u.innerText = a;
     let c = l.querySelector(".value");
     c && (c.value = o, c.addEventListener("blur", function(T) {
       this.focus();
@@ -16543,11 +16586,11 @@ const _LGraphCanvas = class _LGraphCanvas {
     o.is_modified = !1, o.className = "graphdialog rounded", n ? o.innerHTML = "<span class='name'></span> <textarea autofocus class='value'></textarea><button class='rounded'>OK</button>" : o.innerHTML = "<span class='name'></span> <input autofocus type='text' class='value'/><button class='rounded'>OK</button>", o.close = function() {
       a.prompt_box = null, o.parentNode && o.parentNode.removeChild(o);
     };
-    const h = _LGraphCanvas.active_canvas.canvas;
-    h.parentNode.appendChild(o), this.ds.scale > 1 && (o.style.transform = "scale(" + this.ds.scale + ")");
-    let c = null, u = !1;
+    const u = _LGraphCanvas.active_canvas.canvas;
+    u.parentNode.appendChild(o), this.ds.scale > 1 && (o.style.transform = "scale(" + this.ds.scale + ")");
+    let c = null, h = !1;
     LiteGraph.pointerListenerAdd(o, "leave", function(T) {
-      u || LiteGraph.dialog_close_on_mouse_leave && !o.is_modified && LiteGraph.dialog_close_on_mouse_leave && (c = setTimeout(
+      h || LiteGraph.dialog_close_on_mouse_leave && !o.is_modified && LiteGraph.dialog_close_on_mouse_leave && (c = setTimeout(
         o.close,
         LiteGraph.dialog_close_on_mouse_leave_delay
       ));
@@ -16557,11 +16600,11 @@ const _LGraphCanvas = class _LGraphCanvas {
     const p = o.querySelectorAll("select");
     p && p.forEach(function(T) {
       T.addEventListener("click", function(_) {
-        u++;
+        h++;
       }), T.addEventListener("blur", function(_) {
-        u = 0;
+        h = 0;
       }), T.addEventListener("change", function(_) {
-        u = -1;
+        h = -1;
       });
     }), a.prompt_box && a.prompt_box.close(), a.prompt_box = o;
     const f = o.querySelector(".name");
@@ -16580,9 +16623,9 @@ const _LGraphCanvas = class _LGraphCanvas {
     }), o.querySelector("button").addEventListener("click", function(T) {
       r && r(g.value), a.setDirty(!0), o.close();
     });
-    const b = h.getBoundingClientRect();
+    const b = u.getBoundingClientRect();
     let E = -20, L = -20;
-    return b && (E -= b.left, L -= b.top), s ? (o.style.left = s.clientX + E + "px", o.style.top = s.clientY + L + "px") : (o.style.left = h.width * 0.5 + E + "px", o.style.top = h.height * 0.5 + L + "px"), setTimeout(function() {
+    return b && (E -= b.left, L -= b.top), s ? (o.style.left = s.clientX + E + "px", o.style.top = s.clientY + L + "px") : (o.style.left = u.width * 0.5 + E + "px", o.style.top = u.height * 0.5 + L + "px"), setTimeout(function() {
       g.focus();
     }, 10), o;
   }
@@ -16605,8 +16648,8 @@ const _LGraphCanvas = class _LGraphCanvas {
     t = Object.assign(r, t || {});
     const s = this, n = _LGraphCanvas.active_canvas, a = n.canvas, o = a.ownerDocument || document, l = document.createElement("div");
     l.className = "litegraph litesearchbox graphdialog rounded", l.innerHTML = "<span class='name'>Search</span> <input autofocus type='text' class='value rounded'/>", t.do_type_filter && (l.innerHTML += "<select class='slot_in_type_filter'><option value=''></option></select>", l.innerHTML += "<select class='slot_out_type_filter'><option value=''></option></select>"), l.innerHTML += "<div class='helper'></div>", o.fullscreenElement ? o.fullscreenElement.appendChild(l) : (o.body.appendChild(l), o.body.style.overflow = "hidden");
-    let h, c;
-    if (t.do_type_filter && (h = l.querySelector(".slot_in_type_filter"), c = l.querySelector(".slot_out_type_filter")), l.close = function() {
+    let u, c;
+    if (t.do_type_filter && (u = l.querySelector(".slot_in_type_filter"), c = l.querySelector(".slot_out_type_filter")), l.close = function() {
       s.search_box = null, this.blur(), a.focus(), o.body.style.overflow = "", setTimeout(function() {
         s.canvas.focus();
       }, 20), l.parentNode && l.parentNode.removeChild(l);
@@ -16618,11 +16661,11 @@ const _LGraphCanvas = class _LGraphCanvas {
         I || (A = setTimeout(function() {
           l.close();
         }, 500));
-      }), t.do_type_filter && (h.addEventListener("click", function(M) {
+      }), t.do_type_filter && (u.addEventListener("click", function(M) {
         I++;
-      }), h.addEventListener("blur", function(M) {
+      }), u.addEventListener("blur", function(M) {
         I = 0;
-      }), h.addEventListener("change", function(M) {
+      }), u.addEventListener("change", function(M) {
         I = -1;
       }), c.addEventListener("click", function(M) {
         I++;
@@ -16633,7 +16676,7 @@ const _LGraphCanvas = class _LGraphCanvas {
       }));
     }
     s.search_box && s.search_box.close(), s.search_box = l;
-    const u = l.querySelector(".helper");
+    const h = l.querySelector(".helper");
     let p = null, f = null, d = null, g = l.querySelector("input");
     if (g && (g.addEventListener("blur", function(I) {
       s.search_box && this.focus();
@@ -16652,14 +16695,14 @@ const _LGraphCanvas = class _LGraphCanvas {
       }
       return I.preventDefault(), I.stopPropagation(), I.stopImmediatePropagation(), !0;
     })), t.do_type_filter) {
-      if (h) {
+      if (u) {
         const I = LiteGraph.slot_types_in, A = I.length;
         (t.type_filter_in == LiteGraph.EVENT || t.type_filter_in == LiteGraph.ACTION) && (t.type_filter_in = "_event_");
         for (let M = 0; M < A; M++) {
           const O = document.createElement("option");
-          O.value = I[M], O.innerHTML = I[M], h.appendChild(O), t.type_filter_in !== !1 && (t.type_filter_in + "").toLowerCase() == (I[M] + "").toLowerCase() && (O.selected = !0);
+          O.value = I[M], O.innerHTML = I[M], u.appendChild(O), t.type_filter_in !== !1 && (t.type_filter_in + "").toLowerCase() == (I[M] + "").toLowerCase() && (O.selected = !0);
         }
-        h.addEventListener("change", function() {
+        u.addEventListener("change", function() {
           _();
         });
       }
@@ -16676,7 +16719,7 @@ const _LGraphCanvas = class _LGraphCanvas {
       }
     }
     const m = a.getBoundingClientRect(), b = (e ? e.clientX : m.left + m.width * 0.5) - 80, E = (e ? e.clientY : m.top + m.height * 0.5) - 20;
-    l.style.left = b + "px", l.style.top = E + "px", e.layerY > m.height - 200 && (u.style.maxHeight = m.height - e.layerY - 20 + "px"), g.focus(), t.show_all_on_open && _();
+    l.style.left = b + "px", l.style.top = E + "px", e.layerY > m.height - 200 && (h.style.maxHeight = m.height - e.layerY - 20 + "px"), g.focus(), t.show_all_on_open && _();
     function L(I) {
       if (I)
         if (s.onSearchBoxSelection)
@@ -16763,15 +16806,15 @@ const _LGraphCanvas = class _LGraphCanvas {
     }
     function T(I) {
       const A = d;
-      d && d.classList.remove("selected"), d ? (d = I ? d.nextSibling : d.previousSibling, d || (d = A)) : d = I ? u.childNodes[0] : u.childNodes[u.childNodes.length], d && (d.classList.add("selected"), d.scrollIntoView({ block: "end", behavior: "smooth" }));
+      d && d.classList.remove("selected"), d ? (d = I ? d.nextSibling : d.previousSibling, d || (d = A)) : d = I ? h.childNodes[0] : h.childNodes[h.childNodes.length], d && (d.classList.add("selected"), d.scrollIntoView({ block: "end", behavior: "smooth" }));
     }
     function _() {
       f = null;
       let I = g.value;
-      if (p = null, u.innerHTML = "", !I && !t.show_all_if_empty)
+      if (p = null, h.innerHTML = "", !I && !t.show_all_if_empty)
         return;
       if (s.onSearchBox) {
-        const M = s.onSearchBox(u, I, n);
+        const M = s.onSearchBox(h, I, n);
         if (M)
           for (let O = 0; O < M.length; ++O)
             A(M[O]);
@@ -16829,7 +16872,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           for (let S = 0; S < B.length && (A(B[S], "generic_type"), !(_LGraphCanvas.search_limit !== -1 && M++ > _LGraphCanvas.search_limit)); S++)
             ;
         }
-        if ((D.value || P.value) && u.childNodes.length == 0 && t.show_general_if_none_on_typefilter) {
+        if ((D.value || P.value) && h.childNodes.length == 0 && t.show_general_if_none_on_typefilter) {
           const B = [];
           for (const S in LiteGraph.registered_node_types)
             k(S, { skipFilter: !0 }) && B.push(S);
@@ -16841,7 +16884,7 @@ const _LGraphCanvas = class _LGraphCanvas {
         const D = document.createElement("div");
         p || (p = M), D.innerText = M, D.dataset.type = escape(M), D.className = "litegraph lite-search-item", O && (D.className += " " + O), D.addEventListener("click", function(P) {
           L(unescape(this.dataset.type));
-        }), u.appendChild(D);
+        }), h.appendChild(D);
       }
     }
     return l;
@@ -16874,11 +16917,11 @@ const _LGraphCanvas = class _LGraphCanvas {
     let l = !1;
     if ((n == "enum" || n == "combo") && s.values)
       l = o.querySelector("select"), l.addEventListener("change", function(p) {
-        o.modified(), u(p.target.value);
+        o.modified(), h(p.target.value);
       });
     else if (n == "boolean" || n == "toggle")
       l = o.querySelector("input"), l && l.addEventListener("click", function(p) {
-        o.modified(), u(!!l.checked);
+        o.modified(), h(!!l.checked);
       });
     else if (l = o.querySelector("input"), l) {
       l.addEventListener("blur", function(f) {
@@ -16899,9 +16942,9 @@ const _LGraphCanvas = class _LGraphCanvas {
     }
     l && l.focus(), o.querySelector("button").addEventListener("click", c);
     function c() {
-      u(l.value);
+      h(l.value);
     }
-    function u(p) {
+    function h(p) {
       s && s.values && s.values.constructor === Object && s.values[p] != null && (p = s.values[p]), typeof e.properties[t] == "number" && (p = Number(p)), (n == "array" || n == "object") && (p = JSON.parse(p)), e.properties[t] = p, e.graph && e.graph._version++, e.onPropertyChanged && e.onPropertyChanged(t, p), r.onclose && r.onclose(), o.close(), e.setDirtyCanvas(!0, !0);
     }
     return o;
@@ -16918,8 +16961,8 @@ const _LGraphCanvas = class _LGraphCanvas {
     const n = this.canvas.getBoundingClientRect();
     let a = -20, o = -20;
     if (n && (a -= n.left, o -= n.top), t.position ? (a += t.position[0], o += t.position[1]) : t.event ? (a += t.event.clientX, o += t.event.clientY) : (a += this.canvas.width * 0.5, o += this.canvas.height * 0.5), s.style.left = a + "px", s.style.top = o + "px", this.canvas.parentNode.appendChild(s), t.checkForInput) {
-      let u = [];
-      (u = s.querySelectorAll("input")) && u.forEach(function(p) {
+      let h = [];
+      (h = s.querySelectorAll("input")) && h.forEach(function(p) {
         p.addEventListener("keydown", function(f) {
           if (s.modified(), f.keyCode == 27)
             s.close();
@@ -16934,23 +16977,23 @@ const _LGraphCanvas = class _LGraphCanvas {
     }, s.close = function() {
       s.parentNode && s.parentNode.removeChild(s);
     };
-    let l = null, h = !1;
-    s.addEventListener("mouseleave", function(u) {
-      h || (t.closeOnLeave || LiteGraph.dialog_close_on_mouse_leave) && !s.is_modified && LiteGraph.dialog_close_on_mouse_leave && (l = setTimeout(
+    let l = null, u = !1;
+    s.addEventListener("mouseleave", function(h) {
+      u || (t.closeOnLeave || LiteGraph.dialog_close_on_mouse_leave) && !s.is_modified && LiteGraph.dialog_close_on_mouse_leave && (l = setTimeout(
         s.close,
         LiteGraph.dialog_close_on_mouse_leave_delay
       ));
-    }), s.addEventListener("mouseenter", function(u) {
+    }), s.addEventListener("mouseenter", function(h) {
       (t.closeOnLeave || LiteGraph.dialog_close_on_mouse_leave) && l && clearTimeout(l);
     });
     const c = s.querySelectorAll("select");
-    return c && c.forEach(function(u) {
-      u.addEventListener("click", function(p) {
-        h++;
-      }), u.addEventListener("blur", function(p) {
-        h = 0;
-      }), u.addEventListener("change", function(p) {
-        h = -1;
+    return c && c.forEach(function(h) {
+      h.addEventListener("click", function(p) {
+        u++;
+      }), h.addEventListener("blur", function(p) {
+        u = 0;
+      }), h.addEventListener("change", function(p) {
+        u = -1;
       });
     }), s;
   }
@@ -16982,21 +17025,21 @@ const _LGraphCanvas = class _LGraphCanvas {
     }, s.addSeparator = () => {
       const n = document.createElement("div");
       n.className = "separator", s.content.appendChild(n);
-    }, s.addWidget = (n, a, o, l, h) => {
+    }, s.addWidget = (n, a, o, l, u) => {
       l = l || {};
       let c = String(o);
       n = n.toLowerCase(), n == "number" && (c = parseFloat(o).toFixed(3));
-      const u = document.createElement("div");
-      u.className = "property", u.innerHTML = "<span class='property_name'></span><span class='property_value'></span>", u.querySelector(".property_name").innerText = l.label || a;
-      const p = u.querySelector(".property_value");
-      p.innerText = c, u.dataset.property = a, u.dataset.type = l.type || n, u.options = l, u.value = o;
+      const h = document.createElement("div");
+      h.className = "property", h.innerHTML = "<span class='property_name'></span><span class='property_value'></span>", h.querySelector(".property_name").innerText = l.label || a;
+      const p = h.querySelector(".property_value");
+      p.innerText = c, h.dataset.property = a, h.dataset.type = l.type || n, h.options = l, h.value = o;
       const f = l.disabled || !1;
       if (f && p.classList.add("disabled"), n == "code")
-        u.addEventListener("click", function(g) {
+        h.addEventListener("click", function(g) {
           g.preventDefault(), !f && s.inner_showCodePad(this.dataset.property);
         });
       else if (n == "boolean")
-        u.classList.add("boolean"), o && u.classList.add("bool-on"), u.addEventListener("click", function(g) {
+        h.classList.add("boolean"), o && h.classList.add("bool-on"), h.addEventListener("click", function(g) {
           if (g.preventDefault(), f) return;
           const m = this.dataset.property || a;
           this.value = !this.value, this.classList.toggle("bool-on"), this.querySelector(".property_value").innerText = this.value ? "true" : "false", d(m, this.value);
@@ -17032,14 +17075,14 @@ const _LGraphCanvas = class _LGraphCanvas {
           }
         });
       } else if (n === "button") {
-        u.innerHTML = `
+        h.innerHTML = `
                   <span class='property_name'></span>
                   <span class='property_value_img'>
                     <span class="property_img_src"></span>
                     
-                  </span>`, u.querySelector(".property_name").innerText = l.label || a;
-        const g = u.querySelector(".property_value_img");
-        g.setAttribute("contenteditable", !0), g.innerText = c, u.dataset.property = a, u.dataset.type = l.type || n, u.options = l, u.value = o;
+                  </span>`, h.querySelector(".property_name").innerText = l.label || a;
+        const g = h.querySelector(".property_value_img");
+        g.setAttribute("contenteditable", !0), g.innerText = c, h.dataset.property = a, h.dataset.type = l.type || n, h.options = l, h.value = o;
         const m = l.disabled, b = document.createElement("btn");
         b.classList.add("btn", "btn-save-image"), b.textContent = "Add Image", b.addEventListener("click", function(E) {
           if (E.preventDefault(), m) return;
@@ -17047,11 +17090,11 @@ const _LGraphCanvas = class _LGraphCanvas {
           L.type = "file", L.setAttribute("accept", ".png,.jpg,.jpeg,.gif,.webp,"), L.click();
         }), g.appendChild(b);
       }
-      s.content.appendChild(u);
+      s.content.appendChild(h);
       function d(g, m) {
-        l.callback && l.callback(g, m, l), h && h(g, m, l);
+        l.callback && l.callback(g, m, l), u && u(g, m, l);
       }
-      return u;
+      return h;
     }, s.onOpen && typeof s.onOpen == "function" && s.onOpen(), s;
   }
   static getPropertyPrintableValue(e, t) {
@@ -17097,20 +17140,20 @@ const _LGraphCanvas = class _LGraphCanvas {
     }), a.options_panel = n, n.id = "option-panel", n.classList.add("settings");
     function l() {
       n.content.innerHTML = "";
-      const h = function(u, p, f) {
-        f && f.key && (u = f.key), f.values && (p = Object.values(f.values).indexOf(
+      const u = function(h, p, f) {
+        f && f.key && (h = f.key), f.values && (p = Object.values(f.values).indexOf(
           p
-        )), a[u] = p;
+        )), a[h] = p;
       }, c = LiteGraph.availableCanvasOptions;
       c.sort();
-      for (const u in c) {
-        const p = c[u];
+      for (const h in c) {
+        const p = c[h];
         n.addWidget(
           "boolean",
           p,
           a[p],
           { key: p, on: "True", off: "False" },
-          h
+          u
         );
       }
       a.links_render_mode, n.addWidget(
@@ -17121,7 +17164,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           key: "links_render_mode",
           values: LiteGraph.LINK_RENDER_MODES
         },
-        h
+        u
       ), n.addSeparator(), n.footer.innerHTML = "";
     }
     l(), a.canvas.parentNode.appendChild(n);
@@ -17140,44 +17183,44 @@ const _LGraphCanvas = class _LGraphCanvas {
     });
     r.node_panel = s, s.id = "node-panel", s.node = e, s.classList.add("settings");
     function n() {
-      var h;
+      var u;
       s.content.innerHTML = "", s.addHTML(
         "<span class='node_type'>" + e.type + "</span><span class='node_desc'>" + (e.constructor.desc || "") + "</span><span class='separator'></span>"
       ), s.addHTML("<h4>Properties</h4>");
-      const a = (c, u) => {
-        r.graph.beforeChange(e);
-        const p = Object.values(LiteGraph.NODE_MODES).indexOf(u);
+      const a = (c, h) => {
+        r.saveUndoStack(), r.graph.beforeChange(e);
+        const p = Object.values(LiteGraph.NODE_MODES).indexOf(h);
         if (c.includes("inputName")) {
           const f = e.properties[`editable-${c}`];
-          e.setInputName(f.index, u), e.properties[`editable-${c}`].value = u;
+          e.setInputName(f.index, h), e.properties[`editable-${c}`].value = h;
         } else if (c.includes("outputName")) {
           const f = e.properties[`editable-${c}`];
-          e.setOutputName(f.index, u), e.properties[`editable-${c}`].value = u;
+          e.setOutputName(f.index, h), e.properties[`editable-${c}`].value = h;
         } else
           switch (c) {
             case "Title":
-              e.title = u;
+              e.title = h;
               break;
             case "Mode":
-              p >= 0 && LiteGraph.NODE_MODES[p] ? e.changeMode(p) : console.warn("unexpected mode: " + u);
+              p >= 0 && LiteGraph.NODE_MODES[p] ? e.changeMode(p) : console.warn("unexpected mode: " + h);
               break;
             case "Color":
-              _LGraphCanvas.node_colors[u] ? (e.color = _LGraphCanvas.node_colors[u].color, e.bgcolor = _LGraphCanvas.node_colors[u].bgcolor) : console.warn("unexpected color: " + u);
+              _LGraphCanvas.node_colors[h] ? (e.color = _LGraphCanvas.node_colors[h].color, e.bgcolor = _LGraphCanvas.node_colors[h].bgcolor) : console.warn("unexpected color: " + h);
               break;
             case "x":
-              e.pos = [parseInt(u), e.pos[1]];
+              e.pos = [parseInt(h), e.pos[1]];
               break;
             case "y":
-              e.pos = [e.pos[0], parseInt(u)];
+              e.pos = [e.pos[0], parseInt(h)];
               break;
             case "Width":
-              e.size = [parseInt(u), e.size[1]];
+              e.size = [parseInt(h), e.size[1]];
               break;
             case "Height":
-              e.size = [e.size[0], parseInt(u)];
+              e.size = [e.size[0], parseInt(h)];
               break;
             default:
-              e.setProperty(c, u);
+              e.setProperty(c, h);
               break;
           }
         r.graph.afterChange(), r.dirty_canvas = !0;
@@ -17195,22 +17238,22 @@ const _LGraphCanvas = class _LGraphCanvas {
       for (let c in e.properties) {
         if (o.includes(c) || c.includes("editable-"))
           continue;
-        const u = e.properties[c], p = e.getPropertyInfo(c);
+        const h = e.properties[c], p = e.getPropertyInfo(c);
         p.type, !(e.onAddPropertyToPanel && e.onAddPropertyToPanel(c, s)) && s.addWidget(
           p.widget || p.type,
           c,
-          u,
+          h,
           p,
           a
         );
       }
-      if (s.addSeparator(), e.onShowCustomPanelInfo && e.onShowCustomPanelInfo(s), (h = Object.keys(e.properties)) == null ? void 0 : h.some(
+      if (s.addSeparator(), e.onShowCustomPanelInfo && e.onShowCustomPanelInfo(s), (u = Object.keys(e.properties)) == null ? void 0 : u.some(
         (c) => c.includes("editable-")
       )) {
         s.addHTML("<h4>Editable-Properties</h4>");
         for (let c in e.properties)
           if (c.includes("editable-")) {
-            const u = e.properties[c].value, p = e.getPropertyInfo(c);
+            const h = e.properties[c].value, p = e.getPropertyInfo(c);
             p.type;
             const f = c.split("-")[1];
             if (e.onAddPropertyToPanel && e.onAddPropertyToPanel(c, s))
@@ -17218,7 +17261,7 @@ const _LGraphCanvas = class _LGraphCanvas {
             s.addWidget(
               p.widget || p.type,
               f,
-              u,
+              h,
               p,
               a
             );
@@ -17233,13 +17276,13 @@ const _LGraphCanvas = class _LGraphCanvas {
       const o = s.alt_content.querySelector("textarea"), l = () => {
         s.toggleAltContent(!1), s.toggleFooterVisibility(!0), o.parentNode.removeChild(o), s.classList.add("settings"), s.classList.remove("centered"), n();
       };
-      o.value = e.properties[a], o.addEventListener("keydown", function(u) {
-        u.code == "Enter" && u.ctrlKey && (e.setProperty(a, o.value), l());
+      o.value = e.properties[a], o.addEventListener("keydown", function(h) {
+        h.code == "Enter" && h.ctrlKey && (e.setProperty(a, o.value), l());
       }), s.toggleAltContent(!0), s.toggleFooterVisibility(!1), o.style.height = "calc(100% - 40px)";
-      const h = s.addButton("Assign", function() {
+      const u = s.addButton("Assign", function() {
         e.setProperty(a, o.value), l();
       });
-      s.alt_content.appendChild(h);
+      s.alt_content.appendChild(u);
       const c = s.addButton("Close", l);
       c.style.float = "right", s.alt_content.appendChild(c);
     }, n(), this.canvas.parentNode.appendChild(s);
@@ -17261,7 +17304,7 @@ const _LGraphCanvas = class _LGraphCanvas {
           const c = r.addHTML("<button>&#10005;</button> <span class='bullet_icon'></span><span class='name'></span><span class='type'></span>", "subgraph_property");
           c.dataset.name = l.name, c.dataset.slot = o, c.querySelector(".name").innerText = l.name, c.querySelector(".type").innerText = l.type, c.querySelector("button").addEventListener(
             "click",
-            function(u) {
+            function(h) {
               e.removeInput(
                 Number(this.parentNode.dataset.slot)
               ), s();
@@ -17270,8 +17313,8 @@ const _LGraphCanvas = class _LGraphCanvas {
         }
     }
     return r.addHTML(" + <span class='label'>Name</span><input class='name'/><span class='label'>Type</span><input class='type'></input><button>+</button>", "subgraph_property extra", !0).querySelector("button").addEventListener("click", function(o) {
-      const l = this.parentNode, h = l.querySelector(".name").value, c = l.querySelector(".type").value;
-      !h || e.findInputSlot(h) != -1 || (e.addInput(h, c), l.querySelector(".name").value = "", l.querySelector(".type").value = "", s());
+      const l = this.parentNode, u = l.querySelector(".name").value, c = l.querySelector(".type").value;
+      !u || e.findInputSlot(u) != -1 || (e.addInput(u, c), l.querySelector(".name").value = "", l.querySelector(".type").value = "", s());
     }), s(), this.canvas.parentNode.appendChild(r), r;
   }
   showSubgraphPropertiesDialogRight(e) {
@@ -17285,10 +17328,10 @@ const _LGraphCanvas = class _LGraphCanvas {
     function s() {
       if (r.clear(), e.outputs)
         for (let l = 0; l < e.outputs.length; ++l) {
-          const h = e.outputs[l];
-          if (h.not_subgraph_output) continue;
-          const u = r.addHTML("<button>&#10005;</button> <span class='bullet_icon'></span><span class='name'></span><span class='type'></span>", "subgraph_property");
-          u.dataset.name = h.name, u.dataset.slot = l, u.querySelector(".name").innerText = h.name, u.querySelector(".type").innerText = h.type, u.querySelector("button").addEventListener(
+          const u = e.outputs[l];
+          if (u.not_subgraph_output) continue;
+          const h = r.addHTML("<button>&#10005;</button> <span class='bullet_icon'></span><span class='name'></span><span class='type'></span>", "subgraph_property");
+          h.dataset.name = u.name, h.dataset.slot = l, h.querySelector(".name").innerText = u.name, h.querySelector(".type").innerText = u.type, h.querySelector("button").addEventListener(
             "click",
             function(p) {
               e.removeOutput(
@@ -17305,8 +17348,8 @@ const _LGraphCanvas = class _LGraphCanvas {
       o.apply(this);
     });
     function o() {
-      const l = this.parentNode, h = l.querySelector(".name").value, c = l.querySelector(".type").value;
-      !h || e.findOutputSlot(h) != -1 || (e.addOutput(h, c), l.querySelector(".name").value = "", l.querySelector(".type").value = "", s());
+      const l = this.parentNode, u = l.querySelector(".name").value, c = l.querySelector(".type").value;
+      !u || e.findOutputSlot(u) != -1 || (e.addOutput(u, c), l.querySelector(".name").value = "", l.querySelector(".type").value = "", s());
     }
     return s(), this.canvas.parentNode.appendChild(r), r;
   }
@@ -17347,14 +17390,14 @@ const _LGraphCanvas = class _LGraphCanvas {
     function a(o) {
       if (!n)
         return;
-      const l = Object.values(LiteGraph.NODE_MODES).indexOf(o), h = function(u) {
-        l >= 0 && LiteGraph.NODE_MODES[l] ? u.changeMode(l) : (console.warn("unexpected mode: " + o), u.changeMode(LiteGraph.ALWAYS));
+      const l = Object.values(LiteGraph.NODE_MODES).indexOf(o), u = function(h) {
+        l >= 0 && LiteGraph.NODE_MODES[l] ? h.changeMode(l) : (console.warn("unexpected mode: " + o), h.changeMode(LiteGraph.ALWAYS));
       }, c = _LGraphCanvas.active_canvas;
       if (!c.selected_nodes || Object.keys(c.selected_nodes).length <= 1)
-        h(n);
+        u(n);
       else
-        for (const u in c.selected_nodes)
-          h(c.selected_nodes[u]);
+        for (const h in c.selected_nodes)
+          u(c.selected_nodes[h]);
     }
     return !1;
   }
@@ -17367,9 +17410,9 @@ const _LGraphCanvas = class _LGraphCanvas {
       content: "<span style='display: block; padding-left: 4px;'>No color</span>"
     });
     for (const l in _LGraphCanvas.node_colors) {
-      const h = _LGraphCanvas.node_colors[l], c = {
+      const u = _LGraphCanvas.node_colors[l], c = {
         value: l,
-        content: "<span style='display: block; color: #999; padding-left: 4px; border-left: 8px solid " + h.color + "; background-color:" + h.bgcolor + "'>" + l + "</span>"
+        content: "<span style='display: block; color: #999; padding-left: 4px; border-left: 8px solid " + u.color + "; background-color:" + u.bgcolor + "'>" + l + "</span>"
       };
       a.push(c);
     }
@@ -17382,14 +17425,14 @@ const _LGraphCanvas = class _LGraphCanvas {
     function o(l) {
       if (!n)
         return;
-      const h = l.value ? _LGraphCanvas.node_colors[l.value] : null, c = function(p) {
-        h ? p.constructor === LGraphGroup ? p.color = h.groupcolor : (p.color = h.color, p.bgcolor = h.bgcolor) : (delete p.color, delete p.bgcolor);
-      }, u = _LGraphCanvas.active_canvas;
-      if (!u.selected_nodes || Object.keys(u.selected_nodes).length <= 1)
+      const u = l.value ? _LGraphCanvas.node_colors[l.value] : null, c = function(p) {
+        u ? p.constructor === LGraphGroup ? p.color = u.groupcolor : (p.color = u.color, p.bgcolor = u.bgcolor) : (delete p.color, delete p.bgcolor);
+      }, h = _LGraphCanvas.active_canvas;
+      if (!h.selected_nodes || Object.keys(h.selected_nodes).length <= 1)
         c(n);
       else
-        for (const p in u.selected_nodes)
-          c(u.selected_nodes[p]);
+        for (const p in h.selected_nodes)
+          c(h.selected_nodes[p]);
       n.setDirtyCanvas(!0, !0);
     }
     return !1;
@@ -17411,12 +17454,12 @@ const _LGraphCanvas = class _LGraphCanvas {
       );
       const l = function(c) {
         c.shape = o;
-      }, h = _LGraphCanvas.active_canvas;
-      if (!h.selected_nodes || Object.keys(h.selected_nodes).length <= 1)
+      }, u = _LGraphCanvas.active_canvas;
+      if (!u.selected_nodes || Object.keys(u.selected_nodes).length <= 1)
         l(n);
       else
-        for (const c in h.selected_nodes)
-          l(h.selected_nodes[c]);
+        for (const c in u.selected_nodes)
+          l(u.selected_nodes[c]);
       n.graph.afterChange(
         /*?*/
       ), n.setDirtyCanvas(!0);
@@ -17428,14 +17471,14 @@ const _LGraphCanvas = class _LGraphCanvas {
       throw "no node passed";
     const a = n.graph;
     a.beforeChange();
-    const o = function(h) {
-      h.removable !== !1 && a.remove(h);
+    const o = function(u) {
+      u.removable !== !1 && a.remove(u);
     }, l = _LGraphCanvas.active_canvas;
     if (!l.selected_nodes || Object.keys(l.selected_nodes).length <= 1)
       o(n);
     else
-      for (const h in l.selected_nodes)
-        o(l.selected_nodes[h]);
+      for (const u in l.selected_nodes)
+        o(l.selected_nodes[u]);
     a.afterChange(), n.setDirtyCanvas(!0, !0);
   }
   static onMenuNodeToSubgraph(e, t, r, s, n) {
@@ -17444,22 +17487,22 @@ const _LGraphCanvas = class _LGraphCanvas {
       return;
     let l = Object.values(o.selected_nodes || {});
     l.length || (l = [n]);
-    const h = LiteGraph.createNode("graph/subgraph");
-    h.pos = n.pos.concat(), a.add(h), h.buildFromNodes(l), o.deselectAllNodes(), n.setDirtyCanvas(!0, !0);
+    const u = LiteGraph.createNode("graph/subgraph");
+    u.pos = n.pos.concat(), a.add(u), u.buildFromNodes(l), o.deselectAllNodes(), n.setDirtyCanvas(!0, !0);
   }
   static onMenuNodeClone(e, t, r, s, n) {
     n.graph.beforeChange();
-    const a = {}, o = function(h) {
-      if (h.clonable === !1)
+    const a = {}, o = function(u) {
+      if (u.clonable === !1)
         return;
-      const c = h.clone();
-      c && (c.pos = [h.pos[0] + 5, h.pos[1] + 5], h.graph.add(c), a[c.id] = c);
+      const c = u.clone();
+      c && (c.pos = [u.pos[0] + 5, u.pos[1] + 5], u.graph.add(c), a[c.id] = c);
     }, l = _LGraphCanvas.active_canvas;
     if (!l.selected_nodes || Object.keys(l.selected_nodes).length <= 1)
       o(n);
     else
-      for (const h in l.selected_nodes)
-        o(l.selected_nodes[h]);
+      for (const u in l.selected_nodes)
+        o(l.selected_nodes[u]);
     Object.keys(a).length && l.selectNodes(a), n.graph.afterChange(), n.setDirtyCanvas(!0, !0);
   }
   //called by processContextMenu to extract the menu list
@@ -17558,9 +17601,9 @@ const _LGraphCanvas = class _LGraphCanvas {
                 `, a.close = function() {
       a.parentNode && a.parentNode.removeChild(a);
     };
-    const l = _LGraphCanvas.active_canvas.canvas, h = l.getBoundingClientRect();
-    let c = -20, u = -20;
-    h && (c -= h.left, u -= h.top), event ? (a.style.left = event.clientX + c + "px", a.style.top = event.clientY + u + "px") : (a.style.left = l.width * 0.5 + c + "px", a.style.top = l.height * 0.5 + u + "px"), a.querySelector(".okBtn").addEventListener("click", m), l.parentNode.appendChild(a);
+    const l = _LGraphCanvas.active_canvas.canvas, u = l.getBoundingClientRect();
+    let c = -20, h = -20;
+    u && (c -= u.left, h -= u.top), event ? (a.style.left = event.clientX + c + "px", a.style.top = event.clientY + h + "px") : (a.style.left = l.width * 0.5 + c + "px", a.style.top = l.height * 0.5 + h + "px"), a.querySelector(".okBtn").addEventListener("click", m), l.parentNode.appendChild(a);
     const f = document.querySelector("#widthValue"), d = document.querySelector("#heightValue");
     f && (f.value = Number(n.size[0]), f.addEventListener("keydown", function(E) {
       if (a.is_modified = !0, E.keyCode == 27)
@@ -17601,8 +17644,8 @@ const _LGraphCanvas = class _LGraphCanvas {
     l.is_modified = !1, l.className = "graphdialog", l.innerHTML = "<span class='name'></span><input type='text' class='value '/><button>OK</button>", l.close = function() {
       l.parentNode && l.parentNode.removeChild(l);
     };
-    const h = l.querySelector(".name");
-    h.innerText = a;
+    const u = l.querySelector(".name");
+    u.innerText = a;
     let c = l.querySelector(".value");
     c && (c.value = o, c.addEventListener("keydown", function(T) {
       if (l.is_modified = !0, T.keyCode == 27)
@@ -17644,9 +17687,9 @@ const _LGraphCanvas = class _LGraphCanvas {
                 `, a.close = function() {
       a.parentNode && a.parentNode.removeChild(a);
     };
-    const l = _LGraphCanvas.active_canvas.canvas, h = l.getBoundingClientRect();
-    let c = -20, u = -20;
-    h && (c -= h.left, u -= h.top), event ? (a.style.left = event.clientX + c + "px", a.style.top = event.clientY + u + "px") : (a.style.left = l.width * 0.5 + c + "px", a.style.top = l.height * 0.5 + u + "px"), a.querySelector(".okBtn").addEventListener("click", m), l.parentNode.appendChild(a);
+    const l = _LGraphCanvas.active_canvas.canvas, u = l.getBoundingClientRect();
+    let c = -20, h = -20;
+    u && (c -= u.left, h -= u.top), event ? (a.style.left = event.clientX + c + "px", a.style.top = event.clientY + h + "px") : (a.style.left = l.width * 0.5 + c + "px", a.style.top = l.height * 0.5 + h + "px"), a.querySelector(".okBtn").addEventListener("click", m), l.parentNode.appendChild(a);
     const f = document.querySelector("#xValue"), d = document.querySelector("#yValue");
     f && (f.value = Number(n.pos[0]), f.addEventListener("keydown", function(E) {
       if (a.is_modified = !0, E.keyCode == 27)
@@ -17706,11 +17749,11 @@ const _LGraphCanvas = class _LGraphCanvas {
         width: p.size[0],
         height: p.size[1],
         id: p.id
-      })).filter((p) => (p == null ? void 0 : p.id) !== (s == null ? void 0 : s.id)), l = s.size[0], h = s.size[1], c = s.pos[0], u = s.pos[1] - a;
+      })).filter((p) => (p == null ? void 0 : p.id) !== (s == null ? void 0 : s.id)), l = s.size[0], u = s.size[1], c = s.pos[0], h = s.pos[1] - a;
       e.strokeStyle = "#c4c4c4", e.lineWidth = 1;
       for (let p in o) {
         e.strokeStyle = 16711680;
-        const f = o[p], d = f.width, g = f.height, m = f.x, b = f.y, E = Math.round(c), L = Math.round(u), T = Math.round(l), _ = Math.round(h), I = Math.round(m), A = Math.round(b), M = Math.round(d), O = Math.round(g);
+        const f = o[p], d = f.width, g = f.height, m = f.x, b = f.y, E = Math.round(c), L = Math.round(h), T = Math.round(l), _ = Math.round(u), I = Math.round(m), A = Math.round(b), M = Math.round(d), O = Math.round(g);
         I === E && (L < A ? (e.beginPath(), e.moveTo(E, L), e.lineTo(
           I,
           A + O + a
@@ -17764,7 +17807,7 @@ const _LGraphCanvas = class _LGraphCanvas {
     let a = null;
     const o = {
       event: t,
-      callback: h,
+      callback: u,
       extra: e
     };
     e && (o.title = e.type);
@@ -17804,7 +17847,7 @@ const _LGraphCanvas = class _LGraphCanvas {
     if (!a)
       return;
     new ContextMenu(a, o, n);
-    function h(c, u, p) {
+    function u(c, h, p) {
       if (c) {
         if (c.content == "Remove Slot") {
           const f = c.slot;
@@ -17817,7 +17860,7 @@ const _LGraphCanvas = class _LGraphCanvas {
         } else if (c.content == "Rename Slot") {
           const f = c.slot, d = f.input ? e.getInputInfo(f.slot) : e.getOutputInfo(f.slot), g = r.createDialog(
             "<span class='name'>Name</span><input autofocus type='text'/><button>OK</button>",
-            u
+            h
           ), m = g.querySelector("input");
           m && d && (m.value = d.label || "");
           const b = function() {
@@ -17917,18 +17960,18 @@ class ContextMenu {
     });
     let l = document;
     r.event && (l = r.event.target.ownerDocument), l || (l = document), l.fullscreenElement ? l.fullscreenElement.appendChild(a) : l.body.appendChild(a);
-    let h = r.left || 0, c = r.top || 0;
+    let u = r.left || 0, c = r.top || 0;
     if (r.event) {
-      if (h = r.event.clientX - 10, c = r.event.clientY - 10, r.title && (c -= 20), r.parentMenu) {
+      if (u = r.event.clientX - 10, c = r.event.clientY - 10, r.title && (c -= 20), r.parentMenu) {
         const g = r.parentMenu.root.getBoundingClientRect();
-        h = g.left + g.width;
+        u = g.left + g.width;
       }
       const f = document.body.getBoundingClientRect(), d = a.getBoundingClientRect();
       f.height == 0 && console.error(
         "document.body height is 0. That is dangerous, set html,body { height: 100%; }"
-      ), f.width && h > f.width - d.width - 10 && (h = f.width - d.width - 10), f.height && c > f.height - d.height - 10 && (c = f.height - d.height - 10);
+      ), f.width && u > f.width - d.width - 10 && (u = f.width - d.width - 10), f.height && c > f.height - d.height - 10 && (c = f.height - d.height - 10);
     }
-    a.style.left = h + "px", a.style.top = c + "px", r.scale && (a.style.transform = "scale(" + r.scale + ")");
+    a.style.left = u + "px", a.style.top = c + "px", r.scale && (a.style.transform = "scale(" + r.scale + ")");
     const p = LGraphCanvas.active_canvas.canvas;
     this.parent = p.parentElement || document;
   }
@@ -17938,40 +17981,40 @@ class ContextMenu {
     const a = document.createElement("div");
     a.className = "litemenu-entry submenu";
     let o = !1;
-    r === null ? a.classList.add("separator") : (a.innerHTML = r && r.title ? r.title : t, a.value = r, r && (r.disabled && (o = !0, a.classList.add("disabled")), (r.submenu || r.has_submenu) && a.classList.add("has_submenu")), typeof r == "function" ? (a.dataset.value = t, a.onclick_callback = r) : a.dataset.value = r, r.className && (a.className += " " + r.className)), this.root.appendChild(a), o || a.addEventListener("click", h), !o && s.autoopen && LiteGraph.pointerListenerAdd(a, "enter", l);
+    r === null ? a.classList.add("separator") : (a.innerHTML = r && r.title ? r.title : t, a.value = r, r && (r.disabled && (o = !0, a.classList.add("disabled")), (r.submenu || r.has_submenu) && a.classList.add("has_submenu")), typeof r == "function" ? (a.dataset.value = t, a.onclick_callback = r) : a.dataset.value = r, r.className && (a.className += " " + r.className)), this.root.appendChild(a), o || a.addEventListener("click", u), !o && s.autoopen && LiteGraph.pointerListenerAdd(a, "enter", l);
     function l(c) {
-      const u = this.value;
-      !u || !u.has_submenu || h.call(this, c);
+      const h = this.value;
+      !h || !h.has_submenu || u.call(this, c);
     }
-    function h(c) {
-      const u = this.value;
+    function u(c) {
+      const h = this.value;
       let p = !0;
       if (n.current_submenu && n.current_submenu.close(c), s.callback && s.callback.call(
         this,
-        u,
+        h,
         s,
         c,
         n,
         s.node
-      ) === !0 && (p = !1), u && (u.callback && !s.ignore_item_callbacks && u.disabled !== !0 && u.callback.call(
+      ) === !0 && (p = !1), h && (h.callback && !s.ignore_item_callbacks && h.disabled !== !0 && h.callback.call(
         this,
-        u,
+        h,
         s,
         c,
         n,
         s.extra
-      ) === !0 && (p = !1), u.submenu)) {
-        if (!u.submenu.options)
+      ) === !0 && (p = !1), h.submenu)) {
+        if (!h.submenu.options)
           throw "ContextMenu submenu needs options";
         new n.constructor(
-          u.submenu.options,
+          h.submenu.options,
           {
-            callback: u.submenu.callback,
+            callback: h.submenu.callback,
             event: c,
             parentMenu: n,
-            ignore_item_callbacks: u.submenu.ignore_item_callbacks,
-            title: u.submenu.title,
-            extra: u.submenu.extra,
+            ignore_item_callbacks: h.submenu.ignore_item_callbacks,
+            title: h.submenu.title,
+            extra: h.submenu.extra,
             autoopen: s.autoopen
           }
         ), p = !1;
@@ -18098,8 +18141,8 @@ class Editor {
     for (let s = 0; s < t.dataTransfer.files.length; ++s) {
       const n = t.dataTransfer.files[s], a = LGraphCanvas.getFileExtension(n.name), o = new FileReader();
       a == "json" && (o.onload = function(l) {
-        const h = JSON.parse(l.target.result);
-        r.graph.configure(h);
+        const u = JSON.parse(l.target.result);
+        r.graph.configure(u);
       }, o.readAsText(n));
     }
   }
@@ -18126,21 +18169,21 @@ class Editor {
     const n = s.querySelector("canvas"), a = this, o = new LGraphCanvas(n, this.graph);
     o.show_info = !1, o.background_image = "/editor/imgs/grid.png", o.scale = 0.25, o.allow_dragnodes = !1, o.allow_interaction = !1, o.render_shadows = !1, o.max_zoom = 0.25, this.miniwindow_graphcanvas = o, o.onClear = function() {
       o.scale = 0.25, o.allow_dragnodes = !1, o.allow_interaction = !1;
-    }, o.onRenderBackground = function(h, c) {
+    }, o.onRenderBackground = function(u, c) {
       c.strokeStyle = "#567";
-      let u = a.graphcanvas.convertOffsetToCanvas([0, 0]), p = a.graphcanvas.convertOffsetToCanvas([
+      let h = a.graphcanvas.convertOffsetToCanvas([0, 0]), p = a.graphcanvas.convertOffsetToCanvas([
         a.graphcanvas.canvas.width,
         a.graphcanvas.canvas.height
       ]);
-      u = this.convertCanvasToOffset(u), p = this.convertCanvasToOffset(p), c.lineWidth = 1, c.strokeRect(
-        Math.floor(u[0]) + 0.5,
-        Math.floor(u[1]) + 0.5,
-        Math.floor(p[0] - u[0]),
-        Math.floor(p[1] - u[1])
+      h = this.convertCanvasToOffset(h), p = this.convertCanvasToOffset(p), c.lineWidth = 1, c.strokeRect(
+        Math.floor(h[0]) + 0.5,
+        Math.floor(h[1]) + 0.5,
+        Math.floor(p[0] - h[0]),
+        Math.floor(p[1] - h[1])
       );
     }, s.style.position = "absolute", s.style.top = "4px", s.style.right = "4px";
     const l = document.createElement("div");
-    l.className = "corner-button", l.innerHTML = "&#10060;", l.addEventListener("click", function(h) {
+    l.className = "corner-button", l.innerHTML = "&#10060;", l.addEventListener("click", function(u) {
       o.setGraph(null), s.parentNode.removeChild(s);
     }), s.appendChild(l), this.root.querySelector(".content").appendChild(s);
   }
@@ -18218,23 +18261,23 @@ const ge = class ge {
           o.getAudioNodeInOutputSlot ? l = o.getAudioNodeInOutputSlot(
             a.origin_slot
           ) : l = o.audionode;
-          var h = null;
-          t.getAudioNodeInInputSlot ? h = t.getAudioNodeInInputSlot(s) : h = t.audionode, r ? ge.connect(l, h) : ge.disconnect(l, h);
+          var u = null;
+          t.getAudioNodeInInputSlot ? u = t.getAudioNodeInInputSlot(s) : u = t.audionode, r ? ge.connect(l, u) : ge.disconnect(l, u);
         }
       }
     if (t.outputs)
       for (var s = 0; s < t.outputs.length; ++s)
-        for (var c = t.outputs[s], u = 0; u < c.links.length; ++u) {
-          var a = t.graph.links[c.links[u]];
+        for (var c = t.outputs[s], h = 0; h < c.links.length; ++h) {
+          var a = t.graph.links[c.links[h]];
           if (a) {
             var l = null;
             t.getAudioNodeInOutputSlot ? l = t.getAudioNodeInOutputSlot(s) : l = t.audionode;
             var p = t.graph.getNodeById(
               a.target_id
-            ), h = null;
-            p.getAudioNodeInInputSlot ? h = p.getAudioNodeInInputSlot(
+            ), u = null;
+            p.getAudioNodeInInputSlot ? u = p.getAudioNodeInInputSlot(
               a.target_slot
-            ) : h = p.audionode, r ? ge.connect(l, h) : ge.disconnect(l, h);
+            ) : u = p.audionode, r ? ge.connect(l, u) : ge.disconnect(l, u);
           }
         }
   }
@@ -18646,8 +18689,8 @@ class LGAudioADSR extends LGraphNode {
     }, this.audionode = LGAudio.getAudioContext().createGain(), this.audionode.gain.value = 0, this.addInput("in", "audio"), this.addInput("gate", "boolean"), this.addOutput("out", "audio"), this.gate = !1, this.title = "ADSR", this.desc = "Audio envelope";
   }
   onExecute() {
-    var t = LGAudio.getAudioContext(), r = t.currentTime, s = this.audionode, n = s.gain, a = this.getInputData(1), o = this.getInputOrProperty("A"), l = this.getInputOrProperty("D"), h = this.getInputOrProperty("S"), c = this.getInputOrProperty("R");
-    !this.gate && a ? (n.cancelScheduledValues(0), n.setValueAtTime(0, r), n.linearRampToValueAtTime(1, r + o), n.linearRampToValueAtTime(h, r + o + l)) : this.gate && !a && (n.cancelScheduledValues(0), n.setValueAtTime(n.value, r), n.linearRampToValueAtTime(0, r + c)), this.gate = a;
+    var t = LGAudio.getAudioContext(), r = t.currentTime, s = this.audionode, n = s.gain, a = this.getInputData(1), o = this.getInputOrProperty("A"), l = this.getInputOrProperty("D"), u = this.getInputOrProperty("S"), c = this.getInputOrProperty("R");
+    !this.gate && a ? (n.cancelScheduledValues(0), n.setValueAtTime(0, r), n.linearRampToValueAtTime(1, r + o), n.linearRampToValueAtTime(u, r + o + l)) : this.gate && !a && (n.cancelScheduledValues(0), n.setValueAtTime(n.value, r), n.linearRampToValueAtTime(0, r + c)), this.gate = a;
   }
   onGetInputs() {
     return [
@@ -18777,7 +18820,7 @@ class LGAudioVisualization extends LGraphNode {
         for (var o = 0; o < r.length; o += s)
           t.moveTo(a + 0.5, n), t.lineTo(a + 0.5, n - r[o | 0] / 255 * n), a++;
       if (t.stroke(), this.properties.mark >= 0) {
-        var l = LGAudio.getAudioContext().sampleRate, h = l / r.length, a = 2 * (this.properties.mark / h) / s;
+        var l = LGAudio.getAudioContext().sampleRate, u = l / r.length, a = 2 * (this.properties.mark / u) / s;
         a >= this.size[0] && (a = this.size[0] - 1), t.strokeStyle = "red", t.beginPath(), t.moveTo(a, n), t.lineTo(a, 0), t.stroke();
       }
     }
@@ -18798,8 +18841,8 @@ class LGAudioBandSignal extends LGraphNode {
       if (n < 0 && (a = this._freqs[0]), n >= this._freqs.length)
         a = this._freqs[this._freqs.length - 1];
       else {
-        var o = n | 0, l = this._freqs[o], h = this._freqs[o + 1], c = n - o;
-        a = l * (1 - c) + h * c;
+        var o = n | 0, l = this._freqs[o], u = this._freqs[o + 1], c = n - o;
+        a = l * (1 - c) + u * c;
       }
       this.setOutputData(0, a / 255 * this.properties.amplitude);
     }
@@ -19187,18 +19230,18 @@ class Subgraph extends LGraphNode {
         for (var o = 0; o < a.inputs.length; ++o) {
           var l = a.inputs[o];
           if (!(!l || !l.link)) {
-            var h = a.graph.links[l.link];
-            h && (r[h.origin_id] || this.subgraph.addInput(l.name, h.type));
+            var u = a.graph.links[l.link];
+            u && (r[u.origin_id] || this.subgraph.addInput(l.name, u.type));
           }
         }
       if (a.outputs)
         for (var o = 0; o < a.outputs.length; ++o) {
           var c = a.outputs[o];
           if (!(!c || !c.links || !c.links.length))
-            for (var u = !1, p = 0; p < c.links.length; ++p) {
-              var h = a.graph.links[c.links[p]];
-              if (h && !r[h.target_id]) {
-                u = !0;
+            for (var h = !1, p = 0; p < c.links.length; ++p) {
+              var u = a.graph.links[c.links[p]];
+              if (u && !r[u.target_id]) {
+                h = !0;
                 break;
               }
             }
@@ -20166,9 +20209,9 @@ GraphicsPlot.prototype.onDrawBackground = function(e) {
           e.strokeStyle = s[a], e.beginPath();
           var l = o[0] * r * -1 + n;
           e.moveTo(0, clamp(l, 0, t[1]));
-          for (var h = 1; h < o.length && h < t[0]; ++h) {
-            var l = o[h] * r * -1 + n;
-            e.lineTo(h, clamp(l, 0, t[1]));
+          for (var u = 1; u < o.length && u < t[0]; ++u) {
+            var l = o[u] * r * -1 + n;
+            e.lineTo(u, clamp(l, 0, t[1]));
           }
           e.stroke();
         }
@@ -21404,8 +21447,8 @@ MathNoise.prototype.onExecute = function() {
   for (var a = this.properties.speed || 1, o = 0, l = 0; l < t && (r += MathNoise.getValue(e * (1 + l) * a, this.properties.smooth) * s, o += s, s *= this.properties.persistence, !(s < 1e-3)); ++l)
     ;
   r /= o;
-  var h = this.properties.min, c = this.properties.max;
-  this._last_v = r * (c - h) + h, this.setOutputData(0, this._last_v);
+  var u = this.properties.min, c = this.properties.max;
+  this._last_v = r * (c - u) + u, this.setOutputData(0, this._last_v);
 };
 MathNoise.prototype.onDrawBackground = function(e) {
   this.outputs[0].label = (this._last_v || 0).toFixed(3);
@@ -22272,10 +22315,10 @@ class Math3DRemapRange extends LGraphNode {
         this._value[o] = (n[o] + a[o]) * 0.5;
         continue;
       }
-      var h = (this._value[o] - r[o]) / l;
-      this.properties.clamp && (h = clamp$1(h, 0, 1));
+      var u = (this._value[o] - r[o]) / l;
+      this.properties.clamp && (u = clamp$1(u, 0, 1));
       var c = a[o] - n[o];
-      this._value[o] = n[o] + h * c;
+      this._value[o] = n[o] + u * c;
     }
     this.setOutputData(0, this._value), this.setOutputData(1, this._clamped);
   }
@@ -22920,8 +22963,8 @@ LGMIDIGenerator.prototype.onAction = function(e, o) {
   var l = this.properties.duration || 1;
   this.trigger("note", o), setTimeout(
     (function() {
-      var h = new MIDIEvent();
-      h.setup([MIDIEvent.NOTEOFF, r, 0]), this.trigger("note", h);
+      var u = new MIDIEvent();
+      u.setup([MIDIEvent.NOTEOFF, r, 0]), this.trigger("note", u);
     }).bind(this),
     l * 1e3
   );
@@ -23113,9 +23156,9 @@ LGMIDIKeys.prototype.onDrawForeground = function(e) {
       for (var a = 0; a < t; ++a) {
         var o = LGMIDIKeys.keys[a % 12];
         if (o.t == n) {
-          var l = Math.floor(a / 12), h = l * 7 * r + o.x * r;
+          var l = Math.floor(a / 12), u = l * 7 * r + o.x * r;
           n == 0 ? e.fillStyle = this.keys[a] ? "#CCC" : "white" : e.fillStyle = this.keys[a] ? "#333" : "black", e.fillRect(
-            h + 1,
+            u + 1,
             0,
             r * o.w - 2,
             s * o.h
@@ -23130,8 +23173,8 @@ LGMIDIKeys.prototype.getKeyIndex = function(e) {
     for (var n = 0; n < this.keys.length; ++n) {
       var a = LGMIDIKeys.keys[n % 12];
       if (a.t == s) {
-        var o = Math.floor(n / 12), l = o * 7 * t + a.x * t, h = t * a.w, c = r * a.h;
-        if (!(e[0] < l || e[0] > l + h || e[1] > c))
+        var o = Math.floor(n / 12), l = o * 7 * t + a.x * t, u = t * a.w, c = r * a.h;
+        if (!(e[0] < l || e[0] > l + u || e[1] > c))
           return n;
       }
     }
@@ -23589,15 +23632,15 @@ FormEditorNode.prototype.createPropertyOverlay = function() {
   function r(s, n, a, o = {}) {
     const l = document.createElement("div");
     l.style.marginBottom = "8px";
-    const h = document.createElement("label");
-    h.textContent = s, h.style.display = "block", h.style.marginBottom = "2px";
+    const u = document.createElement("label");
+    u.textContent = s, u.style.display = "block", u.style.marginBottom = "2px";
     const c = document.createElement("input");
-    return c.type = n, c.setAttribute("data-property", a), n === "checkbox" ? (c.checked = t.properties[a], c.style.marginLeft = "4px", h.style.display = "inline", h.style.cursor = "pointer", c.addEventListener("change", function(u) {
-      t.updatePropertyFromOverlay(a, u.target.checked);
-    }), l.appendChild(c), l.appendChild(h)) : (c.value = t.properties[a], c.style.width = "100%", c.style.padding = "4px", c.style.backgroundColor = "#333", c.style.border = "1px solid #666", c.style.color = "#fff", c.style.borderRadius = "3px", o.min !== void 0 && (c.min = o.min), o.max !== void 0 && (c.max = o.max), c.addEventListener("input", function(u) {
-      let p = u.target.value;
+    return c.type = n, c.setAttribute("data-property", a), n === "checkbox" ? (c.checked = t.properties[a], c.style.marginLeft = "4px", u.style.display = "inline", u.style.cursor = "pointer", c.addEventListener("change", function(h) {
+      t.updatePropertyFromOverlay(a, h.target.checked);
+    }), l.appendChild(c), l.appendChild(u)) : (c.value = t.properties[a], c.style.width = "100%", c.style.padding = "4px", c.style.backgroundColor = "#333", c.style.border = "1px solid #666", c.style.color = "#fff", c.style.borderRadius = "3px", o.min !== void 0 && (c.min = o.min), o.max !== void 0 && (c.max = o.max), c.addEventListener("input", function(h) {
+      let p = h.target.value;
       n === "number" && (p = parseInt(p) || 0), t.updatePropertyFromOverlay(a, p);
-    }), l.appendChild(h), l.appendChild(c)), l;
+    }), l.appendChild(u), l.appendChild(c)), l;
   }
   return e.appendChild(r("Name:", "text", "name")), e.appendChild(r("Email:", "email", "email")), e.appendChild(r("Age:", "number", "age", { min: 0, max: 120 })), e.appendChild(r("Subscribe to newsletter", "checkbox", "subscribe")), e;
 };
